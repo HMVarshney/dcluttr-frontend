@@ -5,8 +5,8 @@ import React from 'react'
 
 export default function HeroSection() {
     return (
-        <section className='h-full w-full flex flex-col justify-center items-center'>
-            <Button variant="outline" size="sm" className="text-xs font-bold mb-4">
+        <section className='flex flex-col justify-center items-center'>
+            <Button variant="outline" size="sm" className="text-xs font-bold mb-4 mt-20">
                 Dcluttr v1 is live now
             </Button>
             <h1 className='flex items-center gap-3 font-extrabold text-center text-7xl'>

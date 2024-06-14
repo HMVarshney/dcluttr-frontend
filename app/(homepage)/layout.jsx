@@ -4,7 +4,7 @@ import NavBar from "@/components/NavBar";
 
 export default function HomePageLayout({ children }) {
   return (
-    <main className="w-full h-full">
+    <main className="w-full min-h-full">
       <NavBar />
       {children}
       <Footer />
