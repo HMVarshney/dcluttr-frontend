@@ -3,6 +3,7 @@ import YouCanTrustSection from "./_components/YouCanTrustSection";
 import HeroSection from "./_components/HeroSection";
 import OneDashboardSection from "./_components/OneDashboardSection";
 import PerformanceSection from "./_components/PerformanceSection";
+import AnalyticsSection from "./_components/AnalyticsSection";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <YouCanTrustSection />
       <OneDashboardSection />
       <PerformanceSection />
+      <AnalyticsSection />
       <FAQsSection />
     </main>
   );

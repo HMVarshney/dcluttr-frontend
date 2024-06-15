@@ -62,7 +62,7 @@ export default function PerformanceSection() {
             <div className='font-extrabold text-center text-xl lg:text-3xl'>
                 “To be able to see a user’s face, hear their voice, and sense their emotion when they’re talking—is incomparable.”
             </div>
-            <p class="text-center text-sm lg:text-base font-bold mt-5">
+            <p className="text-center text-sm lg:text-base font-bold mt-5">
                 Becky White<br />
                 <span className='text-xs font-normal'>Head of Design Research</span> <br />
                 Canvas
