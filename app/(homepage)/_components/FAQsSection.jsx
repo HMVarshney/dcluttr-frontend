@@ -61,7 +61,7 @@ const faqList = [
 
 export default function FAQsSection() {
     return (
-        <section className='max-w-4xl mx-auto my-14 px-4'>
+        <section className='max-w-5xl mx-auto my-14 px-4'>
             <div className='font-extrabold text-3xl lg:text-5xl'>
                 Questions & answers
             </div>

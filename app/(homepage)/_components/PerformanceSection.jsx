@@ -29,15 +29,14 @@ const starts = [
 export default function PerformanceSection() {
 
     return (
-        <div className='container mx-auto my-12 max-w-5xl'>
+        <div className='px-4 mx-auto my-12 max-w-5xl'>
             <div className='font-extrabold text-center text-3xl lg:text-5xl pb-8 lg:pb-14'>
                 Real Performance that impact Bottomline
             </div>
             <div className='flex flex-col lg:flex-row gap-6 max-w-4xl mx-auto items-center justify-between'>
                 {starts?.map((start, i) =>
-                    <div
-                        key={i}
-                        className='flex lg:flex-col flex-row items-center justify-center gap-4 lg:justify-start'>
+                    <div key={i}
+                        className='flex lg:flex-col flex-row items-center justify-center gap-4 lg:justify-start w-full'>
                         <CountUp
                             className='text-2xl lg:text-7xl font-extrabold'
                             start={0}
