@@ -17,13 +17,15 @@ import { AlignRight } from 'lucide-react'
 export default function NavBar() {
     return (
         <nav className="flex flex-row justify-between py-2 px-4 sticky top-0 bg-white z-[10] border-b">
-            <Image
-                src="/logo.svg"
-                alt="logo"
-                width={100}
-                height={25}
-                className="w-24 object-contain"
-            />
+            <div className='w-[240px] flex items-center'>
+                <Image
+                    src="/logo.svg"
+                    alt="logo"
+                    width={100}
+                    height={25}
+                    className="w-28 object-contain"
+                />
+            </div>
             <div className='hidden lg:flex gap-4'>
                 <Button variant="ghost" className="text-base font-bold">
                     Pricing

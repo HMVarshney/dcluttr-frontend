@@ -69,7 +69,7 @@ export default function FAQsSection() {
                 Can’t find the answer here? <Link href={"/#"} className='underline'>Contact our support team.</Link>
             </div>
             {faqList?.map((accordion, index) => (
-                <Accordion type="multiple" collapsible key={index}>
+                <Accordion type="multiple" collapsible={"true"} key={index}>
                     <AccordionItem value={`item-${index}`}>
                         <AccordionTrigger className="text-left text-lg lg:text-xl font-extrabold pt-8">
                             {accordion.question}
