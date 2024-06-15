@@ -77,7 +77,7 @@ export default function PowerFeaturesSection() {
             <div className='font-extrabold text-center text-3xl lg:text-5xl'>
                 Power features
             </div>
-            <div className='grid grid-cols-1 lg:grid-cols-3 grid-flow-row overflow-y-auto gap-12 pt-8 lg:pt-14 mx-4'>
+            <div className='grid grid-cols-1 lg:grid-cols-3 grid-flow-row overflow-y-auto gap-12 pt-8 lg:pt-14'>
                 {features.map((ele, i) =>
                     <div className=''>
                         {ele.icon}

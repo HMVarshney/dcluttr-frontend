@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function YouCanTrustSection() {
     return (
-        <div className=' max-w-4xl mx-auto px-4 lg:px-0'>
+        <section className=' max-w-5xl mx-auto px-4 lg:px-0'>
             <h1 className='font-extrabold text-center text-2xl lg:text-7xl'>
                 Attribution you can trust
             </h1>
@@ -88,6 +88,6 @@ export default function YouCanTrustSection() {
                 </div>
             </div>
 
-        </div>
+        </section>
     )
 }

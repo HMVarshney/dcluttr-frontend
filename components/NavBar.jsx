@@ -11,6 +11,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { AlignRight } from 'lucide-react'
+import Link from 'next/link'
 
 
 
@@ -18,21 +19,27 @@ export default function NavBar() {
     return (
         <nav className="flex flex-row justify-between py-2 px-4 sticky top-0 bg-white z-[10] border-b">
             <div className='w-[240px] flex items-center'>
-                <Image
-                    src="/logo.svg"
-                    alt="logo"
-                    width={100}
-                    height={25}
-                    className="w-28 object-contain"
-                />
+                <Link href='/'>
+                    <Image
+                        src="/logo.svg"
+                        alt="logo"
+                        width={100}
+                        height={25}
+                        className="w-28 object-contain"
+                    />
+                </Link>
             </div>
             <div className='hidden lg:flex gap-4'>
-                <Button variant="ghost" className="text-base font-bold">
-                    Pricing
-                </Button>
-                <Button variant="ghost" className="text-base font-bold">
-                    Blog
-                </Button>
+                <Link href='/pricing'>
+                    <Button variant="ghost" className="text-base font-bold">
+                        Pricing
+                    </Button>
+                </Link>
+                <Link href='/blogs'>
+                    <Button variant="ghost" className="text-base font-bold">
+                        Blog
+                    </Button>
+                </Link>
             </div>
             <div className='flex gap-4'>
                 <Hint
@@ -51,13 +58,17 @@ export default function NavBar() {
                         <AlignRight className='text-3xl text-primary lg:hidden block ' />
                     </SheetTrigger>
                     <SheetContent>
-                        <div className='flex flex-col items-start gap-4'>
-                            <Button variant="ghost" className="text-base font-bold">
-                                Pricing
-                            </Button>
-                            <Button variant="ghost" className="text-base font-bold">
-                                Blog
-                            </Button>
+                        <div className='flex flex-col items-start justify-stretch gap-4 mt-8'>
+                            <Link href='/pricing'>
+                                <Button variant="ghost" className="text-base font-bold">
+                                    Pricing
+                                </Button>
+                            </Link>
+                            <Link href='/blogs'>
+                                <Button variant="ghost" className="text-base font-bold">
+                                    Blog
+                                </Button>
+                            </Link>
                             <Button variant="ghost" className="text-base font-bold">
                                 Login
                             </Button>
@@ -65,10 +76,6 @@ export default function NavBar() {
                     </SheetContent>
                 </Sheet>
             </div>
-
-
-
-
         </nav>
     )
 }

@@ -5,6 +5,8 @@ import OneDashboardSection from "./_components/OneDashboardSection";
 import PerformanceSection from "./_components/PerformanceSection";
 import AnalyticsSection from "./_components/AnalyticsSection";
 import PowerFeaturesSection from "./_components/PowerFeaturesSection";
+import ScaleItSection from "./_components/ScaleItSection";
+import TestimonialSEction from "./_components/TestimonialSEction";
 
 export default function Home() {
   return (
@@ -13,9 +15,11 @@ export default function Home() {
       <YouCanTrustSection />
       <OneDashboardSection />
       <PerformanceSection />
+      <TestimonialSEction />
       <AnalyticsSection />
       <PowerFeaturesSection />
       <FAQsSection />
+      <ScaleItSection />
     </main>
   );
 }
