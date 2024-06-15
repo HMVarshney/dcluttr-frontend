@@ -61,20 +61,20 @@ const faqList = [
 
 export default function FAQsSection() {
     return (
-        <section className='max-w-4xl mx-auto my-14'>
-            <div className='font-extrabold text-5xl'>
+        <section className='max-w-4xl mx-auto my-14 px-4'>
+            <div className='font-extrabold text-3xl lg:text-5xl'>
                 Questions & answers
             </div>
-            <div className='text-xl mt-6'>
+            <div className=' text-xl lg:text-xl mt-6'>
                 Can’t find the answer here? <Link href={"/#"} className='underline'>Contact our support team.</Link>
             </div>
             {faqList?.map((accordion, index) => (
                 <Accordion type="multiple" collapsible key={index}>
                     <AccordionItem value={`item-${index}`}>
-                        <AccordionTrigger className="text-xl font-extrabold pt-8">
+                        <AccordionTrigger className="text-left text-lg lg:text-xl font-extrabold pt-8">
                             {accordion.question}
                         </AccordionTrigger>
-                        <AccordionContent className="text-xl font-medium pb-8">
+                        <AccordionContent className=" text-lg lg:text-xl font-medium pb-8">
                             {accordion.answer}
                         </AccordionContent>
                     </AccordionItem>

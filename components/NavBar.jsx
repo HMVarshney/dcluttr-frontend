@@ -16,7 +16,7 @@ import { AlignRight } from 'lucide-react'
 
 export default function NavBar() {
     return (
-        <nav className="flex flex-row justify-between py-2 px-4 sticky top-0 ">
+        <nav className="flex flex-row justify-between py-2 px-4 sticky top-0 bg-white z-[10] border-b">
             <Image
                 src="/logo.svg"
                 alt="logo"
