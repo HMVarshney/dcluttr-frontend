@@ -23,7 +23,7 @@ export default function AnalyticsSection() {
                     </span>
                     <div className='pt-16 pb-8 pl-8'>
                         <Image
-                            src="https://placehold.co/800x500/d5d5d5/FFFFFF/png"
+                            src="https://images.ctfassets.net/mmu68mmhtb17/59SeNn0zqOcIhi7gFwvEbO/196ce7b64fbf3cedba5fc088e7ab4e01/Zotify.png"
                             alt="logo" width={800} height={500}
                             className="w-full object-contain shadow rounded-s-lg" />
                     </div>
@@ -46,9 +46,9 @@ export default function AnalyticsSection() {
                     </span>
                     <div className='pt-16 pb-8 pl-8'>
                         <Image
-                            src="https://placehold.co/600x540/d5d5d5/FFFFFF/png"
+                            src="https://images.ctfassets.net/mmu68mmhtb17/69EzgGhhI2bamosQQVHYy8/4df507a1a093cb8a9645520cf05fc722/Frame_1699553948.png"
                             alt="logo" width={800} height={800}
-                            className="w-full object-contain shadow rounded-s-lg" />
+                            className="w-full h-[320px] object-contain shadow rounded-s-lg" />
                     </div>
                     <div className='pb-16 px-8'>
                         <div className='text-black text-3xl font-extrabold my-4'>
@@ -72,9 +72,9 @@ export default function AnalyticsSection() {
                     </span>
                     <div className='pt-16 pb-8 pl-8'>
                         <Image
-                            src="https://placehold.co/600x540/d5d5d5/FFFFFF/png"
+                            src="https://images.ctfassets.net/mmu68mmhtb17/69EzgGhhI2bamosQQVHYy8/4df507a1a093cb8a9645520cf05fc722/Frame_1699553948.png"
                             alt="logo" width={800} height={800}
-                            className="w-full object-contain shadow rounded-s-lg" />
+                            className="w-full h-[320px] object-contain shadow rounded-s-lg" />
                     </div>
                     <div className='pb-16 px-8'>
                         <div className='text-black text-3xl font-extrabold my-4'>
@@ -96,7 +96,7 @@ export default function AnalyticsSection() {
                     </span>
                     <div className='pt-16 pb-8 pl-8'>
                         <Image
-                            src="https://placehold.co/800x500/d5d5d5/FFFFFF/png"
+                            src="https://images.ctfassets.net/mmu68mmhtb17/59SeNn0zqOcIhi7gFwvEbO/196ce7b64fbf3cedba5fc088e7ab4e01/Zotify.png"
                             alt="logo" width={800} height={500}
                             className="w-full object-contain shadow rounded-s-lg" />
                     </div>

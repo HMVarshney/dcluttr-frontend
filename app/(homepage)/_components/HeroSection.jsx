@@ -29,7 +29,7 @@ export default function HeroSection() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const calcX = offsetY => Math.min(100 + (offsetY / 1.5), window.innerWidth);
-            const calcRotate = offsetY => offsetY / 50;
+            const calcRotate = offsetY => offsetY / 30;
 
             set({
                 x: calcX(offsetY),
@@ -60,20 +60,20 @@ export default function HeroSection() {
 
             <animated.img
                 src="/bottom_right.webp"
-                className="fixed w-0 lg:w-60"
+                className="fixed w-0 lg:w-72"
                 style={{
-                    bottom: x.to(x => `${150 - x}px`),
-                    right: x.to(x => `-${(x * 1.2) - 100}px`),
-                    transform: rotate.to(r => `rotate(${-r * 2}deg)`),
+                    bottom: x.to(x => `${100 - x}px`),
+                    right: x.to(x => `${100 - x}px`),
+                    transform: rotate.to(r => `rotate(${-r}deg)`),
                 }}
                 alt="Animated Scroll Image"
             />
             <animated.img
                 src="/top_right.webp"
-                className="fixed w-0 lg:w-52"
+                className="fixed w-0 lg:w-56"
                 style={{
-                    bottom: x.to(x => `${300 - x}px`),
-                    right: x.to(x => `-${(x * 1.2) - 100}px`),
+                    bottom: x.to(x => `${260 - x}px`),
+                    right: x.to(x => `${100 - x}px`),
                     transform: rotate.to(r => `rotate(${-r}deg)`),
                 }}
                 alt="Animated Scroll Image"
@@ -81,19 +81,19 @@ export default function HeroSection() {
 
             <animated.img
                 src="/bottom_left.webp"
-                className="fixed w-0 lg:w-60"
+                className="fixed w-0 lg:w-72"
                 style={{
-                    bottom: x.to(x => `${150 - x}px`),
-                    left: x.to(x => `-${(x * 1.2) - 100}px`),
-                    transform: rotate.to(r => `rotate(${r * 2}deg)`),
+                    bottom: x.to(x => `${100 - x}px`),
+                    left: x.to(x => `${100 - x}px`),
+                    transform: rotate.to(r => `rotate(${r}deg)`),
                 }}
                 alt="Animated Scroll Image"
             />
             <animated.img
                 src="/top_left.webp"
-                className="fixed w-0 lg:w-52"
+                className="fixed w-0 lg:w-56"
                 style={{
-                    bottom: x.to(x => `${300 - x}px`),
+                    bottom: x.to(x => `${260 - x}px`),
                     left: x.to(x => `-${(x * 1.2) - 100}px`),
                     transform: rotate.to(r => `rotate(${r}deg)`),
                 }}

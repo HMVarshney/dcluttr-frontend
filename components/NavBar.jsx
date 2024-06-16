@@ -25,7 +25,7 @@ export default function NavBar() {
                         alt="logo"
                         width={100}
                         height={25}
-                        className="w-28 object-contain"
+                        className="w-32 object-contain"
                     />
                 </Link>
             </div>

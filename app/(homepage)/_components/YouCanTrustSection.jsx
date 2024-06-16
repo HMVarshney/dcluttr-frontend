@@ -24,7 +24,7 @@ export default function YouCanTrustSection() {
                     </span>
                     <div className='pt-16 pb-8 pl-8'>
                         <Image
-                            src="https://placehold.co/800x500/d5d5d5/FFFFFF/png"
+                            src="https://images.ctfassets.net/mmu68mmhtb17/3HaRpR10VRrziw9LSUdVyj/62a5d0a38d8ccf7987b78f98c067b230/Reel_block.png"
                             alt="logo" width={800} height={500}
                             className="w-full object-contain shadow rounded-s-lg" />
                     </div>
@@ -48,7 +48,7 @@ export default function YouCanTrustSection() {
                     </span>
                     <div className='pt-16 pb-8 pl-8'>
                         <Image
-                            src="https://placehold.co/800x500/d5d5d5/FFFFFF/png"
+                            src="https://images.ctfassets.net/mmu68mmhtb17/3HaRpR10VRrziw9LSUdVyj/62a5d0a38d8ccf7987b78f98c067b230/Reel_block.png"
                             alt="logo" width={800} height={500}
                             className="w-full object-contain shadow rounded-s-lg" />
                     </div>
@@ -82,7 +82,7 @@ export default function YouCanTrustSection() {
                 </div>
                 <div className='pt-16 lg:pt-8 lg:pr-8 pb-8 pl-8 w-full order-1 lg:order-2'>
                     <Image
-                        src="https://placehold.co/800x500/d5d5d5/FFFFFF/png"
+                        src="https://images.ctfassets.net/mmu68mmhtb17/5J9EdvPSNSngzjrw1IYzIy/1370ca035d37edd470d53f5607407f03/s2.jpg"
                         alt="logo" width={800} height={500}
                         className="w-full object-contain shadow rounded-s-lg lg:rounded-e-lg" />
                 </div>

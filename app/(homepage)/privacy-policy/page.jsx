@@ -9,6 +9,10 @@ export default function page() {
             <h1 className='font-extrabold text-4xl lg:text-7xl mb-6 lg:mb-8'>
                 Privacy Policy
             </h1>
+            <p className='my-5 text-sm'>
+                <span className='text-gray-500 mr-2'>Last updated</span>17 June 2024<span className='text-gray-500 mr-2 ml-4'>Read time</span>18 min
+            </p>
+            <hr />
 
             <h3 className='font-extrabold text-2xl my-4'>
                 1. How this policy works
