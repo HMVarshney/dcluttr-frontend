@@ -4,16 +4,16 @@ import Image from 'next/image'
 import React from 'react'
 import Marquee from 'react-fast-marquee'
 
-export default function CarouselOfBrands() {
+export default function CarouselOfBrands({ my = 'my-16 lg:my-32' }) {
     return (
         <Marquee
             play={true}
             speed={90}
-            delay={1}
+            delay={0}
             gradient={true}
             gradientWidth={100}
             gradientColor={'white'}
-            className=' max-w-2xl mx-auto my-16 lg:my-32'
+            className={`max-w-2xl mx-auto ${my}`}
         >
             <div className='flex overflow-y-auto gap-x-12 mx-4'>
                 {[...Array(20)]

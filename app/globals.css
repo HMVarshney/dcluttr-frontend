@@ -82,3 +82,30 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.border-animate {
+  position: relative;
+}
+
+.border-animate::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: hsl(var(--primary));
+  animation: fillBorder 3s linear forwards;
+}
+
+@keyframes fillBorder {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}

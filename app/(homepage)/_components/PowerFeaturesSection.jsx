@@ -79,7 +79,7 @@ export default function PowerFeaturesSection() {
             </div>
             <div className='grid grid-cols-1 lg:grid-cols-3 grid-flow-row overflow-y-auto gap-12 pt-8 lg:pt-14'>
                 {features.map((ele, i) =>
-                    <div className=''>
+                    <div className='' key={i}>
                         {ele.icon}
                         <div className='font-bold text-base my-3'>{ele.title}</div>
                         <div>{ele.detail}</div>

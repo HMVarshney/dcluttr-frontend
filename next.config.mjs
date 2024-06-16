@@ -10,6 +10,10 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "www.dcluttr.tech",
             },
+            {
+                protocol: "https",
+                hostname: "images.ctfassets.net",
+            },
         ],
     },
 };

@@ -9,27 +9,33 @@ import CarouselOfBrands from '@/components/CarouselOfBrands';
 
 export default function HeroSection() {
     const [offsetY, setOffsetY] = useState(0);
-    const handleScroll = () => setOffsetY(window.scrollY);
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
+        if (typeof window !== 'undefined') {
+            const handleScroll = () => setOffsetY(window.scrollY);
 
-        return () => window.removeEventListener('scroll', handleScroll);
+            window.addEventListener('scroll', handleScroll);
+
+            return () => window.removeEventListener('scroll', handleScroll);
+        }
     }, []);
 
-    const calcX = offsetY => Math.min(100 + (offsetY / 3), window.innerWidth);
-    const calcRotate = offsetY => offsetY / 50;
 
     const [{ x, rotate }, set] = useSpring(() => ({
-        x: calcX(0),
-        rotate: calcRotate(0)
+        x: 100,
+        rotate: 0
     }));
 
     useEffect(() => {
-        set({
-            x: calcX(offsetY),
-            rotate: calcRotate(offsetY)
-        });
+        if (typeof window !== 'undefined') {
+            const calcX = offsetY => Math.min(100 + (offsetY / 1.5), window.innerWidth);
+            const calcRotate = offsetY => offsetY / 50;
+
+            set({
+                x: calcX(offsetY),
+                rotate: calcRotate(offsetY)
+            });
+        }
     }, [offsetY, set]);
     return (
         <section className='flex flex-col justify-center items-center'>
