@@ -16,7 +16,7 @@ export default function OneDashboardSection() {
     return (
         <section className='my-24 lg:my-52 mx-auto max-w-5xl px-4'>
             <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-2xl lg:text-7xl'>
-                One dashboard<Image src={"/icons/increasing.png"} alt="logo" width={100} height={100} className="w-6 lg:w-14 object-contain" />
+                One dashboard<Image src={"/icons/increasing.svg"} alt="logo" width={100} height={100} className="w-6 lg:w-14 object-contain" />
             </h1>
             <h1 className='font-extrabold text-center text-2xl lg:text-7xl'>
                 to rule them all

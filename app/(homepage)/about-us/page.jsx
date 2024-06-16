@@ -1,7 +1,6 @@
 
 
-
-import CarouselOfBrands from '@/components/CarouselOfBrands'
+import CarouselOfBrands from '../_components/CarouselOfBrands'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React from 'react'
 import { useSpring, animated } from '@react-spring/web';
 import { useState, useEffect } from 'react';
-import CarouselOfBrands from '@/components/CarouselOfBrands';
+import CarouselOfBrands from './CarouselOfBrands';
 
 
 export default function HeroSection() {
@@ -43,7 +43,7 @@ export default function HeroSection() {
                 Dcluttr v1 is live now
             </Button>
             <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-2xl lg:text-7xl'>
-                Advertise better<Image src={"/icons/megaphone.png"} alt="logo" width={100} height={100} className="w-8 lg:w-20 object-contain" />
+                Advertise better<Image src={"/icons/megaphone.svg"} alt="logo" width={100} height={100} className="w-8 lg:w-20 object-contain" />
             </h1>
             <h1 className='font-extrabold text-center text-2xl lg:text-7xl'>
                 using first-party data
