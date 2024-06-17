@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
+import ScaleItSection from '../../_components/ScaleItSection';
 
 let data = [
     {
@@ -161,33 +162,32 @@ let data = [
 ]
 
 
-export default function page() {
+export default function page({ params }) {
+    const { name } = params;
+    const details = data.filter(ele => ele.slug === name)[0]
     return (
         <section className='my-12 lg:my-16 mx-auto max-w-5xl px-4'>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 ">
-                {data.map((item, i) =>
-                    <Link href={`/blogs/${item.slug}`}>
-                        <div className='group overflow-hidden rounded-2xl relative'>
-                            <Image
-                                className=' duration-700 ease-in-out group-hover:scale-110 w-full aspect-[320/160] rounded-lg '
-                                width={800}
-                                height={500}
-                                src={item.images}
-                                alt={item?.title} />
-                            <div className='absolute right-2 bottom-2 bg-black/70 px-2 py-px rounded text-sm font-semibold text-white'>
-                                {item.categories}
-                            </div>
-                        </div>
-                        <div className='rounded-bl-2xl rounded-br-2xl  '>
-                            <div className="py-4 flex flex-col gap-2 ">
-                                <p className="font-bold text-xs text-gray-500">
-                                    Author | {new Date(item.publishedAt).toDateString()} | 6 min read
-                                </p>
-                                <p className='text-base font-semibold '>{item?.title}</p>
-                            </div>
-                        </div>
-                    </Link>)}
+            <div className='w-fit border border-primary px-2 py-1 rounded-md font-bold bg-accent text-sm text-primary'>
+                {details.categories}
             </div>
+            <h1 className='font-extrabold text-3xl lg:text-6xl mt-2 lg:mt-4'>
+                {details?.title}
+            </h1>
+            <Image
+                className=' mt-6 lg:mt-12 w-full aspect-[320/160] rounded-lg '
+                width={2000}
+                height={1000}
+                src={details.images}
+                alt={details?.title} />
+
+            <p className='my-6'>Most people think that creative teams love freedom—and hate structure.</p>
+            <p className='my-6'>But creativity without structure can lead to low output, stretched timelines, and unclear goals.</p>
+            <p className='my-6'>In a recent live series with Motion, Dara Denney revealed how to turn creative teams into performance powerhouses. With a track record of managing over $100M in ad spend, Dara is a true expert in the performance creative field.</p>
+            <p className='my-6'>According to Dara, the key lies in one simple truth: creative freedom is a myth.</p>
+            <p className='my-6'>“You need to attack the sources of ambiguity within the creative process. This is the secret to building high-performing creative teams,” says Dara.</p>
+            <p className='my-6'>Keep reading for Dara’s strategy on how to remove these sources of ambiguity and the processes you need to increase your team's output. </p>
+
+            <ScaleItSection />
         </section>
     )
 }

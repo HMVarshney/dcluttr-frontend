@@ -17,7 +17,7 @@ import Link from 'next/link'
 
 export default function NavBar() {
     return (
-        <nav className="flex flex-row justify-between py-2 px-4 sticky top-0 bg-white z-[10] border-b">
+        <nav className="flex flex-row justify-between py-2 px-4 sticky top-0 bg-white/90 backdrop-blur-sm z-[10] border-b">
             <div className='w-[240px] flex items-center'>
                 <Link href='/'>
                     <Image
