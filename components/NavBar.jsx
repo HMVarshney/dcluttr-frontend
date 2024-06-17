@@ -42,13 +42,12 @@ export default function NavBar() {
                 </Link>
             </div>
             <div className='flex gap-4'>
-                <Hint
-                    label={'Have a account?'}
-                    side="bottom"
-                >
-                    <Button variant="ghost" className="hidden lg:block text-base font-bold">
-                        Login
-                    </Button>
+                <Hint label={'Have a account?'} side="bottom">
+                    <Link href='/log-in'>
+                        <Button variant="ghost" className="hidden lg:block text-base font-bold">
+                            Login
+                        </Button>
+                    </Link>
                 </Hint>
                 <Button className="text-base font-bold">
                     Book a demo
