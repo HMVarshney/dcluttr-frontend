@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import CreateAccount from "../_components/CreateAccount";
 import { useState } from "react";
+import OTPVerification from "../_components/OTPVerification";
 
 
 export default function Home() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
+  const [email, setEmail] = useState('shivasingh.200087@gmail.co');
   return (
     <main className="h-full">
       <div className="flex items-center justify-between py-2.5 px-12 border-b">
@@ -41,8 +43,8 @@ export default function Home() {
           </Link>
         </Hint>
       </div>
-      {step === 1 && <CreateAccount setStep={setStep} />}
-      {step === 2 && <CreateAccount setStep={setStep} />}
+      {step === 1 && <CreateAccount setStep={setStep} setEmail={setEmail} />}
+      {step === 2 && <OTPVerification setStep={setStep} email={email} />}
     </main>
   );
 }

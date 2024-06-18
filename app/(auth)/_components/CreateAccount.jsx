@@ -2,46 +2,50 @@
 
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
+import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 
-export default function CreateAccount({ setStep }) {
-    const { register, handleSubmit, formState: { errors }, control, watch, reset, setValue } = useForm({
+export default function CreateAccount({ setStep, setEmail }) {
+    const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur"
     });
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
         setLoading(true);
-        axiosInterceptorInstance.post('/auth/signup',
-            {
-                "name": `${e.firstName} ${e.lastName}`,
-                "email": e.email,
-                "password": e.password,
-                "mobile": e.mobile,
-            })
-            .then((res) => {
-                console.log(res);
-                axiosInterceptorInstance.post('/auth/otp/generate',
-                    {
-                        "email": e.email
-                    }).then((res) => {
-                        setStep(2)
-                    }).catch((err) => {
-                        console.log(err);
-                    }).finally(() => {
-                        setLoading(false)
-                    })
-            })
-            .catch((err) => {
-                setLoading(false)
-                console.log(err);
-            })
+        setTimeout(() => {
+            setLoading(false)
+            setEmail(e.email)
+            setStep(2)
+        }, 2000)
+        // axiosInterceptorInstance.post('/auth/signup',
+        //     {
+        //         "name": e.name,
+        //         "email": e.email,
+        //         "password": e.password,
+        //         "mobile": e.mobile,
+        //     })
+        //     .then((res) => {
+        //         console.log(res);
+        //         setEmail(e.email)
+        //         axiosInterceptorInstance.post('/auth/otp/generate',
+        //             {
+        //                 "email": e.email
+        //             }).then((res) => {
+        //                 setStep(2)
+        //             }).catch((err) => {
+        //                 console.log(err);
+        //             }).finally(() => {
+        //                 setLoading(false)
+        //             })
+        //     })
+        //     .catch((err) => {
+        //         setLoading(false)
+        //         console.log(err);
+        //     })
     }
     return (
         <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
@@ -52,30 +56,23 @@ export default function CreateAccount({ setStep }) {
                 <p className='text-base mt-1.5'>
                     Please provide your personal details, they will be used to complete your profile
                 </p>
-                <div className='flex gap-6 mt-10'>
-                    <InputText
-                        label="What's your first name?"
-                        placeholder="Enter first name"
-                        register={register}
-                        required="first name is required"
-                        name="firstName"
-                        errors={errors['firstName']} />
-                    <InputText
-                        label="What’s your last name?"
-                        placeholder="Enter last name"
-                        register={register}
-                        required="last name is required"
-                        name="lastName"
-                        errors={errors['lastName']} />
-                </div>
+                <InputText
+                    label="What's your name?"
+                    placeholder="Enter your name"
+                    register={register}
+                    required="Please enter this input field"
+                    name="name"
+                    errors={errors['name']}
+                    className="mt-10" />
                 <InputEmail
                     label="What's your business email?"
                     placeholder="Enter your business email"
                     register={register}
-                    required="email is required"
+                    required="Please enter this input field"
                     name="email"
                     errors={errors['email']}
                     className="mt-2.5" />
+
                 <InputNumber
                     label="What’s your phone number?"
                     placeholder="Enter your phone number"
@@ -89,7 +86,7 @@ export default function CreateAccount({ setStep }) {
                     label="Password"
                     placeholder="Enter your password"
                     register={register}
-                    required="password is required"
+                    required="Please enter this input field"
                     name="password"
                     errors={errors['password']}
                     className="mt-2.5" />
@@ -99,9 +96,9 @@ export default function CreateAccount({ setStep }) {
                     By submitting this form, I acknowledge Dcluttr's <Link href={'/user-terms-of-service'} className='underline text-primary'>Terms of Service</Link> and <Link href={'/privacy-policy'} className='underline text-primary'>Privacy Policy</Link>
                 </p>
 
-                <Button className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Loading...' : 'Continue'}
-                </Button>
+                <FormSubmitButton
+                    isLoading={isLoading}
+                    text="Continue" />
 
                 <Button className="w-full mt-3" variant="outline">
                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
