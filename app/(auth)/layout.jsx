@@ -1,12 +1,10 @@
-import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
 import Image from "next/image";
 
 
 export default function HomePageLayout({ children }) {
   return (
     <main className="w-full h-full ">
-      <div className="grid grid-cols-12 h-full">
+      <div className="lg:grid grid-cols-12 h-full hidden">
         <div className="col-span-5 bg-primary h-full text-white flex items-center justify-center">
           <div className="max-w-[410px] ">
             <h1 className='font-extrabold text-[40px] leading-[48px]'>

@@ -166,7 +166,7 @@ export default function page() {
         <section className='my-12 lg:my-16 mx-auto max-w-5xl px-4'>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3 ">
                 {data.map((item, i) =>
-                    <Link href={`/blogs/${item.slug}`}>
+                    <Link href={`/blogs/${item.slug}`} key={i}>
                         <div className='group overflow-hidden rounded-2xl relative'>
                             <Image
                                 className=' duration-700 ease-in-out group-hover:scale-110 w-full aspect-[320/160] rounded-lg '

@@ -1,11 +1,15 @@
+"use client"
 import Hint from "@/components/Hint";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import CreateAccount from "../_components/CreateAccount";
+import { useState } from "react";
 
 
 export default function Home() {
+  const [step, setStep] = useState(1);
   return (
     <main className="h-full">
       <div className="flex items-center justify-between py-2.5 px-12 border-b">
@@ -37,6 +41,8 @@ export default function Home() {
           </Link>
         </Hint>
       </div>
+      {step === 1 && <CreateAccount setStep={setStep} />}
+      {step === 2 && <CreateAccount setStep={setStep} />}
     </main>
   );
 }
