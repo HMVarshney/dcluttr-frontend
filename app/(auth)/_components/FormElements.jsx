@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils"
 import Image from "next/image"
 import { memo } from "react";
 import Countdown from 'react-countdown';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
+import { Controller } from "react-hook-form"
 
 
 export function InputErrorMessage({ message }) {
@@ -99,6 +101,33 @@ export function InputPassword({ label, placeholder, required, register, name, er
                 type="password"
                 placeholder={placeholder}
                 errors={!!errors?.message}
+            />
+            <InputErrorMessage message={errors?.message} />
+        </div>
+    )
+}
+export function InputSelect({ label, placeholder, required, control, name, errors, className, options }) {
+    return (
+        <div className={cn("grid w-full items-center gap-2", className)}>
+            <Label htmlFor={name}
+                className={`text-black text-sm ${required && "after:content-['*'] after:ml-0.5 after:text-destructive"}`}>
+                {label}
+            </Label>
+            <Controller
+                control={control}
+                name={name}
+                rules={{ required }}
+                render={({ field }) => <Select
+                    name={field.name}
+                    onValueChange={field.onChange}
+                >
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder={placeholder} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {options.map((option) => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                    </SelectContent>
+                </Select>}
             />
             <InputErrorMessage message={errors?.message} />
         </div>

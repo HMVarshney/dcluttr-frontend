@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import OTPInput from 'react-otp-input';
 import { Input } from '@/components/ui/input';
 import dynamic from 'next/dynamic';
+import { ArrowLeft } from 'lucide-react';
 const CustomCount = dynamic(() => import('./FormElements').then((mod) => mod.CustomCount), { ssr: false });
 
 
@@ -37,10 +38,13 @@ export default function OTPVerification({ setStep, email }) {
     return (
         <section className='h-[calc(100vh-66px)] flex pl-28 pt-28'>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-md w-full'>
+                <div className='text-sm mb-6 flex items-center'>
+                    <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(1)} /><span className='text-black font-light ml-2 '>Back</span>
+                </div>
                 <h3 className='font-bold text-2xl'>
                     OTP Verification
                 </h3>
-                <p className='text-base mt-1.5'>
+                <p className='text-base font-light mt-1.5'>
                     Please enter the OTP (One-time Password) sent to your registered email address to complete your verification
                 </p>
                 <p className='text-base mt-4'>

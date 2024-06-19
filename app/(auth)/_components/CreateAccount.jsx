@@ -53,7 +53,7 @@ export default function CreateAccount({ setStep, setEmail }) {
                 <h3 className='font-bold text-2xl'>
                     Create an Account
                 </h3>
-                <p className='text-base mt-1.5'>
+                <p className='text-sm font-light mt-1.5'>
                     Please provide your personal details, they will be used to complete your profile
                 </p>
                 <InputText

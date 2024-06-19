@@ -1,25 +1,25 @@
 "use client"
 
 
-import { Button } from '@/components/ui/button';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
+import { FormSubmitButton, InputSelect, InputText } from './FormElements';
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
+import { ArrowLeft } from 'lucide-react';
 
 export default function OtherDetails({ setStep, setEmail }) {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, control } = useForm({
         mode: "onBlur"
     });
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
+        console.log(e);
         setLoading(true);
         setTimeout(() => {
             setLoading(false)
-            setEmail(e.email)
-            setStep(2)
+            setStep(3)
         }, 2000)
         // axiosInterceptorInstance.post('/auth/signup',
         //     {
@@ -48,8 +48,12 @@ export default function OtherDetails({ setStep, setEmail }) {
         //     })
     }
     return (
-        <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
+        <section className='h-[calc(100vh-66px)] flex pt-28 justify-center'>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
+                <div className='text-sm mb-6 flex items-center'>
+                    <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(2)} /><span className='text-black font-light ml-2 '>Back</span>
+                </div>
+
                 <h3 className='font-bold text-2xl'>
                     Other details
                 </h3>
@@ -65,14 +69,18 @@ export default function OtherDetails({ setStep, setEmail }) {
                     errors={errors['organization name']}
                     className="mt-10" />
 
-                <InputText
+                <InputSelect
                     label="Are you a brand or an agency / freelancer?"
                     placeholder="Select an option"
-                    register={register}
+                    control={control}
                     required="Please enter this input field"
                     name="type"
                     errors={errors['type']}
-                    className="mt-2" />
+                    className="mt-2"
+                    options={[
+                        { value: "Agency", label: "Agency" },
+                        { value: "Freelancer", label: "Freelancer" },
+                    ]} />
 
                 <InputText
                     label="What’s your company website?"
