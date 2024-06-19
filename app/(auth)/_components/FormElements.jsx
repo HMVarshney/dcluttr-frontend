@@ -3,6 +3,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
+import { memo } from "react";
+import Countdown from 'react-countdown';
+
 
 export function InputErrorMessage({ message }) {
     return (
@@ -25,7 +28,8 @@ export function InputText({ label, placeholder, required, register, name, errors
                 id={name}
                 type="text"
                 placeholder={placeholder}
-                className={errors?.message ? 'border-destructive ring-4 ring-destructive/30 ring-offset-destructive/40 ' : ''} />
+                errors={!!errors?.message}
+            />
             <InputErrorMessage message={errors?.message} />
         </div>
     )
@@ -51,7 +55,8 @@ export function InputEmail({ label, placeholder, required, register, name, error
                 id={name}
                 type="email"
                 placeholder={placeholder}
-                className={errors?.message ? 'border-destructive ring-4 ring-destructive/30 ring-offset-destructive/40 ' : ''} />
+                errors={!!errors?.message}
+            />
             <InputErrorMessage message={errors?.message} />
         </div>
     )
@@ -69,7 +74,8 @@ export function InputNumber({ label, placeholder, required, register, name, erro
                 id={name}
                 type="tel"
                 placeholder={placeholder}
-                className={errors?.message ? 'border-destructive ring-4 ring-destructive/30 ring-offset-destructive/40 ' : ''} />
+                errors={!!errors?.message}
+            />
             <InputErrorMessage message={errors?.message} />
         </div>
     )
@@ -92,7 +98,8 @@ export function InputPassword({ label, placeholder, required, register, name, er
                 id={name}
                 type="password"
                 placeholder={placeholder}
-                className={errors?.message ? 'border-destructive ring-4 ring-destructive/30 ring-offset-destructive/40 ' : ''} />
+                errors={!!errors?.message}
+            />
             <InputErrorMessage message={errors?.message} />
         </div>
     )
@@ -113,3 +120,16 @@ export function FormSubmitButton({ isLoading, text }) {
         </Button>
     )
 }
+
+
+function CustomCount({ onComplete, sec, num }) {
+    return (
+        <Countdown date={Date.now() + (1000 * sec)} renderer={({ seconds, completed }) => completed ? <span /> : <span className='mx-1'>({seconds} Secs)</span>}
+            onComplete={onComplete} key={num} />
+    )
+}
+function isEqual(prevProps, nextProps) {
+    return prevProps.number === nextProps.number;
+}
+const MemoizedCustomCount = memo(CustomCount, isEqual);
+export { MemoizedCustomCount as CustomCount };

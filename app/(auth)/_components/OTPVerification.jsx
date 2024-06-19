@@ -2,23 +2,41 @@
 
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
-import Link from 'next/link';
+import { useForm, Controller } from 'react-hook-form';
+import { FormSubmitButton } from './FormElements';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
+import { Label } from '@/components/ui/label';
+import OTPInput from 'react-otp-input';
+import { Input } from '@/components/ui/input';
+import dynamic from 'next/dynamic';
+const CustomCount = dynamic(() => import('./FormElements').then((mod) => mod.CustomCount), { ssr: false });
+
 
 export default function OTPVerification({ setStep, email }) {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { handleSubmit, formState: { errors }, control, watch } = useForm({
         mode: "onBlur"
     });
 
     const [isLoading, setLoading] = useState(false);
+    const [isDisabled, setDisabled] = useState(true);
+    const [num, setNum] = useState(0);
     const onSubmit = (e) => {
+        console.log(e);
+
         setLoading(true);
+        setTimeout(() => {
+            setLoading(false)
+            setStep(3);
+        }, 2000)
+    }
+
+    const handleResend = () => {
+        setNum(pre => pre + 1);
+        setDisabled(true);
     }
     return (
-        <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
-            <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
+        <section className='h-[calc(100vh-66px)] flex pl-28 pt-28'>
+            <form onSubmit={handleSubmit(onSubmit)} className='max-w-md w-full'>
                 <h3 className='font-bold text-2xl'>
                     OTP Verification
                 </h3>
@@ -26,27 +44,44 @@ export default function OTPVerification({ setStep, email }) {
                     Please enter the OTP (One-time Password) sent to your registered email address to complete your verification
                 </p>
                 <p className='text-base mt-4'>
-                    {email}
+                    {email}<span className='text-primary underline font-semibold ml-5 cursor-pointer'
+                        onClick={() => setStep(1)}>Change</span>
                 </p>
 
 
-
-
+                <div className="grid w-full items-center gap-2 mt-10">
+                    <Label htmlFor='otp' className={`text-black text-sm `}>
+                        Enter the OTP
+                    </Label>
+                    <Controller
+                        control={control}
+                        name="otp"
+                        render={({ field }) => <OTPInput
+                            inputStyle={{
+                                width: '44px',
+                                height: '40px',
+                                fontSize: '16px',
+                            }}
+                            className='text-primary'
+                            placeholder="000000"
+                            value={watch('otp')}
+                            name="otp"
+                            onChange={field.onChange}
+                            numInputs={6}
+                            renderSeparator={<div className='w-3'></div>}
+                            renderInput={(props) => <Input {...props} />}
+                        />}
+                    />
+                </div>
+                <p className='text-xs mt-2 mb-10'>
+                    Didn't receive the code? <button onClick={handleResend} disabled={isDisabled} className='disabled:text-black/50 text-primary underline'>Resend</button><CustomCount sec={10} onComplete={() => setDisabled(false)} key={num} num={num} />
+                    {/* //TODO 60 secs */}
+                </p>
 
 
                 <FormSubmitButton
                     isLoading={isLoading}
                     text="Verify" />
-
-                <Button className="w-full mt-3" variant="outline">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-                        <path d="M18.6712 8.368H18V8.33342H10.5V11.6667H15.2096C14.5225 13.6072 12.6762 15.0001 10.5 15.0001C7.73874 15.0001 5.49999 12.7613 5.49999 10.0001C5.49999 7.23883 7.73874 5.00008 10.5 5.00008C11.7746 5.00008 12.9342 5.48091 13.8171 6.26633L16.1742 3.90925C14.6858 2.52216 12.695 1.66675 10.5 1.66675C5.89791 1.66675 2.16666 5.398 2.16666 10.0001C2.16666 14.6022 5.89791 18.3334 10.5 18.3334C15.1021 18.3334 18.8333 14.6022 18.8333 10.0001C18.8333 9.44133 18.7758 8.89592 18.6712 8.368Z" fill="#FFC107" />
-                        <path d="M3.12747 6.12133L5.86539 8.12925C6.60622 6.29508 8.40039 5.00008 10.5 5.00008C11.7746 5.00008 12.9341 5.48091 13.8171 6.26633L16.1741 3.90925C14.6858 2.52216 12.695 1.66675 10.5 1.66675C7.29914 1.66675 4.52331 3.47383 3.12747 6.12133Z" fill="#FF3D00" />
-                        <path d="M10.5 18.3331C12.6525 18.3331 14.6084 17.5094 16.0871 16.1698L13.5079 13.9873C12.6432 14.645 11.5865 15.0007 10.5 14.9998C8.33252 14.9998 6.4921 13.6177 5.79877 11.689L3.08127 13.7827C4.46043 16.4815 7.26127 18.3331 10.5 18.3331Z" fill="#4CAF50" />
-                        <path d="M18.6713 8.36784H18V8.33325H10.5V11.6666H15.2096C14.8809 12.5901 14.2889 13.3971 13.5067 13.9878L13.5079 13.987L16.0871 16.1695C15.9046 16.3353 18.8333 14.1666 18.8333 9.99992C18.8333 9.44117 18.7758 8.89575 18.6713 8.36784Z" fill="#1976D2" />
-                    </svg>
-                    <span className='ml-2'>Login with Google</span>
-                </Button>
             </form>
         </section>
     )
