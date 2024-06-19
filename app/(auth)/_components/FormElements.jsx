@@ -7,6 +7,8 @@ import { memo } from "react";
 import Countdown from 'react-countdown';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
 import { Controller } from "react-hook-form"
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 
 export function InputErrorMessage({ message }) {
@@ -82,13 +84,16 @@ export function InputNumber({ label, placeholder, required, register, name, erro
         </div>
     )
 }
-export function InputPassword({ label, placeholder, required, register, name, errors, className }) {
+export function InputPassword({ label, placeholder, required, register, name, errors, className, showForgetOption = false }) {
     return (
         <div className={cn("grid w-full items-center gap-2", className)}>
-            <Label htmlFor={name}
-                className={`text-black text-sm ${required && "after:content-['*'] after:ml-0.5 after:text-destructive"}`}>
-                {label}
-            </Label>
+            <div className="flex items-center">
+                <Label htmlFor={name}
+                    className={`text-black text-sm ${required && "after:content-['*'] after:ml-0.5 after:text-destructive"}`}>
+                    {label}
+                </Label>
+                {showForgetOption && <Link href="/forget-password" className="text-xs text-primary ml-auto cursor-pointer">Forgot Password?</Link>}
+            </div>
             <Input
                 {...register(name, {
                     required,
@@ -149,6 +154,25 @@ export function FormSubmitButton({ isLoading, text }) {
         </Button>
     )
 }
+
+export function FormSubmitButtonWithIcon({ isLoading, text }) {
+    return (
+        <button disabled={isLoading} className='h-10 w-full py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90'>
+            {isLoading ?
+                <Image
+                    src="/icons/spinner.svg"
+                    alt="loader"
+                    width={20}
+                    height={20}
+                    className="animate-spin" />
+                : <>
+                    {text}
+                    <ArrowRight className='w-4 ml-2' />
+                </>}
+        </button>
+    )
+}
+
 
 
 function CustomCount({ onComplete, sec, num }) {

@@ -3,12 +3,15 @@
 
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FormSubmitButton, InputSelect, InputText } from './FormElements';
+import { FormSubmitButtonWithIcon, InputSelect, InputText } from './FormElements';
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function OtherDetails({ setStep, setEmail }) {
+    const router = useRouter()
     const { register, handleSubmit, formState: { errors }, control } = useForm({
         mode: "onBlur"
     });
@@ -19,7 +22,7 @@ export default function OtherDetails({ setStep, setEmail }) {
         setLoading(true);
         setTimeout(() => {
             setLoading(false)
-            setStep(3)
+            router.replace(`/log-in`)
         }, 2000)
         // axiosInterceptorInstance.post('/auth/signup',
         //     {
@@ -97,7 +100,7 @@ export default function OtherDetails({ setStep, setEmail }) {
                     By submitting this form, I acknowledge Dcluttr's <Link href={'/user-terms-of-service'} className='underline text-primary'>Terms of Service</Link> and <Link href={'/privacy-policy'} className='underline text-primary'>Privacy Policy</Link>
                 </p>
 
-                <FormSubmitButton
+                <FormSubmitButtonWithIcon
                     isLoading={isLoading}
                     text="Sign up" />
             </form>

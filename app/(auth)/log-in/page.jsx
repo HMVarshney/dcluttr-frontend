@@ -1,6 +1,7 @@
 import Hint from "@/components/Hint";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import LogInForm from "../_components/LogInForm";
 
 
 export default function Home() {
@@ -18,7 +19,7 @@ export default function Home() {
           </Link>
         </Hint>
       </div>
-      log-in
+      <LogInForm />
     </main>
   );
 }
