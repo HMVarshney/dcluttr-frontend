@@ -22,7 +22,7 @@ export default function Hint({
                     sideOffset={sideOffset}
                     alignOffset={alignOffset}
                 >
-                    <p className='font-semibold capitalize'>
+                    <p className='font-semibold'>
                         {label}
                     </p>
                 </TooltipContent>

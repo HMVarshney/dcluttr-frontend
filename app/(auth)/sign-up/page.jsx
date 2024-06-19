@@ -11,7 +11,7 @@ import OtherDetails from "../_components/OtherDetails";
 
 
 export default function Home() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   return (
     <main className="h-full">
@@ -39,7 +39,7 @@ export default function Home() {
         <div className="mr-4 ml-auto text-sm">
           Already have an account?
         </div>
-        <Hint label={'Have a account?'} side="bottom">
+        <Hint label={'Already have an account?'} side="bottom">
           <Link href='/log-in'>
             <Button className="hidden lg:block text-base font-bold">
               Login
