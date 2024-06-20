@@ -13,7 +13,7 @@ export default function List({ data }) {
     return (
         <ul className='space-y-4'>
             {data.map((org) => (
-                <div className='aspect-square relative'>
+                <div className='aspect-square relative' key={org.name}>
                     <Hint
                         label={org.name}
                         side="right"
