@@ -32,6 +32,10 @@ export default function Profile() {
                     side="top"
                     sideOffset={0}
                     className="w-40 ml-10 p-1.5">
+                    <div className='text-sm font-bold p-2.5'>
+                        My Profile
+                    </div>
+
                     <DropdownMenuItem className='flex gap-2 p-2.5'>
                         <Avatar className='w-5 h-5'>
                             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
