@@ -4,14 +4,26 @@ import React, { Fragment } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CustomTooltip from './CustomTooltip';
 import CustomActiveDot from './CustomActiveDot';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, CircleEllipsis, CircleHelp, Pin } from 'lucide-react';
+import { Checkbox } from "@/components/ui/checkbox"
 
 
-export default function SimpleAreaChart({ data, details }) {
+export default function AreaCharts({ data, details }) {
   return (
-    <div className='shadow rounded-lg bg-white w-full overflow-hidden'>
-      <div className='px-4 py-3 text-xs font-semibold text-[#515153] border-b border-[#F1F1F1]'>
-        {details.title}
+    <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
+      <div className='flex items-center px-4 py-3 border-b border-[#F1F1F1]'>
+        <Checkbox
+          className="duration-300 ease-in-out w-0 border-0 opacity-0 mr-0 
+        group-hover:w-4 group-hover:border group-hover:opacity-100 group-hover:mr-3 " />
+        <div className='text-xs font-semibold text-[#515153]'>
+          {details.title}
+        </div>
+        <div
+          className="ml-auto flex gap-2">
+          <CircleHelp className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
+          <Pin className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
+          <CircleEllipsis className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
+        </div>
       </div>
       <div className='flex items-center justify-between px-3 pt-2.5'>
         <div className=' text-2xl font-bold text-black'>
@@ -46,18 +58,20 @@ export default function SimpleAreaChart({ data, details }) {
               type="monotone"
               dataKey={ele.dataKey}
               stroke={ele.color}
+              strokeDasharray={ele.type !== 'area' && "2 2"}
               fillOpacity={1} fill={`url(#${ele.name}-${ele.id})`}
               activeDot={<CustomActiveDot />}
             />
-            <defs>
-              <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
-                <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
-              </linearGradient>
-            </defs>
+            {ele.type === 'area' &&
+              <defs>
+                <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
+                  <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
+                </linearGradient>
+              </defs>}
           </Fragment>)}
 
-          {/* <Area type="monotone" dataKey="pv" stroke={details.color} fillOpacity={1} fill={`url(#${details.id})`}
+          {/*   <Area type="monotone" dataKey="pv" stroke={details.color} fillOpacity={1} fill={`url(#${details.id})`}
           activeDot={<CustomActiveDot details={details} />} />
           <Area type="monotone" dataKey="pv" stroke="#DB3500" strokeDasharray="3 3" fill="#fff" fillOpacity={0} /> */}
         </AreaChart>

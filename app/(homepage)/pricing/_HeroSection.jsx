@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function HeroSection() {
     return (
-        <section className='flex flex-col justify-center my-28 mx-auto max-w-5xl px-4'>
+        <section className='flex flex-col justify-center my-16 mx-auto max-w-5xl px-4'>
             <h1 className='flex items-center justify-start gap-2 lg:gap-3 font-extrabold text-center text-3xl lg:text-7xl'>
                 Take better decisions
                 <svg className='w-10 lg:w-24' viewBox="0 0 118 102" fill="none" xmlns="http://www.w3.org/2000/svg" >
@@ -16,7 +16,7 @@ export default function HeroSection() {
             <h1 className='font-extrabold text-3xl lg:text-7xl'>
                 using better data
             </h1>
-            <div className='flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 mt-20 lg:mt-28'>
+            <div className='flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 mt-10 lg:mt-16'>
                 {[{
                     title: 'Free',
                     description: 'Uncover insights fast in video calls, support tickets, docs, and more',
