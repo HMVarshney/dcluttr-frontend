@@ -3,8 +3,8 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import React from 'react'
 import SimpleAreaChart from './_components/Home/SimpleAreaChart'
-import { DatePickerWithRange } from './_components/Home/DatePickerWithRange';
 import AreaChart from './_components/Home/AreaChart';
+import TestChart from './_components/Home/TestChart';
 
 
 const data = {
@@ -138,9 +138,7 @@ export default function page() {
     return (
         <ScrollArea className='rounded-md bg-[#FAFAFA] h-full '>
 
-            <div className='m-8 flex gap-8'>
-                <DatePickerWithRange />
-            </div>
+            <TestChart />
 
             <div className='m-8 flex gap-8'>
                 <AreaChart data={data1} details={{ title: 'ROAS', }} />

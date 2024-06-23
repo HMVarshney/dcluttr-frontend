@@ -30,9 +30,8 @@ const timePeriods = [
     "Quarters"
 ];
 
-export function DatePickerWithRange({ className, }) {
+export function DatePickerWithRange({ className, dateRange, setDateRange }) {
     const [isOpen, setOpen] = useState(false)
-    const [date, setDate] = useState({})
 
     return (
         <div className={cn("grid gap-2", className)}>
@@ -43,18 +42,18 @@ export function DatePickerWithRange({ className, }) {
                         variant={"outline"}
                         className={cn(
                             "w-[260px] justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
+                            !dateRange && "text-muted-foreground"
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date?.from ? (
-                            date.to ? (
+                        {dateRange?.from ? (
+                            dateRange.to ? (
                                 <>
-                                    {moment(date.from).format("MMM DD, YYYY")} -{" "}
-                                    {moment(date.to).format("MMM DD, YYYY")}
+                                    {moment(dateRange.from).format("MMM DD, YYYY")} -{" "}
+                                    {moment(dateRange.to).format("MMM DD, YYYY")}
                                 </>
                             ) : (
-                                moment(date.from).format("MMM DD, YYYY")
+                                moment(dateRange.from).format("MMM DD, YYYY")
                             )
                         ) : (
                             <span>Pick a date</span>
@@ -76,18 +75,18 @@ export function DatePickerWithRange({ className, }) {
                     <div className="px-6 flex flex-col justify-end">
                         <div className="flex items-center gap-3 ">
                             <Button variant={"outline"} className="w-full justify-start text-left">
-                                {moment(date.from).format("MMM DD, YYYY")}
+                                {moment(dateRange?.from).format("MMM DD, YYYY")}
                             </Button>
                             <Button variant={"outline"} className="w-full justify-start text-left">
-                                {moment(date.to).format("MMM DD, YYYY")}
+                                {moment(dateRange?.to).format("MMM DD, YYYY")}
                             </Button>
                         </div>
                         <Calendar
                             initialFocus
                             mode="range"
-                            defaultMonth={date?.from}
-                            selected={date}
-                            onSelect={setDate}
+                            defaultMonth={dateRange?.from}
+                            selected={dateRange}
+                            onSelect={setDateRange}
                             numberOfMonths={2}
                             className="px-0"
                         />
