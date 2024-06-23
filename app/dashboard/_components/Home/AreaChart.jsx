@@ -7,53 +7,56 @@ import CustomActiveDot from './CustomActiveDot';
 import { ArrowUp, CircleEllipsis, CircleHelp, Pin } from 'lucide-react';
 import { Checkbox } from "@/components/ui/checkbox"
 import moment from 'moment';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
-export default function AreaChart({ data, details }) {
+export default function AreaChart({ isLoading = false, data, details }) {
   return (
     <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
       <AreaChartHeader details={details} />
-      <ResponsiveContainer width="100%" height={160}>
-        <Charts
-          data={data.data}
-          margin={{
-            top: 10, right: 16, left: -20, bottom: 0,
-          }}
-        >
-          <CartesianGrid
-            strokeWidth={1}
-            stroke="#D1D3DA8F"
-          />
-          <XAxis
-            dataKey={data.dataKeyXAxis
-              ? (ele) => moment(ele["orders.created_at"]).format('DD MMM YY')
-              : null} axisLine={false} tickLine={false}
-            tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
-
-          <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
-
-          <Tooltip content={<CustomTooltip />} />
-
-          {data.series?.map(ele => <Fragment key={ele.name}>
-            <Area
-              type="monotone"
-              dataKey={ele.dataKey}
-              stroke={ele.color}
-              strokeDasharray={ele.type !== 'area' ? "2 2" : null}
-              fillOpacity={1} fill={`url(#${ele.name}-${ele.id})`}
-              activeDot={<CustomActiveDot />}
+      {isLoading
+        ? <Skeleton className="w-[calc(100%-32px)] h-[128px] my-4 rounded-md mx-auto" />
+        : <ResponsiveContainer width="100%" height={160}>
+          <Charts
+            data={data.data}
+            margin={{
+              top: 10, right: 16, left: -20, bottom: 0,
+            }}
+          >
+            <CartesianGrid
+              strokeWidth={1}
+              stroke="#D1D3DA8F"
             />
-            {ele.type === 'area' &&
-              <defs>
-                <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
-                  <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
-                </linearGradient>
-              </defs>}
-          </Fragment>)}
+            <XAxis
+              dataKey={data.dataKeyXAxis
+                ? (ele) => moment(ele["orders.created_at"]).format('D MMM YY')
+                : null} axisLine={false} tickLine={false}
+              tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
 
-        </Charts>
-      </ResponsiveContainer>
+            <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
+
+            <Tooltip content={<CustomTooltip />} />
+
+            {data.series?.map(ele => <Fragment key={ele.name}>
+              <Area
+                type="monotone"
+                dataKey={ele.dataKey}
+                stroke={ele.color}
+                strokeDasharray={ele.type !== 'area' ? "2 2" : null}
+                fillOpacity={1} fill={`url(#${ele.name}-${ele.id})`}
+                activeDot={<CustomActiveDot />}
+              />
+              {ele.type === 'area' &&
+                <defs>
+                  <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
+                    <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
+                  </linearGradient>
+                </defs>}
+            </Fragment>)}
+
+          </Charts>
+        </ResponsiveContainer>}
       <AreaChartFooter data={data} />
     </div>
   );

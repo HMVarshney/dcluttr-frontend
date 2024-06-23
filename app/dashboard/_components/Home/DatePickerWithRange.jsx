@@ -14,20 +14,20 @@ import {
 import moment from "moment"
 
 const timePeriods = [
-    "Today",
-    "Yesterday",
-    "Last 7 days",
-    "Last 30 days",
-    "Last 90 days",
-    "Last 365 days",
-    "Last month",
-    "Last 12 months",
-    "Last year",
-    "Week to date",
-    "Month to date",
-    "Quarter to date",
-    "Year to date",
-    "Quarters"
+    { label: "Today", value: 'today' },
+    { label: "Yesterday", value: 'yesterday' },
+    { label: "Last 7 days", value: 'last 7 days' },
+    { label: "Last 30 days", value: 'last 30 days' },
+    { label: "Last 90 days", value: 'last 90 days' },
+    { label: "Last 365 days", value: 'last 365 days' },
+    { label: "Last month", value: 'last months' },
+    { label: "Last 12 months", value: 'last 12 months' },
+    { label: "Last year", value: 'last year' },
+    { label: "Week to date", value: 'this week' },
+    { label: "Month to date", value: 'this month' },
+    { label: "Quarter to date", value: 'this quarter' },
+    { label: "Year to date", value: 'this year' },
+    { label: "Quarters", value: 'this quarter' }
 ];
 
 export function DatePickerWithRange({ className, dateRange, setDateRange }) {
@@ -56,7 +56,7 @@ export function DatePickerWithRange({ className, dateRange, setDateRange }) {
                                 moment(dateRange.from).format("MMM DD, YYYY")
                             )
                         ) : (
-                            <span>Pick a date</span>
+                            <span>{dateRange?.label ?? "Pick a date"}</span>
                         )}
                     </Button>
                 </PopoverTrigger>
@@ -64,15 +64,18 @@ export function DatePickerWithRange({ className, dateRange, setDateRange }) {
                     <div className="w-40 bg-slate-50 p-4" >
                         {timePeriods?.map(ele =>
                             <Button
-                                onClick={() => setOpen(false)}
+                                onClick={() => {
+                                    setOpen(false)
+                                    setDateRange(ele)
+                                }}
                                 size="sm"
                                 variant={"outline"}
-                                key={ele}
+                                key={ele.label}
                                 className="w-full justify-start text-left text-sm border-none bg-transparent">
-                                {ele}
+                                {ele.label}
                             </Button>)}
                     </div>
-                    <div className="px-6 flex flex-col justify-end">
+                    <div className="px-6 flex flex-col pt-20">
                         <div className="flex items-center gap-3 ">
                             <Button variant={"outline"} className="w-full justify-start text-left">
                                 {moment(dateRange?.from).format("MMM DD, YYYY")}
@@ -86,9 +89,11 @@ export function DatePickerWithRange({ className, dateRange, setDateRange }) {
                             mode="range"
                             defaultMonth={dateRange?.from}
                             selected={dateRange}
-                            onSelect={setDateRange}
+                            onSelect={(range) => {
+                                setDateRange({ ...range, value: null })
+                            }}
                             numberOfMonths={2}
-                            className="px-0"
+                            className="px-0 pt-6"
                         />
                         <div className="flex gap-2 justify-end items-center py-4">
                             <Button variant="outline" size="sm" onClick={() => setOpen(false)}>
