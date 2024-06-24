@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
+import { toast } from 'sonner';
 
 export default function CreateAccount({ setStep, setEmail }) {
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -15,37 +16,29 @@ export default function CreateAccount({ setStep, setEmail }) {
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
+
+        const signUpRequest = JSON.stringify({ ...e })
+
+
+        const formData = new FormData();
+        // formData.append('key', 'value');
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            setEmail(e.email)
-            setStep(2)
-        }, 2000)
-        // axiosInterceptorInstance.post('/auth/signup',
-        //     {
-        //         "name": e.name,
-        //         "email": e.email,
-        //         "password": e.password,
-        //         "mobile": e.mobile,
-        //     })
-        //     .then((res) => {
-        //         console.log(res);
-        //         setEmail(e.email)
-        //         axiosInterceptorInstance.post('/auth/otp/generate',
-        //             {
-        //                 "email": e.email
-        //             }).then((res) => {
-        //                 setStep(2)
-        //             }).catch((err) => {
-        //                 console.log(err);
-        //             }).finally(() => {
-        //                 setLoading(false)
-        //             })
-        //     })
-        //     .catch((err) => {
-        //         setLoading(false)
-        //         console.log(err);
-        //     })
+        axiosInterceptorInstance.post(`/auth/signup?signUpRequest=${signUpRequest}`, formData)
+            .then((res) => {
+                setEmail(e.email)
+                axiosInterceptorInstance.post('/auth/otp/generate',
+                    {
+                        "email": e.email
+                    }).then((res) => {
+                        setStep(2)
+                    }).catch((err) => {
+                        console.log(err);
+                    }).finally(() => {
+                        setLoading(false)
+                    })
+            }).catch((err) => {
+                setLoading(false)
+            })
     }
     return (
         <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
