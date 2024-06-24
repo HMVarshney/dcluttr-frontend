@@ -32,7 +32,7 @@ export default function LogInForm({ }) {
                 <p className='text-sm font-light mt-1.5'>
                     Please provide your personal details, they will be used to complete your profile
                 </p>
-                <InputText
+                <InputEmail
                     label="Email ID"
                     placeholder="Enter email ID"
                     register={register}

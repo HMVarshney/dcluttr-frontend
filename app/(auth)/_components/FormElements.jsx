@@ -92,7 +92,7 @@ export function InputPassword({ label, placeholder, required, register, name, er
                     className={`text-black text-sm ${required && "after:content-['*'] after:ml-0.5 after:text-destructive"}`}>
                     {label}
                 </Label>
-                {showForgetOption && <Link href="/forget-password" className="text-xs text-primary ml-auto cursor-pointer">Forgot Password?</Link>}
+                {showForgetOption && <Link href="/forgot-password" className="text-xs text-primary ml-auto cursor-pointer">Forgot Password?</Link>}
             </div>
             <Input
                 {...register(name, {
