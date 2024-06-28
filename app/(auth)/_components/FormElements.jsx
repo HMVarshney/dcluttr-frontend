@@ -97,10 +97,10 @@ export function InputPassword({ label, placeholder, required, register, name, er
             <Input
                 {...register(name, {
                     required,
-                    minLength: {
-                        value: 8,
-                        message: "Password must have at least 8 characters"
-                    }
+                    // minLength: {
+                    //     value: 8,
+                    //     message: "Password must have at least 8 characters"
+                    // }
                 })}
                 id={name}
                 type="password"

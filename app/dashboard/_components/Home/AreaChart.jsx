@@ -10,10 +10,10 @@ import moment from 'moment';
 import { Skeleton } from '@/components/ui/skeleton';
 
 
-export default function AreaChart({ isLoading = false, data, details }) {
+export default function AreaChart({ isLoading = false, data, details, dragHandleProps = {} }) {
   return (
     <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
-      <AreaChartHeader details={details} />
+      <AreaChartHeader details={details} dragHandleProps={dragHandleProps} />
       {isLoading
         ? <Skeleton className="w-[calc(100%-32px)] h-[128px] my-4 rounded-md mx-auto" />
         : <ResponsiveContainer width="100%" height={160}>
@@ -64,7 +64,7 @@ export default function AreaChart({ isLoading = false, data, details }) {
 
 
 
-export function AreaChartHeader({ details }) {
+export function AreaChartHeader({ details, dragHandleProps }) {
   return (
     <>
       <div className='flex items-center px-4 py-3 border-b border-[#F1F1F1]'>
@@ -74,7 +74,7 @@ export function AreaChartHeader({ details }) {
         <div className='text-xs font-semibold text-[#515153]'>
           {details.title}
         </div>
-        <div
+        <div  {...dragHandleProps}
           className="ml-auto flex gap-2">
           <CircleHelp className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
           <Pin className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />

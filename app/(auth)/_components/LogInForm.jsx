@@ -8,20 +8,31 @@ import { FormSubmitButtonWithIcon, InputEmail, InputNumber, InputPassword, Input
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import { useRouter } from 'next/navigation';
+import { setCookie } from '@/lib/utils';
 
 export default function LogInForm({ }) {
     const router = useRouter()
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm({
         mode: "onBlur"
     });
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            router.replace(`/dashboard`)
-        }, 2000)
+        axiosInterceptorInstance.post('/auth/login', e)
+            .then((res) => {
+                if (res.data?.accessToken) {
+                    setCookie('authToken', res.data?.accessToken)
+                    router.replace(`/dashboard`)
+                }
+            }).catch((err) => {
+                console.log(err)
+                setError('password', {
+                    type: 'manual',
+                    message: err.response.data.message
+                })
+            })
+            .finally(() => setLoading(false))
     }
     return (
         <section className='h-[calc(100vh-66px)] flex pt-28 justify-center'>

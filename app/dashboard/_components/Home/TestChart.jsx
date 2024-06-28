@@ -83,7 +83,7 @@ export default function TestChart() {
                         },
                     ],
                     data,
-                }} details={{ title: 'ROAS', }} />
+                }} details={{ title: 'Cube data', }} />
         </div>
 
     </>
