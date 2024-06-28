@@ -2,7 +2,7 @@
 
 
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
 import Link from 'next/link';
@@ -10,24 +10,24 @@ import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import { toast } from 'sonner';
 
 export default function CreateAccount({ setStep, setEmail }) {
+    const ref = useRef()
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur"
     });
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
-
         const signUpRequest = JSON.stringify({ ...e })
 
-
         const formData = new FormData();
-        // formData.append('key', 'value');
+        formData.append('file', ref.current);
+        formData.append('signUpRequest', signUpRequest);
         setLoading(true);
-        axiosInterceptorInstance.post(`/auth/signup?signUpRequest=${signUpRequest}`, formData)
+        axiosInterceptorInstance.post(`/auth/signup`, formData)
             .then((res) => {
                 setEmail(e.email)
-                axiosInterceptorInstance.post('/auth/otp/generate',
-                    {
+                axiosInterceptorInstance
+                    .post('/auth/otp/generate', {
                         "email": e.email
                     }).then((res) => {
                         setStep(2)
@@ -49,6 +49,8 @@ export default function CreateAccount({ setStep, setEmail }) {
                 <p className='text-sm font-light mt-1.5'>
                     Please provide your personal details, they will be used to complete your profile
                 </p>
+
+                <input id="file" type="file" onChange={(e) => ref.current = e.target.files[0]} />
                 <InputText
                     label="What's your name?"
                     placeholder="Enter your name"

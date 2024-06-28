@@ -10,10 +10,13 @@ import OTPInput from 'react-otp-input';
 import { Input } from '@/components/ui/input';
 import dynamic from 'next/dynamic';
 import { ArrowLeft } from 'lucide-react';
+import { setCookie } from '@/lib/utils';
+import { useRouter } from 'next/router';
 const CustomCount = dynamic(() => import('./FormElements').then((mod) => mod.CustomCount), { ssr: false });
 
 
 export default function OTPVerification({ setStep, email }) {
+    const router = useRouter()
     const { handleSubmit, formState: { errors }, control, watch } = useForm({
         mode: "onBlur"
     });
@@ -22,18 +25,34 @@ export default function OTPVerification({ setStep, email }) {
     const [isDisabled, setDisabled] = useState(true);
     const [num, setNum] = useState(0);
     const onSubmit = (e) => {
-        console.log(e);
-
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            setStep(3);
-        }, 2000)
+        axiosInterceptorInstance
+            .post('/auth/otp/verify', {
+                "email": email,
+                "otp": e.otp
+            }).then((res) => {
+                if (res.data?.accessToken) {
+                    setCookie('authToken', res.data?.accessToken)
+                    router.replace(`/dashboard`)
+                }
+                // setStep(3);
+            }).catch((err) => {
+                console.log(err);
+            }).finally(() => {
+                setLoading(false)
+            })
     }
 
     const handleResend = () => {
-        setNum(pre => pre + 1);
         setDisabled(true);
+        axiosInterceptorInstance
+            .post('/auth/otp/resend', {
+                "email": email,
+            }).then((res) => {
+                setNum(pre => pre + 1);
+            }).catch((err) => {
+                console.log(err);
+            })
     }
     return (
         <section className='h-[calc(100vh-66px)] flex pl-28 pt-28'>
