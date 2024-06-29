@@ -22,7 +22,7 @@ export default function LogInForm({ }) {
         axiosInterceptorInstance.post('/auth/login', e)
             .then((res) => {
                 if (res.data?.accessToken) {
-                    setCookie('authToken', res.data?.accessToken)
+                    setCookie('accessToken', res.data?.accessToken)
                     router.replace(`/dashboard`)
                 }
             }).catch((err) => {
