@@ -138,7 +138,7 @@ const data1 = {
         },
     ]
 };
-export default function page() {
+export default function Page() {
     const [titles, setTitles] = useState(['ROAS', 'Revenue', 'Spends'])
     const handleOnDragEnd = (result) => {
         console.log(result);
