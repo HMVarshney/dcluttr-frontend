@@ -6,6 +6,9 @@ import SimpleAreaChart from './_components/Home/SimpleAreaChart'
 import AreaChart from './_components/Home/AreaChart';
 import TestChart from './_components/Home/TestChart';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import Header from './_components/Header';
+import { Forward, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 
 const data = {
@@ -148,15 +151,37 @@ export default function page() {
 
     }
     return (
-        <ScrollArea className='rounded-md bg-[#FAFAFA] h-full '>
-
-            <TestChart />
-
+        <ScrollArea className='rounded-md bg-[#FAFAFA] h-full border'>
+            <Header />
+            <div className='flex items-center justify-between gap-2 my-3 mx-6'>
+                <div className=''>
+                    <div className='font-bold text-xl'>
+                        Store
+                    </div>
+                    <div className='text-[#4F4D55] text-sm'>
+                        Find all the analytics for store
+                    </div>
+                </div>
+                <div className='flex gap-2'>
+                    <Button variant="outline" className=" text-[#031B15]">
+                        <Pencil className='w-4 h-4 mr-2' />
+                        <div className='font-medium text-sm'>
+                            Edit
+                        </div>
+                    </Button>
+                    <Button variant="default" >
+                        <Forward className='w-4 h-4 mr-2' />
+                        <div className='font-medium text-sm'>
+                            Export
+                        </div>
+                    </Button>
+                </div>
+            </div>
 
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="imageUrls" direction='horizontal'>
                     {provided => (
-                        <div className='m-8 flex gap-8' {...provided.droppableProps} ref={provided.innerRef}>
+                        <div className='m-6 flex gap-3' {...provided.droppableProps} ref={provided.innerRef}>
                             {titles.map((title, i) => (
                                 <Draggable key={i} draggableId={`image-${i}`} index={i}>
                                     {provided => (
@@ -172,6 +197,7 @@ export default function page() {
                 </Droppable>
             </DragDropContext>
 
+            <TestChart />
 
             <div className='m-8 flex gap-8'>
                 <SimpleAreaChart data={data} details={{ title: 'Spends and Revenue Performance', }} />

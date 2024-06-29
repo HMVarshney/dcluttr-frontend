@@ -8,6 +8,7 @@ import { ChangePassword, EnterEmail, OTPVerification } from '../_components/Forg
 
 export default function Home() {
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState('');
   return (
     <main className="h-full">
       <div className="flex items-center justify-between py-5 px-12 border-b">
@@ -33,9 +34,9 @@ export default function Home() {
 
       </div>
       <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
-        {step === 1 && <EnterEmail step={step} setStep={setStep} />}
-        {step === 2 && <OTPVerification step={step} setStep={setStep} />}
-        {step === 3 && <ChangePassword step={step} setStep={setStep} />}
+        {step === 1 && <EnterEmail setStep={setStep} setEmail={setEmail} />}
+        {step === 2 && <OTPVerification setStep={setStep} email={email} />}
+        {step === 3 && <ChangePassword setStep={setStep} />}
       </section>
     </main>
   );

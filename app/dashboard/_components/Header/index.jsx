@@ -89,6 +89,7 @@ export default function Header() {
                     className='w-full  object-contain'
                     width={2000}
                     height={400}
+                    priority
                 />
             </div>
         </div>

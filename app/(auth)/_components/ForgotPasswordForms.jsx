@@ -11,10 +11,11 @@ import OTPInput from 'react-otp-input';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import dynamic from 'next/dynamic';
+import { setCookie } from '@/lib/utils';
 const CustomCount = dynamic(() => import('./FormElements').then((mod) => mod.CustomCount), { ssr: false });
 
 
-export function EnterEmail({ step, setStep }) {
+export function EnterEmail({ setStep, setEmail }) {
     const { register, handleSubmit, formState: { errors }, watch } = useForm({
         mode: "onBlur"
     });
@@ -22,11 +23,17 @@ export function EnterEmail({ step, setStep }) {
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            // router.replace(`/dashboard`)
-            setStep(2)
-        }, 2000)
+        axiosInterceptorInstance
+            .post('/auth/otp/generate', {
+                "email": e.email
+            }).then((res) => {
+                setEmail(e.email)
+                setStep(2)
+            }).catch((err) => {
+                console.log(err);
+            }).finally(() => {
+                setLoading(false)
+            })
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
@@ -53,7 +60,7 @@ export function EnterEmail({ step, setStep }) {
 }
 
 
-export function OTPVerification({ step, setStep }) {
+export function OTPVerification({ email, setStep }) {
     const { handleSubmit, formState: { errors }, control, watch } = useForm({
         mode: "onBlur"
     });
@@ -63,11 +70,20 @@ export function OTPVerification({ step, setStep }) {
     const [num, setNum] = useState(0);
     const onSubmit = (e) => {
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            // router.replace(`/dashboard`)
-            setStep(3)
-        }, 2000)
+        axiosInterceptorInstance
+            .post('/auth/otp/verify', {
+                "email": email,
+                "otp": e.otp
+            }).then((res) => {
+                if (res.data?.accessToken) {
+                    setCookie('accessToken', res.data?.accessToken)
+                    setStep(3);
+                }
+            }).catch((err) => {
+                console.log(err);
+            }).finally(() => {
+                setLoading(false)
+            })
     }
 
     const handleResend = () => {
@@ -129,10 +145,16 @@ export function ChangePassword({ step, setStep }) {
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            router.replace(`/log-in`)
-        }, 2000)
+        axiosInterceptorInstance
+            .post('/user/password/forget', {
+                "newPassword": e.c_password
+            }).then((res) => {
+                router.replace(`/log-in`)
+            }).catch((err) => {
+                console.log(err);
+            }).finally(() => {
+                setLoading(false)
+            })
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>

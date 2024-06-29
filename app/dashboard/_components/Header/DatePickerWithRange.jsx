@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { CalendarDays, Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -30,7 +30,7 @@ const timePeriods = [
     { label: "Quarters", value: 'this quarter' }
 ];
 
-export function DatePickerWithRange({ className, dateRange, setDateRange }) {
+export default function DatePickerWithRange({ className, dateRange, setDateRange }) {
     const [isOpen, setOpen] = useState(false)
 
     return (
@@ -41,11 +41,11 @@ export function DatePickerWithRange({ className, dateRange, setDateRange }) {
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-[260px] justify-start text-left font-normal",
+                            "w-[240px] justify-start text-left font-normal",
                             !dateRange && "text-muted-foreground"
                         )}
                     >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <CalendarDays className="mr-2 h-5 w-5" />
                         {dateRange?.from ? (
                             dateRange.to ? (
                                 <>
