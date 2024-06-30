@@ -23,7 +23,7 @@ export default function Notifications() {
                 onClick={(e) => e.stopPropagation()}
                 side="bottom"
                 sideOffset={0}
-                className="w-80 mr-10 -mt-1 p-0">
+                className="w-80 mr-10 mt-1 p-0">
                 <div className='text-sm font-bold px-4 py-2.5 border-b'>
                     Notifications
                 </div>
@@ -38,7 +38,7 @@ export default function Notifications() {
                         <div className='flex flex-col gap-1'>
                             <div className='text-sm font-semibold'>Primary notification text</div>
                             <div className='text-xs text-[#031B15B2]'>This is the description of the notification</div>
-                            <div className='text-xs text-[#031B15B2]'>22 hours ago</div>
+                            <div className='text-xs text-[#031B15B2] mt-1.5'>22 hours ago</div>
                         </div>
                         <EllipsisVertical className='w-4 h-4 ml-auto' />
                     </DropdownMenuItem>))}

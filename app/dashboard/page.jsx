@@ -9,6 +9,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Header from './_components/Header';
 import { Forward, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ExportFileFormat from './_components/ExportFileFormat';
 
 
 const data = {
@@ -169,12 +170,7 @@ export default function Page() {
                             Edit
                         </div>
                     </Button>
-                    <Button variant="default" >
-                        <Forward className='w-4 h-4 mr-2' />
-                        <div className='font-medium text-sm'>
-                            Export
-                        </div>
-                    </Button>
+                    <ExportFileFormat />
                 </div>
             </div>
 

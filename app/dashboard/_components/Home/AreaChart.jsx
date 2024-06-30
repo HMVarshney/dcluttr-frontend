@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import { AreaChart as Charts, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CustomTooltip from './CustomTooltip';
 import CustomActiveDot from './CustomActiveDot';
-import { ArrowUp, CircleEllipsis, CircleHelp, Pin } from 'lucide-react';
+import { ArrowUp, CircleEllipsis, CircleHelp, Grip, Pin } from 'lucide-react';
 import { Checkbox } from "@/components/ui/checkbox"
 import moment from 'moment';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -69,16 +69,18 @@ export function AreaChartHeader({ details, dragHandleProps }) {
     <>
       <div className='flex items-center px-4 py-3 border-b border-[#F1F1F1]'>
         <Checkbox
-          className="duration-300 ease-in-out w-0 border-0 opacity-0 mr-0 
-        group-hover:w-4 group-hover:border group-hover:opacity-100 group-hover:mr-3 " />
+          className="duration-300 ease-in-out w-0 h-0 border-0 opacity-0 mr-0 
+        group-hover:w-4 group-hover:h-4 group-hover:border group-hover:opacity-100 group-hover:mr-3 " />
         <div className='text-xs font-semibold text-[#515153]'>
           {details.title}
         </div>
-        <div  {...dragHandleProps}
+        <div
           className="ml-auto flex gap-2">
           <CircleHelp className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
           <Pin className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
-          <CircleEllipsis className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
+          <div  {...dragHandleProps}>
+            <Grip className='duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100' />
+          </div>
         </div>
       </div>
       <div className='flex items-center justify-between px-3 pt-2.5'>
