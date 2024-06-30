@@ -14,8 +14,9 @@ import {
 import Switcher from './Switcher'
 import DatePickerWithRange from './DatePickerWithRange';
 import { Button } from '@/components/ui/button';
-import { Bell, RefreshCcw, Home, HomeIcon, PcCase, Plus, TvMinimal } from 'lucide-react';
+import { RefreshCcw, HomeIcon, PcCase, Plus, TvMinimal } from 'lucide-react';
 import Image from 'next/image';
+import Notifications from './Notifications';
 
 
 
@@ -49,9 +50,7 @@ export default function Header() {
                 <Button variant="ghost" className="px-2.5">
                     <RefreshCcw className='w-5 h-5' />
                 </Button>
-                <Button variant="ghost" className="px-2.5">
-                    <Bell className='w-5 h-5' />
-                </Button>
+                <Notifications />
             </div>
             <div className='flex items-center justify-between gap-2 py-3 px-6 bg-white border-b'>
                 <div className='border rounded-xl flex gap-2 bg-[#FAFAFA] p-[3px]'>

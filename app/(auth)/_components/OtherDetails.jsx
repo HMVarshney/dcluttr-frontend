@@ -1,7 +1,7 @@
 "use client"
 
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FormSubmitButtonWithIcon, InputSelect, InputText } from './FormElements';
 import Link from 'next/link';
@@ -12,46 +12,27 @@ import { useRouter } from 'next/navigation';
 
 export default function OtherDetails({ setStep, setEmail }) {
     const router = useRouter()
+    const ref = useRef()
+
     const { register, handleSubmit, formState: { errors }, control } = useForm({
         mode: "onBlur"
     });
 
     const [isLoading, setLoading] = useState(false);
+    const [file, setFile] = useState(null);
     const onSubmit = (e) => {
-        console.log(e);
         setLoading(true);
-        setTimeout(() => {
-            setLoading(false)
-            router.replace(`/log-in`)
-        }, 2000)
-        // axiosInterceptorInstance.post('/auth/signup',
-        //     {
-        //         "name": e.name,
-        //         "email": e.email,
-        //         "password": e.password,
-        //         "mobile": e.mobile,
-        //     })
-        //     .then((res) => {
-        //         console.log(res);
-        //         setEmail(e.email)
-        //         axiosInterceptorInstance.post('/auth/otp/generate',
-        //             {
-        //                 "email": e.email
-        //             }).then((res) => {
-        //                 setStep(2)
-        //             }).catch((err) => {
-        //                 console.log(err);
-        //             }).finally(() => {
-        //                 setLoading(false)
-        //             })
-        //     })
-        //     .catch((err) => {
-        //         setLoading(false)
-        //         console.log(err);
-        //     })
+        const formData = new FormData();
+        formData.append('file', file);
+        axiosInterceptorInstance
+            .post(`/organization/add?name=${e.organization_name}`, formData)
+            .then((res) => {
+                setLoading(false)
+                router.replace(`/log-in`)
+            })
     }
     return (
-        <section className='h-[calc(100vh-66px)] flex pt-28 justify-center'>
+        <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
                 <div className='text-sm mb-6 flex items-center'>
                     <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(2)} /><span className='text-black font-light ml-2 '>Back</span>
@@ -63,13 +44,32 @@ export default function OtherDetails({ setStep, setEmail }) {
                 <p className='text-base mt-1.5'>
                     Please provide your personal details, they will be used to complete your profile
                 </p>
+                <div className='flex mt-10 items-center' onClick={() => ref.current.click()}>
+                    <Image
+                        src={file ? URL.createObjectURL(file) : '/image_placeholder.svg'}
+                        width={56}
+                        height={56}
+                        alt='dcluttr logo'
+                        className="rounded-xl border"
+                    />
+                    <div className='ml-3'>
+                        <div className='text-sm text-[#031B15] font-semibold'>Image</div>
+                        <div className='text-xs text-primary font-semibold'>Add Image</div>
+                    </div>
+                    <input
+                        ref={ref}
+                        onChange={(e) => setFile(e.target.files[0])}
+                        type="file"
+                        className="hidden"
+                    />
+                </div>
                 <InputText
                     label="What’s your organization name?"
                     placeholder="Enter organization name"
                     register={register}
                     required="Please enter this input field"
-                    name="organization name"
-                    errors={errors['organization name']}
+                    name="organization_name"
+                    errors={errors['organization_name']}
                     className="mt-10" />
 
                 <InputSelect

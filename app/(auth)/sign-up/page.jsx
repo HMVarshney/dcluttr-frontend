@@ -11,7 +11,7 @@ import StepBox from "@/components/StepBox";
 
 
 export default function Home() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const [email, setEmail] = useState('');
   return (
     <main className="h-full">
