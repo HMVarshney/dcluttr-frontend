@@ -2,7 +2,7 @@
 
 
 import { ArrowBigLeft, ChevronRight, LogOut, UserRound, UsersRound } from 'lucide-react'
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     Avatar,
     AvatarFallback,
@@ -17,17 +17,20 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { deleteCookie } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { DashboardContext } from '../../layout'
 
 export default function Profile() {
     const { replace } = useRouter()
+    let { userDetails } = useContext(DashboardContext);
+    console.log(userDetails);
     return (
         <div className='flex flex-col items-center justify-center gap-5'>
             <UsersRound className='text-icon cursor-pointer w-7 h-7' />
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src={userDetails?.image} alt={userDetails?.fullName} />
+                        <AvatarFallback>{userDetails?.fullName?.slice(0, 1)}</AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -41,10 +44,10 @@ export default function Profile() {
 
                     <DropdownMenuItem className='flex gap-2 p-2.5 cursor-pointer'>
                         <Avatar className='w-5 h-5'>
-                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarImage src={userDetails?.image} alt={userDetails?.fullName} />
+                            <AvatarFallback>{userDetails?.fullName?.slice(0, 1)}</AvatarFallback>
                         </Avatar>
-                        <div className='text-sm'>Shiva</div>
+                        <div className='text-sm line-clamp-1'>{userDetails?.fullName}</div>
                         <div className='text-[10px] text-white px-2 bg-primary rounded'>Admin</div>
                     </DropdownMenuItem>
                     <DropdownMenuItem className='flex gap-2 p-2.5 cursor-pointer'>

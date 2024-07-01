@@ -4,6 +4,7 @@ import SideBar from "./_components/Sidebar";
 import OrgSideBar from "./_components/OrgSidebar";
 import { createContext, useEffect, useState } from "react";
 import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
+import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 
 
 export const DashboardContext = createContext();
@@ -25,7 +26,8 @@ export default function DashboardLayout({ children }) {
 
     return (
         <DashboardContext.Provider value={{ userDetails, getUserDetails }}>
-            <main className="h-full flex items-stretch">
+            <DecluttrNotWorksInPhone />
+            <main className="h-full hidden lg:flex items-stretch">
                 <div className="flex flex-col">
                     <Navbar />
                     <div className="flex h-full">

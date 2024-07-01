@@ -1,9 +1,11 @@
+import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 import Image from "next/image";
 
 
 export default function HomePageLayout({ children }) {
   return (
     <main className="w-full h-full ">
+      <DecluttrNotWorksInPhone />
       <div className="lg:grid grid-cols-12 h-full hidden">
         <div className="col-span-5 bg-primary h-full text-white flex items-center justify-center">
           <div className="max-w-[410px] ">
