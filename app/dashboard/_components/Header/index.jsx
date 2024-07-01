@@ -27,59 +27,61 @@ export default function Header() {
         value: null
     });
     return (
-        <div className=''>
-            <div className='flex items-center justify-center gap-2 py-3 px-6 bg-white border-b'>
-                <div className='mr-auto'>
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem>
-                                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator />
-                            <BreadcrumbItem>
-                                <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                    <div className='text-[#919191] text-xs'>
-                        Last updated: 12:56 PM
+        <>
+            <div className='sticky top-0'>
+                <div className='flex items-center justify-center gap-2 py-3 px-6 bg-white border-b'>
+                    <div className='mr-auto'>
+                        <Breadcrumb>
+                            <BreadcrumbList>
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+                                </BreadcrumbItem>
+                                <BreadcrumbSeparator />
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
+                                </BreadcrumbItem>
+                            </BreadcrumbList>
+                        </Breadcrumb>
+                        <div className='text-[#919191] text-xs'>
+                            Last updated: 12:56 PM
+                        </div>
                     </div>
+                    <Switcher />
+                    <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />
+                    <Button variant="ghost" className="px-2.5">
+                        <RefreshCcw className='w-5 h-5' />
+                    </Button>
+                    <Notifications />
                 </div>
-                <Switcher />
-                <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />
-                <Button variant="ghost" className="px-2.5">
-                    <RefreshCcw className='w-5 h-5' />
-                </Button>
-                <Notifications />
-            </div>
-            <div className='flex items-center justify-between gap-2 py-3 px-6 bg-white border-b'>
-                <div className='border rounded-xl flex gap-2 bg-[#FAFAFA] p-[3px]'>
-                    <Button variant="default" size="xs">
-                        <HomeIcon className='w-4 h-4 mr-1' />
-                        <div className='font-medium text-sm'>
-                            Home
-                        </div>
-                    </Button>
-                    <Button variant="ghost" size="xs" className=" text-[#031B15B2]">
-                        <PcCase className='w-4 h-4 mr-1' />
-                        <div className='font-medium text-sm'>
-                            Dcluttr Pixel
-                        </div>
-                    </Button>
-                </div>
-                <div className='flex gap-2'>
-                    <Button variant="outline" className=" text-[#031B15]">
-                        <TvMinimal className='w-4 h-4 mr-2' />
-                        <div className='font-medium text-sm'>
-                            Customize Dashboard
-                        </div>
-                    </Button>
-                    <Button variant="default" >
-                        <Plus className='w-4 h-4 mr-2' />
-                        <div className='font-medium text-sm'>
-                            Create Section
-                        </div>
-                    </Button>
+                <div className='flex items-center justify-between gap-2 py-3 px-6 bg-white border-b'>
+                    <div className='border rounded-xl flex gap-2 bg-[#FAFAFA] p-[3px]'>
+                        <Button variant="default" size="xs">
+                            <HomeIcon className='w-4 h-4 mr-1' />
+                            <div className='font-medium text-sm'>
+                                Home
+                            </div>
+                        </Button>
+                        <Button variant="ghost" size="xs" className=" text-[#031B15B2]">
+                            <PcCase className='w-4 h-4 mr-1' />
+                            <div className='font-medium text-sm'>
+                                Dcluttr Pixel
+                            </div>
+                        </Button>
+                    </div>
+                    <div className='flex gap-2'>
+                        <Button variant="outline" className=" text-[#031B15]">
+                            <TvMinimal className='w-4 h-4 mr-2' />
+                            <div className='font-medium text-sm'>
+                                Customize Dashboard
+                            </div>
+                        </Button>
+                        <Button variant="default" >
+                            <Plus className='w-4 h-4 mr-2' />
+                            <div className='font-medium text-sm'>
+                                Create Section
+                            </div>
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div className=' py-3 px-6'>
@@ -91,6 +93,6 @@ export default function Header() {
                     priority
                 />
             </div>
-        </div>
+        </>
     )
 }

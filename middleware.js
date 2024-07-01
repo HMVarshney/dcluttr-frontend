@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server';
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
-    console.log("middleware ran!!");
-    if (request.nextUrl.pathname.startsWith('/log-in') || request.nextUrl.pathname.startsWith('/sign-up')) {
+    if (request.nextUrl.pathname.includes('/log-in')
+        || request.nextUrl.pathname.includes('/sign-up')
+        || request.nextUrl.pathname.includes('/forgot-password')) {
         //TODO: Redirect to the module based on the user role.
         console.log("in login");
         if (cookies().get("accessToken")) {
@@ -13,7 +14,7 @@ export function middleware(request) {
         return NextResponse.next();
     }
 
-    if (request.nextUrl.pathname.startsWith('/dashboard')) {
+    if (request.nextUrl.pathname.includes('/dashboard')) {
         console.log("dashboard");
         if (!cookies().get("accessToken")) {
             return NextResponse.redirect(new URL('/log-in', request.url));

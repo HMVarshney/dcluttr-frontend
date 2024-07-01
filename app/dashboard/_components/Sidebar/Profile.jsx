@@ -54,8 +54,8 @@ export default function Profile() {
                     </DropdownMenuItem>
                     <DropdownMenuItem className='flex gap-2 p-2.5 cursor-pointer'
                         onClick={(e) => {
-                            deleteCookie("accessToken")
                             replace("/log-in")
+                            deleteCookie("accessToken")
                         }}>
                         <LogOut className='w-4 h-4' />
                         <div className='text-sm'>Sign Out</div>
