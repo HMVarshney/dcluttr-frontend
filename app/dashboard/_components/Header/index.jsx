@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { RefreshCcw, HomeIcon, PcCase, Plus, TvMinimal } from 'lucide-react';
 import Image from 'next/image';
 import Notifications from './Notifications';
+import BrandList from './BrandList';
 import CreateSectionButton from './CreateSectionButton';
 
 
@@ -55,20 +56,7 @@ export default function Header() {
                     <Notifications />
                 </div>
                 <div className='flex items-center justify-between gap-2 py-3 px-6 bg-white border-b'>
-                    <div className='border rounded-xl flex gap-2 bg-[#FAFAFA] p-[3px]'>
-                        <Button variant="default" size="xs">
-                            <HomeIcon className='w-4 h-4 mr-1' />
-                            <div className='font-medium text-sm'>
-                                Home
-                            </div>
-                        </Button>
-                        <Button variant="ghost" size="xs" className=" text-[#031B15B2]">
-                            <PcCase className='w-4 h-4 mr-1' />
-                            <div className='font-medium text-sm'>
-                                Dcluttr Pixel
-                            </div>
-                        </Button>
-                    </div>
+                    <BrandList />
                     <div className='flex gap-2'>
                         <Button variant="outline" className=" text-[#031B15]">
                             <TvMinimal className='w-4 h-4 mr-2' />
