@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { RefreshCcw, HomeIcon, PcCase, Plus, TvMinimal } from 'lucide-react';
 import Image from 'next/image';
 import Notifications from './Notifications';
+import CreateSectionButton from './CreateSectionButton';
 
 
 
@@ -75,12 +76,7 @@ export default function Header() {
                                 Customize Dashboard
                             </div>
                         </Button>
-                        <Button variant="default" >
-                            <Plus className='w-4 h-4 mr-2' />
-                            <div className='font-medium text-sm'>
-                                Create Section
-                            </div>
-                        </Button>
+                        <CreateSectionButton />
                     </div>
                 </div>
             </div>
