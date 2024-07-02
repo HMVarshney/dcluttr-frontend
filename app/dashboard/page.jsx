@@ -10,6 +10,7 @@ import Header from './_components/Header';
 import { Forward, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ExportFileFormat from './_components/ExportFileFormat';
+import CustomBarChart from './_components/Home/CustomBarChart';
 
 
 const data = {
@@ -34,7 +35,7 @@ const data = {
         {
             name: 'A',
             s: 8,
-            r: 0,
+            r: 1,
             amt: 24,
         },
         {
@@ -198,6 +199,11 @@ export default function Page() {
             <div className='m-8 flex gap-8'>
                 <SimpleAreaChart data={data} details={{ title: 'Spends and Revenue Performance', }} />
                 <SimpleAreaChart data={data} details={{ title: 'ROAS', }} />
+            </div>
+
+            <div className='m-8 flex gap-8'>
+                <AreaChart data={data} details={{ title: 'Spends and Revenue Performance', }} />
+                <CustomBarChart data={data} details={{ title: 'ROAS', }} />
             </div>
             {/*  <div className='h-screen' />
             <div className='h-screen' />
