@@ -30,7 +30,7 @@ export default function Header() {
     });
     return (
         <>
-            <div className='sticky top-0'>
+            <div className='sticky top-0 z-10'>
                 <div className='flex items-center justify-center gap-2 py-3 px-6 bg-white border-b'>
                     <div className='mr-auto'>
                         <Breadcrumb>

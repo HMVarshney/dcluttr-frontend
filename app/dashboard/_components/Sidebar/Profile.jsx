@@ -22,7 +22,7 @@ import { DashboardContext } from '../../layout'
 export default function Profile() {
     const { replace } = useRouter()
     let { userDetails } = useContext(DashboardContext);
-    console.log(userDetails);
+
     return (
         <div className='flex flex-col items-center justify-center gap-5'>
             <UsersRound className='text-icon cursor-pointer w-7 h-7' />

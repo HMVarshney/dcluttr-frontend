@@ -25,7 +25,7 @@ export default function BrandList() {
             if (buttonContainerRef.current) {
                 const { scrollLeft, scrollWidth, clientWidth } = buttonContainerRef.current;
                 setCanScrollLeft(scrollLeft > 0);
-                setCanScrollRight(scrollLeft < scrollWidth - clientWidth);
+                setCanScrollRight(scrollLeft < (scrollWidth - clientWidth - 10));
             }
         };
 
