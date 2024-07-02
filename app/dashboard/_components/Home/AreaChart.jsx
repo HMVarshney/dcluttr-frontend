@@ -8,7 +8,11 @@ import moment from 'moment';
 import { Skeleton } from '@/components/ui/skeleton';
 import ChartHeader from './ChartHeader';
 import ChartFooter from './ChartFooter';
-
+const error = console.error;
+console.error = (...args) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
+};
 
 export default function AreaChart({ isLoading = false, data, details, dragHandleProps = {} }) {
   return (
