@@ -17,7 +17,7 @@ export default function Home() {
       <PerformanceSection />
       <TestimonialSection />
       <AnalyticsSection />
-      <PowerFeaturesSection />
+      {/* <PowerFeaturesSection /> */}
       <FAQsSection />
       <ScaleItSection />
     </main>

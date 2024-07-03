@@ -4,7 +4,7 @@ import Image from 'next/image'
 import React from 'react'
 import Marquee from 'react-fast-marquee'
 
-export default function CarouselOfBrands({ my = 'my-16 lg:my-32' }) {
+export default function CarouselOfBrands({ my = 'my-16 lg:my-28' }) {
     return (
         <Marquee
             play={true}

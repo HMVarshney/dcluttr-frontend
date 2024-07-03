@@ -22,27 +22,27 @@ export default function OneDashboardSection() {
                 to rule them all
             </h1>
             <p className='text-center text-base lg:text-xl my-6 px-4 max-w-xl mx-auto'>
-                Unified dashboard which seamlessly integrates with your preferred ecommerce platform and marketing channels
+                Seamlessly integrates with your preferred e-commerce platform and marketing channels.
             </p>
             <div className='flex items-center justify-center gap-6 lg:gap-10 '>
                 <Image
-                    src="https://www.dcluttr.tech/images/graphics/google.png"
+                    src="/icons/google.svg"
                     alt="logo" width={100} height={100}
                     className="w-8 lg:w-12 object-contain" />
                 <Image
-                    src="https://www.dcluttr.tech/images/graphics/meta.png"
+                    src="/icons/meta.svg"
                     alt="logo" width={100} height={100}
                     className="w-8 lg:w-12 object-contain" />
                 <Image
-                    src="https://www.dcluttr.tech/images/graphics/amazon.png"
+                    src="/icons/amazon.svg"
                     alt="logo" width={100} height={100}
                     className="w-8 lg:w-12 object-contain" />
                 <Image
-                    src="https://www.dcluttr.tech/images/graphics/flipkart.png"
+                    src="/icons/flipkart.svg"
                     alt="logo" width={100} height={100}
                     className="w-8 lg:w-12 object-contain" />
                 <Image
-                    src="https://www.dcluttr.tech/images/graphics/shopify.png"
+                    src="/icons/shopify.svg"
                     alt="logo" width={100} height={100}
                     className="w-8 lg:w-12 object-contain" />
             </div>
@@ -81,14 +81,14 @@ export default function OneDashboardSection() {
             </Swiper>
             <div className='flex items-center mt-4 pt-4 gap-6'>
                 {[{
-                    title: 'See trends as they happen',
-                    description: 'Visualize emerging themes in your customer feedback over time.',
+                    title: 'Centralised Metrics',
+                    description: 'Gain a holistic understanding with metrics like Blended ROAS, NCPA, CLTV, and Total Ad spends.',
                 }, {
-                    title: 'Go straight to the source',
-                    description: 'Explore underlying feedback, build empathy, and uncover themes.',
+                    title: 'Simple and Customizable',
+                    description: 'Simply drag-and-drop to arrange sections to fit your needs.',
                 }, {
-                    title: 'Tailored just for you',
-                    description: 'Tell us what matters to you, and we’ll make sure you stay on top of it.',
+                    title: 'Custom reports for everyone',
+                    description: 'Create custom reports with metrics that matter to you.',
                 }].map((ele, i) => (
                     <div key={i} className={`w-full lg:w-1/3 border-t-2 pt-4 cursor-pointer ${activeSlide === i ? 'border-animate' : 'border-gray-300 hidden lg:block'}`}
                         onClick={() => {
@@ -99,7 +99,7 @@ export default function OneDashboardSection() {
                         <p className='font-extrabold text-xl mb-2'>
                             {ele?.title}
                         </p>
-                        <p className='text-base'>
+                        <p className='text-base line-clamp-2'>
                             {ele?.description}
                         </p>
                     </div>

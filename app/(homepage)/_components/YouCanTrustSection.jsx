@@ -4,13 +4,12 @@ import Image from 'next/image'
 
 export default function YouCanTrustSection() {
     return (
-        <section className=' max-w-5xl mx-auto px-4 lg:px-0'>
+        <section className='my-24 lg:my-52 max-w-5xl mx-auto px-4 lg:px-0'>
             <h1 className='font-extrabold text-center text-2xl lg:text-7xl'>
                 Attribution you can trust
             </h1>
             <p className='text-center text-base lg:text-xl my-6'>
-                No more GA4 woes. Scale your ads with better cross-channel visibility.<br />
-                Take better decisions with 5+ attribution models and accurate<br /> analysis of all the touch points.
+                No more GA4 woes. Scale your ads with better cross-channel visibility.
             </p>
 
             <div className='flex flex-col lg:flex-row gap-8 my-10'>
@@ -29,12 +28,12 @@ export default function YouCanTrustSection() {
                             className="w-full object-contain shadow rounded-s-lg" />
                     </div>
                     <div className='pb-16 px-8'>
-                        <div className='text-primary text-base font-bold'>Build context</div>
+                        <div className='text-primary text-base font-bold'>Best-in-class tracking</div>
                         <div className='text-black text-3xl font-extrabold my-4'>
-                            Get your team listening to customers
+                            Bolt - Our proprietary first-party pixel
                         </div>
                         <div className='text-black text-base font-medium'>
-                            Send key takeaways within minutes of hanging up. No more missed moments. Build context and align your team.
+                            Carefully engineered in-house, “Bolt” opens the door to countless analytics, attribution, and never-seen-before insights. Every click and conversion - exactly as it happened. All in real-time - unlike GA, Google, Meta.
                         </div>
                     </div>
                 </div>
@@ -53,12 +52,12 @@ export default function YouCanTrustSection() {
                             className="w-full object-contain shadow rounded-s-lg" />
                     </div>
                     <div className='pb-16 px-8'>
-                        <div className='text-primary text-base font-bold'>Build context</div>
+                        <div className='text-primary text-base font-bold'>Scale confidently - no guessing required</div>
                         <div className='text-black text-3xl font-extrabold my-4'>
-                            Get your team listening to customers
+                            Advanced attribution modelling
                         </div>
                         <div className='text-black text-base font-medium'>
-                            Send key takeaways within minutes of hanging up. No more missed moments. Build context and align your team.
+                            Take better decisions with 5+ multi-touch attribution models. Get deeper insights on what’s actually working - top, middle, and bottom of the funnel.
                         </div>
                     </div>
                 </div>
@@ -72,12 +71,12 @@ export default function YouCanTrustSection() {
                         <path fillRule="evenodd" clipRule="evenodd" d="M97.586 50.508c0 .23-.096.537-.202.867-.252.785-2.105 8.786-2.282 9.201a.526.526 0 00.968.409c.215-.51 2.202-8.798 2.436-9.71.125-.49.154-.926.07-1.218-.14-.497-.603-.733-1.392-.556-.933.21-9.637.58-11.207.305a.524.524 0 10-.18 1.034c1.497.261 10.123.127 11.192-.199a5.31 5.31 0 01.597-.133z" fill="#027056" stroke="#027056" strokeWidth="2"></path></svg>
                 </span>
                 <div className='px-8 pb-16 lg:pb-8 w-full order-2 lg:order-1'>
-                    <div className='text-primary text-base font-bold'>Build context</div>
+                    <div className='text-primary text-base font-bold'>Dcluttr loves iOS</div>
                     <div className='text-black text-3xl font-extrabold my-4'>
-                        Get your team listening to customers
+                        Future-proof and private
                     </div>
                     <div className='text-black text-base font-medium'>
-                        Send key takeaways within minutes of hanging up. No more missed moments. Build context and align your team.
+                        Unaffected by privacy changes on iOS 14.5+, Google, Safari, and other platforms. All the first-party data is collected with customer consent, complying with privacy policy and data protection laws.
                     </div>
                 </div>
                 <div className='pt-16 lg:pt-8 lg:pr-8 pb-8 pl-8 w-full order-1 lg:order-2'>

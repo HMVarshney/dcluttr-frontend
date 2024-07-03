@@ -39,23 +39,23 @@ export default function HeroSection() {
     }, [offsetY, set]);
     return (
         <section className='flex flex-col justify-center items-center'>
-            <Button variant="outline" size="sm" className="text-xs font-bold mb-4 mt-28 shadow-sm">
-                Dcluttr v1 is live now
+            <Button variant="outline" size="sm" className="text-xs font-bold mb-8 mt-32 lg:mt-40 shadow-sm">
+                Dcluttr V1 is live now
             </Button>
-            <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-2xl lg:text-7xl'>
+            <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-3xl lg:text-7xl'>
                 Advertise better<Image src={"/icons/megaphone.svg"} alt="logo" width={100} height={100} className="w-8 lg:w-20 object-contain" />
             </h1>
-            <h1 className='font-extrabold text-center text-2xl lg:text-7xl'>
+            <h1 className='font-extrabold text-center text-3xl lg:text-7xl'>
                 using first-party data
             </h1>
-            <p className='text-center text-base lg:text-xl my-6'>
-                Relying on third party cookies in 2024 is reckless. Stop the Guesswork.
+            <p className='text-center text-base lg:text-xl my-8 font-medium'>
+                Relying on third party cookies in 2024 is reckless. Stop the guesswork.
             </p>
             <Button className="text-base font-bold">
-                Book a demo
+                Book a free demo
             </Button>
 
-            <CarouselOfBrands />
+            {/* <CarouselOfBrands /> */}
 
 
             <animated.img

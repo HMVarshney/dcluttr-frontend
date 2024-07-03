@@ -10,6 +10,9 @@ export default function ScaleItSection() {
             <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-2xl lg:text-7xl'>
                 Scale<Image src={"/icons/graph.svg"} alt="logo" width={200} height={200} className="w-7 lg:w-14 object-contain" />it to the moon
             </h1>
+            <p className='text-center text-base lg:text-xl my-8 font-medium'>
+                Book a walkthrough to see how Dcluttr helps you take better decisions.
+            </p>
             <Button className="text-base font-bold mt-4 lg:mt-10">
                 Book a demo
             </Button>
