@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
+import ScaleItSection from '../_components/ScaleItSection';
 
 let data = [
     {
@@ -188,6 +189,7 @@ export default function page() {
                         </div>
                     </Link>)}
             </div>
+            <ScaleItSection className="my-12 lg:my-24" />
         </section>
     )
 }

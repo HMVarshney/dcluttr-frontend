@@ -10,13 +10,13 @@ export default function HomePageLayout({ children }) {
         <div className="col-span-5 bg-primary h-full text-white flex items-center justify-center">
           <div className="max-w-[410px] ">
             <h1 className='font-extrabold text-[40px] leading-[48px]'>
-              A Single Source Of Truth The Whole Team Can Trust
+              Take better decisions using first-party data
             </h1>
             <div className='flex flex-col gap-4 mt-12'>
-              {['Get a tour of the platform',
-                'See real examples of data insights',
-                'Understand which pricing plan is best for you',
-                'Start getting better data for your business',
+              {['Advanced attribution using Bolt',
+                'Insights you’ve never seen before',
+                'Real-time analytics',
+                'Connects with all marketing channels',
               ]?.map(ele =>
                 <div className='flex items-center gap-2' key={ele}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -28,7 +28,8 @@ export default function HomePageLayout({ children }) {
                 </div>
               )}
             </div>
-            <hr className="my-11 border-white/20" />
+            <div className="h-40" />
+            {/*  <hr className="my-11 border-white/20" />
             <div className='text-base font-semibold text-white/50'>
               You’re in Great Company
             </div>
@@ -38,7 +39,7 @@ export default function HomePageLayout({ children }) {
               width={800}
               height={200}
               className="mt-8 -ml-3 w-96 object-contain"
-            />
+            /> */}
           </div>
         </div>
         <div className="col-span-7">

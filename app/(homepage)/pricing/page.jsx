@@ -12,7 +12,7 @@ export default function page() {
     return (
         <main className="h-full">
             <HeroSection />
-            <CarouselOfBrands />
+            {/* <CarouselOfBrands /> */}
             <TestimonialSection />
             <FAQsSection />
             <ScaleItSection />

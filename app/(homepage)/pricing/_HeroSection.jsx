@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function HeroSection() {
     return (
-        <section className='flex flex-col justify-center my-16 mx-auto max-w-5xl px-4'>
+        <section className='flex flex-col justify-center mt-16 mx-auto max-w-5xl px-4'>
             <h1 className='flex items-center justify-start gap-2 lg:gap-3 font-extrabold text-center text-3xl lg:text-7xl'>
                 Take better decisions
                 <svg className='w-10 lg:w-24' viewBox="0 0 118 102" fill="none" xmlns="http://www.w3.org/2000/svg" >
@@ -16,90 +16,76 @@ export default function HeroSection() {
             <h1 className='font-extrabold text-3xl lg:text-7xl'>
                 using better data
             </h1>
-            <div className='flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 mt-10 lg:mt-16'>
-                {[{
-                    title: 'Free',
-                    description: 'Uncover insights fast in video calls, support tickets, docs, and more',
-                    recommend: false,
-                }, {
-                    title: 'Professional',
-                    description: 'Build your customer insights hub with powerful search, folders, and more',
-                    recommend: true,
-                }, {
-                    title: 'Enterprise',
-                    description: 'Scale customer insights org-wide with Enterprise-grade functionality',
-                    recommend: false,
-                }].map((ele, i) =>
-                    <div className='border rounded-lg w-full p-8' key={i}>
-                        <div className='text-xl font-extrabold mb-4'>
-                            {ele.title}
-                        </div>
-                        <div className='text-base font-medium mb-8'>
-                            {ele.description}
-                        </div>
-                        <hr />
-                        <Button variant={ele.recommend ? "default" : "outline"} className="text-base font-bold my-8 w-full ">
-                            Get Started
-                        </Button>
-                        <hr />
-                        <div className='flex flex-col gap-4 mt-8'>
-                            <div className='flex items-center gap-2'>
-                                <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 3s1 4 3 6 6 3 6 3-4 1-6 3-3 6-3 6-1-4-3-6-6-3-6-3 4-1 6-3 3-6 3-6z" fill="url(#shuriken-gradient_svg__paint0_linear_642_159)">
-                                    </path>
-                                    <defs>
-                                        <linearGradient id="shuriken-gradient_svg__paint0_linear_642_159" x1="12" y1="3" x2="12" y2="21" gradientUnits="userSpaceOnUse">
-                                            <stop stopColor="#027056"></stop><stop offset="1" stopColor="#01251c">
-                                            </stop>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <div className='text-base font-medium'>
-                                    No credit card required
-                                </div>
+            <div className='mx-auto max-w-4xl flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 mt-10 lg:mt-16'>
+                {[
+                    {
+                        title: 'Growth',
+                        description: 'Grow your brand with the most advanced first-party data analytics platform on the planet.',
+                        recommend: false,
+                        features: [
+                            'All integrations supported',
+                            'Attribution using Bolt - our proprietary first-party pixel',
+                            'Performance Analytics',
+                            'Creative Analytics',
+                            'Product Analytics',
+                            'Dedicated customer success manager',
+                        ]
+                    },
+                    {
+                        title: 'Agency',
+                        description: 'Bring the most advanced first-party data analytics to your clients',
+                        recommend: true,
+                        features: [
+                            'Everything included in Growth plan, plus:',
+                            'Personalized branding',
+                            'Referral benefits',
+                            'Custom dashboards and automation',
+                            'Exclusive brand connects and agency referrals',
+                        ]
+                    }].map((ele, i) =>
+                        <div className='border rounded-lg w-full p-8' key={i}>
+                            <div className='text-xl font-extrabold mb-4'>
+                                {ele.title}
                             </div>
-                            <div className='flex items-center gap-2'>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17 9l-7 7-3-3" stroke="url(#check-gradient_svg__paint0_linear_642_168)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                                    <defs>
-                                        <linearGradient id="check-gradient_svg__paint0_linear_642_168" x1="12" y1="9" x2="12" y2="16" gradientUnits="userSpaceOnUse">
-                                            <stop stopColor="#027056"></stop><stop offset="1" stopColor="#01251c"></stop>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <div className='text-base font-medium'>
-                                    Automatic summarization
-                                </div>
+                            <div className='text-base font-medium mb-8'>
+                                {ele.description}
                             </div>
-                            <div className='flex items-center gap-2'>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17 9l-7 7-3-3" stroke="url(#check-gradient_svg__paint0_linear_642_168)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                                    <defs>
-                                        <linearGradient id="check-gradient_svg__paint0_linear_642_168" x1="12" y1="9" x2="12" y2="16" gradientUnits="userSpaceOnUse">
-                                            <stop stopColor="#027056"></stop><stop offset="1" stopColor="#01251c"></stop>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <div className='text-base font-medium'>
-                                    Highlights key moments
-                                </div>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17 9l-7 7-3-3" stroke="url(#check-gradient_svg__paint0_linear_642_168)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                                    <defs>
-                                        <linearGradient id="check-gradient_svg__paint0_linear_642_168" x1="12" y1="9" x2="12" y2="16" gradientUnits="userSpaceOnUse">
-                                            <stop stopColor="#027056"></stop><stop offset="1" stopColor="#01251c"></stop>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <div className='text-base font-medium'>
-                                    Identifies themes
-                                </div>
+                            <hr />
+                            <Button variant={ele.recommend ? "default" : "outline"} className="text-base font-bold my-8 w-full ">
+                                Get Started for Free
+                            </Button>
+                            <hr />
+                            <div className='flex flex-col gap-4 mt-8'>
+                                {ele.features?.map((ele, i) =>
+                                    <div key={i} className='flex items-center gap-2'>
+                                        {i === 0 ?
+                                            <svg width="24px" height="24px" className='min-w-6 min-h-6' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M12 3s1 4 3 6 6 3 6 3-4 1-6 3-3 6-3 6-1-4-3-6-6-3-6-3 4-1 6-3 3-6 3-6z" fill="url(#shuriken-gradient_svg__paint0_linear_642_159)">
+                                                </path>
+                                                <defs>
+                                                    <linearGradient id="shuriken-gradient_svg__paint0_linear_642_159" x1="12" y1="3" x2="12" y2="21" gradientUnits="userSpaceOnUse">
+                                                        <stop stopColor="#027056"></stop><stop offset="1" stopColor="#01251c">
+                                                        </stop>
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                            :
+                                            <svg width="24" height="24" className='min-w-6 min-h-6' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M17 9l-7 7-3-3" stroke="url(#check-gradient_svg__paint0_linear_642_168)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                                                <defs>
+                                                    <linearGradient id="check-gradient_svg__paint0_linear_642_168" x1="12" y1="9" x2="12" y2="16" gradientUnits="userSpaceOnUse">
+                                                        <stop stopColor="#027056"></stop><stop offset="1" stopColor="#01251c"></stop>
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>}
+                                        <div className='text-base font-medium'>
+                                            {ele}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
             </div>
         </section>
     )
