@@ -15,13 +15,13 @@ export default function OneDashboardSection() {
 
     return (
         <section className='my-24 lg:my-52 mx-auto max-w-5xl px-4'>
-            <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-2xl lg:text-7xl'>
-                One dashboard<Image src={"/icons/increasing.svg"} alt="logo" width={100} height={100} className="w-6 lg:w-14 object-contain" />
+            <h1 className='flex items-center justify-center gap-2 lg:gap-3 font-extrabold text-center text-3xl lg:text-6xl'>
+                One dashboard<Image src={"/icons/increasing.svg"} alt="logo" width={100} height={100} className="w-6 lg:w-12 object-contain" />
             </h1>
-            <h1 className='font-extrabold text-center text-2xl lg:text-7xl'>
+            <h1 className='font-extrabold text-center text-3xl lg:text-6xl'>
                 to rule them all
             </h1>
-            <p className='text-center text-base lg:text-xl my-6 px-4 max-w-xl mx-auto'>
+            <p className='text-center text-xl my-6 px-4 max-w-xl mx-auto'>
                 Seamlessly integrates with your preferred e-commerce platform and marketing channels.
             </p>
             <div className='flex items-center justify-center gap-6 lg:gap-10 '>
@@ -79,7 +79,7 @@ export default function OneDashboardSection() {
                         className="w-full lg:w-2/3 object-contain mt-8 lg:mt-16 mx-auto select-none" />
                 </SwiperSlide>
             </Swiper>
-            <div className='flex items-center mt-4 pt-4 gap-6'>
+            <div className='flex items-start mt-4 pt-4 gap-6'>
                 {[{
                     title: 'Centralised Metrics',
                     description: 'Gain a holistic understanding with metrics like Blended ROAS, NCPA, CLTV, and Total Ad spends.',
@@ -96,10 +96,10 @@ export default function OneDashboardSection() {
                                 ref.current.slideTo(i);
                             }
                         }}>
-                        <p className='font-extrabold text-xl mb-2'>
+                        <p className='font-extrabold text-xl lg:text-2xl mb-2'>
                             {ele?.title}
                         </p>
-                        <p className='text-base line-clamp-2'>
+                        <p className='text-lg lg:text-xl line-clamp'>
                             {ele?.description}
                         </p>
                     </div>
