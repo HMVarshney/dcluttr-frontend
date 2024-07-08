@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 import ScaleItSection from '../../_components/ScaleItSection';
+import { Button } from '@/components/ui/button';
 
 let data = [
     {
@@ -170,9 +171,29 @@ export default function page({ params }) {
             <div className='w-fit border border-primary px-2 py-1 rounded-md font-bold bg-accent text-sm text-primary'>
                 {details.categories}
             </div>
-            <h1 className='font-extrabold text-3xl lg:text-6xl mt-2 lg:mt-4'>
+            <h1 className='font-extrabold text-3xl lg:text-5xl mt-2 lg:mt-4'>
                 {details?.title}
             </h1>
+            <div className="flex items-center gap-3 mt-4 lg:mt-6">
+                <Image
+                    src={"https://cdn.prod.website-files.com/61bcbae3ae2e8e0565a790d1/64c820fc7c3808d8b8fa1f00_Mary%20Lister.webp"}
+                    width={800}
+                    height={800}
+                    className='w-20 object-contain rounded-full'
+                    alt='jj'
+                />
+                <div>
+                    <div className="">
+                        By Mary Lister
+                    </div>
+                    <div className="text-xs my-1">
+                        Last Updated: April 12, 2024
+                    </div>
+                    <Button size="sm" variant="outline" className="text-xs h-8">
+                        Product Launches
+                    </Button>
+                </div>
+            </div>
             <Image
                 className=' mt-6 lg:mt-12 w-full aspect-[320/160] rounded-lg '
                 width={2000}
@@ -187,7 +208,35 @@ export default function page({ params }) {
             <p className='my-6'>“You need to attack the sources of ambiguity within the creative process. This is the secret to building high-performing creative teams,” says Dara.</p>
             <p className='my-6'>Keep reading for Dara’s strategy on how to remove these sources of ambiguity and the processes you need to increase your team's output. </p>
 
-            <ScaleItSection />
+            <h2 className='font-extrabold text-xl lg:text-3xl my-3 lg:my-6'>
+                Continue reading
+            </h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 ">
+                {data.slice(0, 3).map((item, i) =>
+                    <Link href={`/blogs/${item.slug}`} key={i}>
+                        <div className='group overflow-hidden rounded-2xl relative'>
+                            <Image
+                                className=' duration-700 ease-in-out group-hover:scale-110 w-full aspect-[320/160] rounded-lg '
+                                width={800}
+                                height={500}
+                                src={item.images}
+                                alt={item?.title} />
+                            <div className='absolute right-2 bottom-2 bg-black/70 px-2 py-px rounded text-sm font-semibold text-white'>
+                                {item.categories}
+                            </div>
+                        </div>
+                        <div className='rounded-bl-2xl rounded-br-2xl  '>
+                            <div className="py-4 flex flex-col gap-2 ">
+                                <p className="font-bold text-xs text-gray-500">
+                                    Author | {new Date(item.publishedAt).toDateString()} | 6 min read
+                                </p>
+                                <p className='text-base font-semibold '>{item?.title}</p>
+                            </div>
+                        </div>
+                    </Link>)}
+            </div>
+            <ScaleItSection className=" my-16 lg:my-32" />
+
         </section>
     )
 }

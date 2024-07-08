@@ -165,8 +165,25 @@ let data = [
 export default function page() {
     return (
         <section className='my-12 lg:my-16 mx-auto max-w-5xl px-4'>
+            <div className='hidden lg:flex items-center justify-center mb-10 gap-14'>
+                <div className='group overflow-hidden rounded-2xl relative'>
+                    <Image
+                        className=' duration-700 ease-in-out group-hover:scale-110 w-full aspect-[320/160] rounded-lg '
+                        width={800}
+                        height={500}
+                        src={data[0].images}
+                        alt={data[0]?.title} />
+                    <div className='absolute right-2 bottom-2 bg-black/70 px-2 py-px rounded text-sm font-semibold text-white'>
+                        {data[0].categories}
+                    </div>
+                </div>
+                <div className="py-4 flex flex-col gap-2 w-1/3 ">
+                    <h1 className='text-3xl font-semibold '>Dara Denney’s guide to building high-performing creative teams</h1>
+                    <p className='text-base font-semibold '>To build a high-performing creative team, focus on removing ambiguity in the creative process with structure, SOPs, and clear metrics. </p>
+                </div>
+            </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3 ">
-                {data.map((item, i) =>
+                {data.slice(1, -1).map((item, i) =>
                     <Link href={`/blogs/${item.slug}`} key={i}>
                         <div className='group overflow-hidden rounded-2xl relative'>
                             <Image
