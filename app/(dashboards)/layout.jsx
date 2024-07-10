@@ -1,5 +1,4 @@
 "use client"
-import Navbar from "./_components/Sidebar/Navbar";
 import SideBar from "./_components/Sidebar";
 import OrgSideBar from "./_components/OrgSidebar";
 import { createContext, useEffect, useState } from "react";
@@ -8,8 +7,9 @@ import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 
 
 export const DashboardContext = createContext();
-export default function DashboardLayout({ children }) {
+export default function DashboardsLayout({ children }) {
     const [userDetails, setUserDetails] = useState({})
+    const [sideBarClose, setSideBarClose] = useState(false)
     const getUserDetails = () => {
         axiosInterceptorInstance
             .get("/user/me")
@@ -25,20 +25,11 @@ export default function DashboardLayout({ children }) {
     }, [])
 
     return (
-        <DashboardContext.Provider value={{ userDetails, getUserDetails }}>
+        <DashboardContext.Provider value={{ userDetails, getUserDetails, sideBarClose, setSideBarClose }}>
             <DecluttrNotWorksInPhone />
             <main className="h-full hidden lg:flex items-stretch">
-                <div className="flex flex-col">
-                    <Navbar />
-                    <div className="flex h-full">
-                        <SideBar />
-                        <OrgSideBar />
-                    </div>
-                </div>
-
-                <div className="px-5 pt-4 w-full">
-                    {children}
-                </div>
+                <SideBar />
+                {children}
             </main>
         </DashboardContext.Provider>
     );
