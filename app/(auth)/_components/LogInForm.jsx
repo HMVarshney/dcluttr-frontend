@@ -9,8 +9,10 @@ import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import { setCookie } from '@/lib/utils';
 import LoginWithGoogle from './LoginWithGoogle';
+import { useRouter } from 'next/navigation';
 
 export default function LogInForm({ }) {
+    const router = useRouter()
     const { register, handleSubmit, formState: { errors }, setError } = useForm({
         mode: "onBlur"
     });

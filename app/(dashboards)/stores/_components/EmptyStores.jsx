@@ -6,7 +6,7 @@ import React from 'react'
 
 export default function EmptyStores() {
     return (
-        <div className='h-full w-full flex flex-col justify-center items-center'>
+        <div className='rounded-md bg-[#FAFAFA] h-full border w-full flex flex-col justify-center items-center'>
             <Image
                 src="/icons/empty-stores.svg"
                 width={78}
