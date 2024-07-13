@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/table"
 import { Trash } from "phosphor-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import InvitePeopleButton from "./InvitePeopleButton"
 
 const data = [
     {
@@ -213,9 +214,7 @@ export default function MembersTable() {
                     </TableBody>
                 </Table>
             </div>
-            <Button className="mt-8">
-                Invite people
-            </Button>
+            <InvitePeopleButton />
         </div>
     )
 }
