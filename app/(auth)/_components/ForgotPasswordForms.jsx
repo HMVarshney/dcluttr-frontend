@@ -146,7 +146,7 @@ export function ChangePassword({ step, setStep }) {
     const onSubmit = (e) => {
         setLoading(true);
         axiosInterceptorInstance
-            .post('/user/password/forget', {
+            .post('/user/password/reset', {
                 "newPassword": e.c_password
             }).then((res) => {
                 router.replace(`/log-in`)

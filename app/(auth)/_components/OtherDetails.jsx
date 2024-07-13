@@ -9,8 +9,10 @@ import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
-export default function OtherDetails({ setStep, setEmail }) {
+
+export default function OtherDetails({ setStep, isBF = false }) {
     const router = useRouter()
     const ref = useRef()
 
@@ -24,26 +26,34 @@ export default function OtherDetails({ setStep, setEmail }) {
         setLoading(true);
         const formData = new FormData();
         formData.append('file', file);
-        axiosInterceptorInstance
-            .post(`/organization/add?name=${e.organization_name}`, formData)
+        formData.append('name', e.name);
+        formData.append('organizationType', e.organizationType);
+        formData.append('website', e.website);
+        axiosInterceptorInstance.post(`/organization/add`, formData)
             .then((res) => {
+                if (isBF) {
+                    setStep(false)
+                } else {
+                    router.replace(`/log-in`)
+                }
+            }).finally(() => {
                 setLoading(false)
-                router.replace(`/log-in`)
             })
     }
     return (
-        <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
+        <section className={cn('h-[calc(100vh-66px)] flex items-center justify-center', { 'h-auto': isBF })}>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
-                <div className='text-sm mb-6 flex items-center'>
-                    <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(2)} /><span className='text-black font-light ml-2 '>Back</span>
-                </div>
-
-                <h3 className='font-bold text-2xl'>
-                    Other details
-                </h3>
-                <p className='text-base mt-1.5'>
-                    Please provide your personal details, they will be used to complete your profile
-                </p>
+                {!isBF && <>
+                    <div className='text-sm mb-6 flex items-center'>
+                        <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(2)} /><span className='text-black font-light ml-2 '>Back</span>
+                    </div>
+                    <h3 className='font-bold text-2xl'>
+                        Other details
+                    </h3>
+                    <p className='text-base mt-1.5'>
+                        Please provide your personal details, they will be used to complete your profile
+                    </p>
+                </>}
                 <div className='flex mt-10 items-center' onClick={() => ref.current.click()}>
                     <Image
                         src={file ? URL.createObjectURL(file) : '/image_placeholder.svg'}
@@ -68,8 +78,8 @@ export default function OtherDetails({ setStep, setEmail }) {
                     placeholder="Enter organization name"
                     register={register}
                     required="Please enter this input field"
-                    name="organization_name"
-                    errors={errors['organization_name']}
+                    name="name"
+                    errors={errors['name']}
                     className="mt-10" />
 
                 <InputSelect
@@ -77,12 +87,13 @@ export default function OtherDetails({ setStep, setEmail }) {
                     placeholder="Select an option"
                     control={control}
                     required="Please enter this input field"
-                    name="type"
-                    errors={errors['type']}
+                    name="organizationType"
+                    errors={errors['organizationType']}
                     className="mt-2"
                     options={[
-                        { value: "Agency", label: "Agency" },
-                        { value: "Freelancer", label: "Freelancer" },
+                        { value: "BRAND", label: "Brand" },
+                        { value: "AGENCY", label: "Agency" },
+                        { value: "FREELANCER", label: "Freelancer" },
                     ]} />
 
                 <InputText
@@ -90,8 +101,8 @@ export default function OtherDetails({ setStep, setEmail }) {
                     placeholder="Enter website URL"
                     register={register}
                     required="Please enter this input field"
-                    name="company website"
-                    errors={errors['company website']}
+                    name="website"
+                    errors={errors['website']}
                     className="mt-2" />
 
 
@@ -102,7 +113,7 @@ export default function OtherDetails({ setStep, setEmail }) {
 
                 <FormSubmitButtonWithIcon
                     isLoading={isLoading}
-                    text="Sign up" />
+                    text={isBF ? "Create" : "Sign up"} />
             </form>
         </section>
     )

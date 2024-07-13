@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
     if (request.nextUrl.pathname.includes('/log-in')
-        || request.nextUrl.pathname.includes('/sign-up')
+        // || request.nextUrl.pathname.includes('/sign-up')//TODO: Redirect to the module
         || request.nextUrl.pathname.includes('/forgot-password')) {
         //TODO: Redirect to the module based on the user role.
         console.log("in login");

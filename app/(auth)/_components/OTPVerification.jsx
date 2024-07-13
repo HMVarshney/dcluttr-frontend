@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from '@/components/ui/button';
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form';
 import { FormSubmitButton } from './FormElements';
@@ -11,12 +10,10 @@ import { Input } from '@/components/ui/input';
 import dynamic from 'next/dynamic';
 import { ArrowLeft } from 'lucide-react';
 import { setCookie } from '@/lib/utils';
-import { useRouter } from 'next/router';
 const CustomCount = dynamic(() => import('./FormElements').then((mod) => mod.CustomCount), { ssr: false });
 
 
 export default function OTPVerification({ setStep, email }) {
-    const router = useRouter()
     const { handleSubmit, formState: { errors }, control, watch } = useForm({
         mode: "onBlur"
     });
@@ -32,10 +29,10 @@ export default function OTPVerification({ setStep, email }) {
                 "otp": e.otp
             }).then((res) => {
                 if (res.data?.accessToken) {
-                    setCookie('authToken', res.data?.accessToken)
-                    router.replace(`/dashboard`)
+                    setCookie('accessToken', res.data?.accessToken)
+                    setCookie('refreshToken', res.data?.refreshToken)
+                    setStep(3);
                 }
-                // setStep(3);
             }).catch((err) => {
                 console.log(err);
             }).finally(() => {

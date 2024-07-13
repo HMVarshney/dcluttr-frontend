@@ -1,13 +1,11 @@
 "use client"
 
 
-import { Button } from '@/components/ui/button';
 import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
-import { toast } from 'sonner';
 import LoginWithGoogle from './LoginWithGoogle';
 
 export default function CreateAccount({ setStep, setEmail }) {
@@ -18,7 +16,7 @@ export default function CreateAccount({ setStep, setEmail }) {
 
     const [isLoading, setLoading] = useState(false);
     const onSubmit = (e) => {
-        const signUpRequest = JSON.stringify({ ...e })
+        const signUpRequest = JSON.stringify({ ...e, mobile: e.mobile ? e.mobile : null })
 
         const formData = new FormData();
         formData.append('file', ref.current);
@@ -52,7 +50,7 @@ export default function CreateAccount({ setStep, setEmail }) {
                         Please provide your personal details, they will be used to complete your profile
                     </p>
 
-                    <input id="file" type="file" onChange={(e) => ref.current = e.target.files[0]} />
+                    {/* <input id="file" type="file" onChange={(e) => ref.current = e.target.files[0]} /> */}
                     <InputText
                         label="What's your name?"
                         placeholder="Enter your name"
