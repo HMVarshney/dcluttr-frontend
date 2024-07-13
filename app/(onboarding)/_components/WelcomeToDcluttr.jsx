@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'
 
-export default function WelcomeToDcluttr() {
+export default function WelcomeToDcluttr({ setStep }) {
     return (
         <div className='h-full w-full flex flex-col justify-center items-center'>
             <Image
@@ -18,7 +18,7 @@ export default function WelcomeToDcluttr() {
             <p className='text-xs mt-4 mb-10 w-1/2 text-center'>
                 You’re just minutes away from transforming your data into profitable growth. There are a few things that need to be set up first. Ready to get started?
             </p>
-            <Button className='w-1/2'>
+            <Button className='w-1/2' onClick={() => setStep(2)} >
                 Get Started
             </Button>
         </div>

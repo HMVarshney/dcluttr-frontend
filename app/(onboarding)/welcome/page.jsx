@@ -11,10 +11,11 @@ import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from '@/lib/utils'
 
 
 export default function Page() {
-    const [step, setStep] = useState(5)
+    const [step, setStep] = useState(1)
 
     return (
         <main className="w-full h-full ">
@@ -40,9 +41,9 @@ export default function Page() {
                     </div>
                     <div className="border border-[#0000001F] bg-white rounded-lg p-4 mt-4">
                         <div className='font-medium text-sm text-black mb-2'>
-                            {(step / 7 * 100)?.toFixed(0)}% Completed
+                            {((step - 1) / 7 * 100)?.toFixed(0)}% Completed
                         </div>
-                        <Progress value={(step / 7 * 100)?.toFixed(0)} className="bg-[#0000001F]" />
+                        <Progress value={((step - 1) / 7 * 100)?.toFixed(0)} className="bg-[#0000001F]" />
                     </div>
 
                     <div className='border border-[#0000001F] bg-white rounded-lg p-4 flex flex-col gap-2.5 mt-12'>
@@ -53,35 +54,29 @@ export default function Page() {
                             title: 'Welcome',
                             disc: 'Avg. time to complete: 3 mins',
                             btnText: 'Let’s go!',
-                            status: "DONE"
                         }, {
                             title: 'Brand Details',
                             disc: 'Avg. time to complete: 3 mins',
                             btnText: 'Completed',
-                            status: "DONE"
                         }, {
                             title: 'Pending Approval',
                             disc: 'Avg. time to complete: 3 mins',
                             btnText: 'Approved',
-                            status: "DONE"
                         }, {
                             title: 'Connect your Data',
                             disc: 'Avg. time to complete: 3 mins',
-                            btnText: 'None Added',
-                            status: "DONE"
+                            btnText: 'Completed',
                         }, {
                             title: 'Install Dcluttr Pixel',
                             disc: 'Avg. time to complete: 3 mins',
                             btnText: 'None Added',
-                            status: true
                         }, {
                             title: 'All Set',
                             disc: 'Avg. time to complete: 3 mins',
                             btnText: 'None Added',
-                            status: true
                         }]?.map((ele, i) =>
                             <div className='flex gap-2 border rounded-md px-4 py-3' key={ele.title}>
-                                {step > i ? <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className="fill-primary mt-1">
+                                {step > i + 1 ? <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className="fill-primary mt-1">
                                     <path d="M9 0.875C7.39303 0.875 5.82214 1.35152 4.486 2.24431C3.14985 3.1371 2.10844 4.40605 1.49348 5.8907C0.87852 7.37535 0.717618 9.00901 1.03112 10.5851C1.34463 12.1612 2.11846 13.6089 3.25476 14.7452C4.39106 15.8815 5.8388 16.6554 7.4149 16.9689C8.99099 17.2824 10.6247 17.1215 12.1093 16.5065C13.594 15.8916 14.8629 14.8502 15.7557 13.514C16.6485 12.1779 17.125 10.607 17.125 9C17.1227 6.84581 16.266 4.78051 14.7427 3.25727C13.2195 1.73403 11.1542 0.877275 9 0.875ZM12.5672 7.56719L8.19219 11.9422C8.13415 12.0003 8.06522 12.0464 7.98934 12.0779C7.91347 12.1093 7.83214 12.1255 7.75 12.1255C7.66787 12.1255 7.58654 12.1093 7.51067 12.0779C7.43479 12.0464 7.36586 12.0003 7.30782 11.9422L5.43282 10.0672C5.31554 9.94991 5.24966 9.79085 5.24966 9.625C5.24966 9.45915 5.31554 9.30009 5.43282 9.18281C5.55009 9.06554 5.70915 8.99965 5.875 8.99965C6.04086 8.99965 6.19992 9.06554 6.31719 9.18281L7.75 10.6164L11.6828 6.68281C11.7409 6.62474 11.8098 6.57868 11.8857 6.54725C11.9616 6.51583 12.0429 6.49965 12.125 6.49965C12.2071 6.49965 12.2884 6.51583 12.3643 6.54725C12.4402 6.57868 12.5091 6.62474 12.5672 6.68281C12.6253 6.74088 12.6713 6.80982 12.7027 6.88569C12.7342 6.96156 12.7504 7.04288 12.7504 7.125C12.7504 7.20712 12.7342 7.28844 12.7027 7.36431C12.6713 7.44018 12.6253 7.50912 12.5672 7.56719Z" />
                                 </svg>
                                     : <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" className=" mt-1">
@@ -96,19 +91,21 @@ export default function Page() {
                                         {ele.disc}
                                     </div>
                                 </div>
-                                <div className='text-sm font-medium text-primary ml-auto mt-2.5'>
-                                    {ele.btnText}
+                                <div className={cn('text-sm font-medium text-[#EC1212]  ml-auto mt-2.5', { 'text-primary': step > i + 1 })}>
+                                    {step > i + 1 ? ele.btnText : "None Added"}
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
                 <div className="col-span-7">
-                    <main className="w-full h-full " onClick={() => setStep(pre => pre < 6 ? pre + 1 : 1)}>
-                        {step === 1 && <WelcomeToDcluttr />}
-                        {step === 2 && <BrandDetails />}
-                        {step === 3 && <PendingApproval />}
-                        {step === 4 && <ConnectYourData />}
+                    <main className="w-full h-full "
+                    // onClick={() => setStep(pre => pre < 6 ? pre + 1 : 1)}
+                    >
+                        {step === 1 && <WelcomeToDcluttr setStep={setStep} />}
+                        {step === 2 && <BrandDetails setStep={setStep} />}
+                        {step === 3 && <PendingApproval setStep={setStep} />}
+                        {step === 4 && <ConnectYourData setStep={setStep} />}
                         {step === 5 && <InstallDcluttrPixel />}
                         {step === 6 && <AllDoneStartUsingDcluttr />}
                     </main>

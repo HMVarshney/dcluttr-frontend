@@ -10,9 +10,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FormSubmitButtonWithIcon, InputSelect, InputText } from '@/app/(auth)/_components/FormElements';
 import { Button } from '@/components/ui/button';
+import { useSelector } from 'react-redux';
 
-export default function BrandDetails() {
+export default function BrandDetails({ setStep }) {
     const router = useRouter()
+    // const organizationDetails = useSelector((state) => state.dashboard.organizationDetails);
+    // const orgId = organizationDetails?.id
     const ref = useRef()
 
     const { register, handleSubmit, formState: { errors }, control } = useForm({
@@ -23,14 +26,14 @@ export default function BrandDetails() {
     const [file, setFile] = useState(null);
     const onSubmit = (e) => {
         setLoading(true);
-        // const formData = new FormData();
-        // formData.append('file', file);
-        // axiosInterceptorInstance
-        //     .post(`/organization/add?name=${e.organization_name}`, formData)
-        //     .then((res) => {
-        setLoading(false)
-        // router.replace(`/log-in`)
-        // })
+        const formData = new FormData();
+        formData.append('file', file);
+        axiosInterceptorInstance
+            .post(`/brand?name=${e.name}&monthlyAdSpend=${e.monthlyAdSpend}&website=${e.website}&orgId=${2}`, formData)
+            .then((res) => {
+                setLoading(false)
+                setStep(3)
+            })
     }
     return (
         <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
@@ -65,8 +68,8 @@ export default function BrandDetails() {
                     placeholder="Enter brand name"
                     register={register}
                     required="Please enter this input field"
-                    name="brand_name"
-                    errors={errors['brand_name']}
+                    name="name"
+                    errors={errors['name']}
                     className="mt-10" />
 
                 <InputText
@@ -74,8 +77,8 @@ export default function BrandDetails() {
                     placeholder="Enter website URL"
                     register={register}
                     required="Please enter this input field"
-                    name="brand_website"
-                    errors={errors['brand_website']}
+                    name="website"
+                    errors={errors['website']}
                     className="mt-2" />
 
                 <InputSelect
@@ -83,13 +86,15 @@ export default function BrandDetails() {
                     placeholder="Select an option"
                     control={control}
                     required="Please enter this input field"
-                    name="spend"
-                    errors={errors['spend']}
+                    name="monthlyAdSpend"
+                    errors={errors['monthlyAdSpend']}
                     className="mt-2 mb-12"
                     options={[
-                        { value: "50K", label: "50K" },
-                        { value: "100K", label: "100K" },
-                        { value: "500K", label: "500K" },
+                        { value: "ZERO_TO_FOUR_LAC", label: "0-4L" },
+                        { value: "FOUR_TO_TEN_LAC", label: "4-10L" },
+                        { value: "TEN_TO_TWENTY_LAC", label: "10-20L" },
+                        { value: "TWENTY_LAC_TO_ONE_CR", label: "20-100L" },
+                        { value: "GREATER_THAN_ONE_CR", label: "100L+" },
                     ]} />
 
                 <Button className='w-full'>

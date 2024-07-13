@@ -3,8 +3,11 @@
 import { InputText } from '@/app/(auth)/_components/FormElements';
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 export default function StoresSettings() {
+    const organizationDetails = useSelector((state) => state.dashboard.organizationDetails);
+    console.log(organizationDetails);
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur"
     });

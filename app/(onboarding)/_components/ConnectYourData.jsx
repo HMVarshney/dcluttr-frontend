@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import React from 'react'
 
-export default function ConnectYourData() {
+export default function ConnectYourData({ setStep }) {
     return (
         <div className='h-full w-full flex flex-col justify-center items-center px-20'>
             <h2 className='text-4xl font-bold mt-20'>
@@ -78,7 +78,8 @@ export default function ConnectYourData() {
                             </div>
                         </div>
                         {item.status !== "COMING" &&
-                            <Button variant={item.status === "CONNECTED" ? "default" : "outline"} className='ml-auto' size="sm" >
+                            <Button variant={item.status === "CONNECTED" ? "default" : "outline"} className='ml-auto' size="sm"
+                                onClick={() => setStep(5)} >
                                 {item.btnText}
                             </Button>}
                     </div>
