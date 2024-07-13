@@ -1,34 +1,25 @@
 "use client"
 import SideBar from "./_components/Sidebar";
-import OrgSideBar from "./_components/OrgSidebar";
-import { createContext, useEffect, useState } from "react";
-import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
+import { useEffect, } from "react";
 import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 import { Mulish } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserDetails } from "@/lib/store/features/dashboardSlice";
 const mulish = Mulish({ subsets: ["latin"] });
 
 
-export const DashboardContext = createContext();
 export default function DashboardsLayout({ children }) {
-    const [userDetails, setUserDetails] = useState({})
-    const [sideBarClose, setSideBarClose] = useState(false)
-    const getUserDetails = () => {
-        axiosInterceptorInstance
-            .get("/user/me")
-            .then((res) => {
-                setUserDetails(res.data);
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.dashboard.userDetails);
+    const sideBarClose = useSelector((state) => state.dashboard.sideBarClose);
 
     useEffect(() => {
-        getUserDetails()
-    }, [])
+        dispatch(fetchUserDetails());
+    }, [dispatch]);
 
     return (
-        <DashboardContext.Provider value={{ userDetails, getUserDetails, sideBarClose, setSideBarClose }}>
+        <>
             <DecluttrNotWorksInPhone />
             <main className={cn(
                 "h-full hidden lg:flex items-stretch",
@@ -37,6 +28,6 @@ export default function DashboardsLayout({ children }) {
                 <SideBar />
                 {children}
             </main>
-        </DashboardContext.Provider>
+        </>
     );
 }

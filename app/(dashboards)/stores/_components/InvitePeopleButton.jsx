@@ -60,7 +60,7 @@ export default function InvitePeopleButton() {
                         { role: 'Collaborator', tex: 'Access all workspace. Can edit, but not invite others.' },
                         { role: 'Admin', tex: 'Access all workspaces. Can edit and invite others' }]
                             ?.map(({ role, tex }, index) => (
-                                <div className={cn("p-4 rounded-lg border cursor-pointer border-gray-300 transition-all", { 'border-primary': index === roleId })} onClick={() => setRoleId(index)}>
+                                <div key={index} className={cn("p-4 rounded-lg border cursor-pointer border-gray-300 transition-all", { 'border-primary': index === roleId })} onClick={() => setRoleId(index)}>
                                     <div className="text-sm font-semibold flex">
                                         {role}<Check size={20} className={cn("ml-auto opacity-0 transition-all", { 'opacity-100': index === roleId })} />
                                     </div>

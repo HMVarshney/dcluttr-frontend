@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 
-export default function page() {
+export default function Page() {
     const [step, setStep] = useState(5)
 
     return (

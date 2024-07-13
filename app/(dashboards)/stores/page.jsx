@@ -21,7 +21,7 @@ import moment from 'moment'
 import AllBrands from './_components/AllBrands'
 import BrandDetails from './_components/BrandDetails'
 
-export default function page() {
+export default function Page() {
     const [dateRange, setDateRange] = useState({
         from: moment('2019-01-01', "YYYY-MM-DD")._d,
         to: moment('2022-12-23', "YYYY-MM-DD")._d,

@@ -1,27 +1,26 @@
-"use client"
+"use client";
 
-
-import { ArrowBigLeft, ChevronRight, LogOut, UserRound, UsersRound } from 'lucide-react'
-import React, { useContext } from 'react'
+import { ArrowBigLeft, ChevronRight, LogOut, UserRound, UsersRound } from 'lucide-react';
+import React from 'react';
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from "@/components/ui/avatar"
+} from "@/components/ui/avatar";
 
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
-import { deleteCookie } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
-import { DashboardContext } from '../../layout'
+} from "@/components/ui/dropdown-menu";
+import { deleteCookie } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux'; // Import useSelector from react-redux
 
 export default function Profile() {
-    const { replace } = useRouter()
-    let { userDetails } = useContext(DashboardContext);
+    const { replace } = useRouter();
+    const userDetails = useSelector((state) => state.dashboard.userDetails);
 
     return (
         <div className='flex flex-col items-center justify-center gap-5'>
@@ -57,8 +56,8 @@ export default function Profile() {
                     </DropdownMenuItem>
                     <DropdownMenuItem className='flex gap-2 p-2.5 cursor-pointer'
                         onClick={(e) => {
-                            replace("/log-in")
-                            deleteCookie("accessToken")
+                            replace("/log-in");
+                            deleteCookie("accessToken");
                         }}>
                         <LogOut className='w-4 h-4' />
                         <div className='text-sm'>Sign Out</div>
@@ -66,5 +65,5 @@ export default function Profile() {
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
-    )
+    );
 }
