@@ -4,19 +4,18 @@ import { useEffect, } from "react";
 import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 import { Mulish } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserDetails } from "@/lib/store/features/dashboardSlice";
+import { useDispatch } from "react-redux";
+import { fetchAllOrganization, fetchUserDetails } from "@/lib/store/features/dashboardSlice";
 const mulish = Mulish({ subsets: ["latin"] });
 
 
 export default function DashboardsLayout({ children }) {
     const dispatch = useDispatch();
-    const userDetails = useSelector((state) => state.dashboard.userDetails);
-    const sideBarClose = useSelector((state) => state.dashboard.sideBarClose);
 
     useEffect(() => {
         dispatch(fetchUserDetails());
-    }, [dispatch]);
+        dispatch(fetchAllOrganization("FIRST"));
+    }, []);
 
     return (
         <>

@@ -1,5 +1,5 @@
 import { ChevronsUpDown } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,9 +9,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function Navbar({ isOpen }) {
+    const router = useRouter();
+    const { status, userDetails, allOrganization } = useSelector((state) => state.dashboard);
+
+    useEffect(() => {
+        if (allOrganization?.length && status === "succeeded" && !userDetails?.brands?.length) {
+            router.push('/welcome');
+        }
+    }, [allOrganization?.length, status])
+
     return (
         <div className='w-full py-4 border-b flex gap-4'>
             <DropdownMenu>

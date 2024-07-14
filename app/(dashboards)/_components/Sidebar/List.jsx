@@ -1,33 +1,56 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Hint from '@/components/Hint';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { fetchOrganizationDetails } from '@/lib/store/features/dashboardSlice';
+import { Skeleton } from '@/components/ui/skeleton';
+import { setStep } from '@/lib/store/features/authSlice';
+import { useRouter } from 'next/navigation';
 
 export default function List() {
+    const router = useRouter();
     const dispatch = useDispatch();
-    const { userDetails, organizationDetails } = useSelector((state) => state.dashboard);
-    let organizationAuthorities = userDetails?.organizationAuthorities?.organizationAuthorities;
-    if (!organizationAuthorities?.length) return null;
+    const { allOrganization, organizationDetails, allOrganizationStatus } = useSelector((state) => state.dashboard);
+
+
+    useEffect(() => {
+        if (!allOrganization?.length && allOrganizationStatus === "succeeded") {
+            dispatch(setStep(3));
+            router.push('/sign-up');
+        }
+    }, [allOrganization?.length, allOrganizationStatus])
+
+
+    if (allOrganizationStatus === "loading") {
+        return (
+            <ul className='space-y-4'>
+                <Skeleton className="aspect-square" />
+                <Skeleton className="aspect-square" />
+                <Skeleton className="aspect-square" />
+                <Skeleton className="aspect-square" />
+            </ul>
+        )
+    };
+
+
 
     return (
         <ul className='space-y-4'>
-            {organizationAuthorities.map((org, i) => (
+            {allOrganization.map((org, i) => (
                 <div className='aspect-square relative' key={i}>
                     <Hint
-                        label={org.organizationName}
+                        label={org?.name}
                         side="right"
                     >
                         <Avatar
-                            className={cn('border rounded-lg cursor-pointer transition', organizationDetails?.id === org.organizationId && 'border-2 border-primary/50')}
-                            onClick={() => dispatch(fetchOrganizationDetails(org.organizationId))}
+                            className={cn('border rounded-lg cursor-pointer transition', organizationDetails?.id === org?.id && 'border-2 border-primary/50')}
+                            onClick={() => dispatch(fetchOrganizationDetails(org?.id))}
                         >
-                            <AvatarImage src={org.imageUrl} alt={org.organizationName} />
-                            <AvatarFallback className="text-xl rounded-lg">{org.organizationName?.[0]}</AvatarFallback>
+                            <AvatarImage src={org?.organizationLogo} alt={org?.name} />
+                            <AvatarFallback className="text-xl rounded-lg">{org?.name?.[0]}</AvatarFallback>
                         </Avatar>
                     </Hint>
                 </div>))}
