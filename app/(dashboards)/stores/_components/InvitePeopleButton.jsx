@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function InvitePeopleButton() {
     const dispatch = useDispatch()
-    const { organizationDetails } = useSelector((state) => state.dashboard)
+    const organizationDetails = useSelector((state) => state.organization.organizationDetails)
     const brandIds = organizationDetails?.brands
     const orgId = organizationDetails?.id
     const [isOpen, setOpen] = useState(false);

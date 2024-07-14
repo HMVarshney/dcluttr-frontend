@@ -3,7 +3,7 @@
 import OtherDetails from "@/app/(auth)/_components/OtherDetails";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { fetchAllOrganization } from "@/lib/store/features/dashboardSlice";
+import { fetchAllOrganization } from "@/lib/store/features/organizationSlice";
 import { Plus } from "lucide-react";
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";

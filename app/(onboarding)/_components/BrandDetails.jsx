@@ -18,7 +18,7 @@ export default function BrandDetails({ setStep }) {
     });
 
     const { loading, error } = useSelector((state) => state.brand);
-    const { organizationDetails } = useSelector((state) => state.dashboard);
+    const organizationDetails = useSelector((state) => state.organization.organizationDetails);
     const orgId = organizationDetails?.id;
 
     const [file, setFile] = useState(null);

@@ -19,8 +19,7 @@ import { getAllUsersOfOrganization } from '@/lib/store/features/organizationSlic
 
 export default function page() {
     const dispatch = useDispatch()
-    const { organizationDetails } = useSelector((state) => state.dashboard)
-    const { usersList, status } = useSelector((state) => state.organization)
+    const { usersList, status, organizationDetails } = useSelector((state) => state.organization)
     useEffect(() => {
         if (organizationDetails?.id) {
             dispatch(getAllUsersOfOrganization(organizationDetails?.id))

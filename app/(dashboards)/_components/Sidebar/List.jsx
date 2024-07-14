@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Hint from '@/components/Hint';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { fetchOrganizationDetails } from '@/lib/store/features/dashboardSlice';
+import { fetchOrganizationDetails } from '@/lib/store/features/organizationSlice';
 import { Skeleton } from '@/components/ui/skeleton';
 import { setStep } from '@/lib/store/features/authSlice';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 export default function List() {
     const router = useRouter();
     const dispatch = useDispatch();
-    const { allOrganization, organizationDetails, allOrganizationStatus } = useSelector((state) => state.dashboard);
+    const { allOrganization, organizationDetails, allOrganizationStatus } = useSelector((state) => state.organization);
 
 
     useEffect(() => {

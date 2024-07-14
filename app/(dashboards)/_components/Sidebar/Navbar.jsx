@@ -14,8 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function Navbar({ isOpen }) {
-    const router = useRouter();
-    const { status, allOrganization } = useSelector((state) => state.dashboard);
+    // const router = useRouter();
+    // const { status, allOrganization } = useSelector((state) => state.organization);
     const { brandsList } = useSelector((state) => state.brand);
 
     // useEffect(() => {
