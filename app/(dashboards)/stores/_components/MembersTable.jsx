@@ -8,8 +8,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, } from "lucide-react"
-
+import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -32,34 +31,7 @@ import {
 import { Trash } from "phosphor-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import InvitePeopleButton from "./InvitePeopleButton"
-
-const data = [
-    {
-        id: "m5gr84i9",
-        name: "Shiva Singh (You)",
-        role: "Organization",
-        email: "ritvik@organization.club",
-    },
-    {
-        id: "3u1reuv4",
-        name: "Shiva Singh (You)",
-        role: "Organization",
-        email: "Abe45@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        name: "Shiva Singh (You)",
-        role: "lalala",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        name: "Shiva Singh (You)",
-        role: "Organization",
-        email: "Silas22@gmail.com",
-    },
-]
-
+import ConfirmModal from "@/components/ConfirmModal"
 
 export const columns = [
     {
@@ -79,11 +51,11 @@ export const columns = [
             return (
                 <div className="flex items-center space-x-3">
                     <Avatar>
-                        <AvatarImage src="https://lh3.googleusercontent.com/a/ACg8ocIRon2cY0wIwVnv9sxbxtnV3VyEN6SO51SN3ndz6QD3Sea8FXYB=s96-c" alt={'fullName'} />
-                        <AvatarFallback>{'FullName'.slice(0, 1)}</AvatarFallback>
+                        <AvatarImage src={row.original.image} alt={row.original.fullName} />
+                        <AvatarFallback>{row.original.fullName.slice(0, 1)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <div className="font-bold">{row.original.name}</div>
+                        <div className="font-bold">{row.original.fullName}</div>
                         <div className="text-sm opacity-50">{row.getValue("email")}</div>
                     </div>
                 </div>
@@ -94,7 +66,7 @@ export const columns = [
         accessorKey: "role",
         header: "Role",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("role")}</div>
+            <div className="capitalize">{row.original?.organizationRole?.name}</div>
         ),
     },
     {
@@ -102,10 +74,17 @@ export const columns = [
         header: "Settings",
         cell: ({ row }) => {
             return (
-                <button className="flex items-center gap-1">
-                    <Trash size={20} className="text-destructive" weight="bold" />
-                    <span className="font-medium text-destructive">Delete</span>
-                </button>
+                <ConfirmModal
+                    disabled={false}
+                    header={`Delete ${row.original.fullName}`}
+                    description={`Are you sure you want to delete ${row.original.fullName}?`}
+                    onConfirm={() => alert('deleted')}>
+                    <button className="flex items-center gap-1">
+                        <Trash size={20} className="text-destructive" weight="bold" />
+                        <span className="font-medium text-destructive">Delete</span>
+                    </button>
+                </ConfirmModal>
+
             )
         },
     },
@@ -113,7 +92,7 @@ export const columns = [
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
-            const payment = row.original
+            const user = row.original
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -124,13 +103,13 @@ export const columns = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(payment.id)}
+                            onClick={() => navigator.clipboard.writeText(user.id)}
                         >
-                            option 1
+                            Copy ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>option 1</DropdownMenuItem>
-                        <DropdownMenuItem>option 1</DropdownMenuItem>
+                        <DropdownMenuItem>Action 1</DropdownMenuItem>
+                        <DropdownMenuItem>Action 2</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
@@ -138,22 +117,22 @@ export const columns = [
     },
 ]
 
-export default function MembersTable() {
+export default function MembersTable({ usersList }) {
     const [sorting, setSorting] = useState([])
     const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
-        data,
+        data: usersList,
         columns,
+        state: {
+            sorting,
+            rowSelection,
+        },
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            rowSelection,
-        },
     })
 
     return (

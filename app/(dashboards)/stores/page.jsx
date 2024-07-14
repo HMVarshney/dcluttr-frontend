@@ -2,8 +2,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import React, { useState } from 'react'
 import EmptyStores from './_components/EmptyStores'
-import MembersTable from './_components/MembersTable'
-import StoresSettings from './_components/StoresSettings'
 import {
     Breadcrumb,
     BreadcrumbEllipsis,

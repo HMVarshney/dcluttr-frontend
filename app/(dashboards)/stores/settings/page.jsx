@@ -1,6 +1,6 @@
 "use client"
 import { ScrollArea } from '@/components/ui/scroll-area'
-import React from 'react'
+import React, { useEffect } from 'react'
 import StoresSettings from '../_components/StoresSettings'
 import MembersTable from '../_components/MembersTable'
 import {
@@ -12,13 +12,20 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Loading from '@/app/(auth)/loading'
+import { getAllUsersOfOrganization } from '@/lib/store/features/organizationSlice'
 
 
 export default function page() {
-    const { organizationDetails, status } = useSelector((state) => state.dashboard)
-
+    const dispatch = useDispatch()
+    const { organizationDetails } = useSelector((state) => state.dashboard)
+    const { usersList, status } = useSelector((state) => state.organization)
+    useEffect(() => {
+        if (organizationDetails?.id) {
+            dispatch(getAllUsersOfOrganization(organizationDetails?.id))
+        }
+    }, [organizationDetails?.id])
     return (
         <ScrollArea className='rounded-md bg-[#FAFAFA] h-full border'>
             <div className='sticky top-0 z-10'>
@@ -42,9 +49,12 @@ export default function page() {
                 </div>
             </div>
 
-            {status === "idle" && <Loading />}
-            <StoresSettings />
-            <MembersTable data={[]} />
+            {status === "loading" ?
+                <Loading />
+                : <>
+                    <StoresSettings organizationDetails={organizationDetails} />
+                    <MembersTable usersList={usersList} />
+                </>}
         </ScrollArea>
     )
 }

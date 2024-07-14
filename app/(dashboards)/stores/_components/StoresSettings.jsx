@@ -4,11 +4,8 @@ import { InputText } from '@/app/(auth)/_components/FormElements';
 import { Button } from '@/components/ui/button';
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 
-export default function StoresSettings() {
-    const organizationDetails = useSelector((state) => state.dashboard.organizationDetails);
-
+export default function StoresSettings({ organizationDetails }) {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         mode: "onBlur"
     });
@@ -21,11 +18,13 @@ export default function StoresSettings() {
         data.append('organizationType', organizationDetails?.organizationType);
         console.log(data);
     }
+
     useEffect(() => {
         setValue('name', organizationDetails?.name)
         // setValue('email', organizationDetails?.email)//TODO
         setValue('website', organizationDetails?.website)
     }, [organizationDetails?.id])
+
     return (
         <div className="px-6">
             <h3 className='text-xl font-bold mt-4'>
