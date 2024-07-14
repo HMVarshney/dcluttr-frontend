@@ -9,7 +9,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Header from '../_components/Header';
 import { Forward, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ExportFileFormat from '../_components/ExportFileFormat';
+import ExportFileFormat from '@/components/ExportFileFormat';
 import CustomBarChart from '../_components/Home/CustomBarChart';
 
 
