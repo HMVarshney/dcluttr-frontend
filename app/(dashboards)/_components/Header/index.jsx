@@ -11,12 +11,12 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import Switcher from './Switcher'
-import DatePickerWithRange from './DatePickerWithRange';
+import Switcher from '@/components/Switcher'
+import DatePickerWithRange from '@/components/DatePickerWithRange';
 import { Button } from '@/components/ui/button';
 import { RefreshCcw, HomeIcon, PcCase, Plus, TvMinimal } from 'lucide-react';
 import Image from 'next/image';
-import Notifications from './Notifications';
+import Notifications from '@/components/Notifications';
 import BrandList from './BrandList';
 import CreateSectionButton from './CreateSectionButton';
 

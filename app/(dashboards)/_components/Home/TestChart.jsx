@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import cube from '@cubejs-client/core';
 import AreaChart from './AreaChart';
-import DatePickerWithRange from '../Header/DatePickerWithRange';
+import DatePickerWithRange from '@/components/DatePickerWithRange';
 import moment from 'moment';
 
 const cubeApi = cube(

@@ -11,10 +11,10 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import DatePickerWithRange from '../_components/Header/DatePickerWithRange'
+import DatePickerWithRange from '@/components/DatePickerWithRange';
 import { Button } from '@/components/ui/button'
 import { Plus } from 'phosphor-react'
-import Notifications from '../_components/Header/Notifications'
+import Notifications from '@/components/Notifications'
 import moment from 'moment'
 import AllBrands from './_components/AllBrands'
 import BrandDetails from './_components/BrandDetails'
