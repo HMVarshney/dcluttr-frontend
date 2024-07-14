@@ -20,7 +20,7 @@ export default function OtherDetails({ isBF = false, onDone = () => { } }) {
     const router = useRouter()
     const ref = useRef()
 
-    const { register, handleSubmit, formState: { errors }, control } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError, control } = useForm({
         mode: "onBlur"
     });
 
@@ -34,6 +34,13 @@ export default function OtherDetails({ isBF = false, onDone = () => { } }) {
                 } else {
                     router.replace('/log-in');
                 }
+            })
+            .catch((err) => {
+                console.log(err);
+                setError('name', {
+                    type: 'manual',
+                    message: err,
+                });
             });
     }
     return (

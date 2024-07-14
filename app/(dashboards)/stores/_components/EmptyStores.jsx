@@ -2,9 +2,11 @@
 
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function EmptyStores() {
+    const router = useRouter()
     return (
         <div className='mt-60 w-full flex flex-col justify-center items-center'>
             <Image
@@ -18,7 +20,7 @@ export default function EmptyStores() {
             <p className='text-xs mt-1 mb-8'>
                 You don't have any brands in this organisation.
             </p>
-            <Button>
+            <Button onClick={() => { router.push('/welcome'); }}>
                 Create a brand
             </Button>
         </div>

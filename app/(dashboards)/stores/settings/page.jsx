@@ -12,8 +12,12 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { useSelector } from 'react-redux'
+import Loading from '@/app/(auth)/loading'
+
 
 export default function page() {
+    const { organizationDetails, status } = useSelector((state) => state.dashboard)
 
     return (
         <ScrollArea className='rounded-md bg-[#FAFAFA] h-full border'>
@@ -37,6 +41,8 @@ export default function page() {
                     </div>
                 </div>
             </div>
+
+            {status === "idle" && <Loading />}
             <StoresSettings />
             <MembersTable data={[]} />
         </ScrollArea>

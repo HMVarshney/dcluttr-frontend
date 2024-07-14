@@ -1,40 +1,36 @@
-"use client"
+"use client";
 
-
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
-import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FormSubmitButtonWithIcon, InputSelect, InputText } from '@/app/(auth)/_components/FormElements';
-import { Button } from '@/components/ui/button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitBrandDetails } from '@/lib/store/features/brandSlice';
 
 export default function BrandDetails({ setStep }) {
-    const router = useRouter()
-    // const organizationDetails = useSelector((state) => state.dashboard.organizationDetails);
-    // const orgId = organizationDetails?.id
-    const ref = useRef()
+    const dispatch = useDispatch();
+    const ref = useRef();
 
     const { register, handleSubmit, formState: { errors }, control } = useForm({
         mode: "onBlur"
     });
 
-    const [isLoading, setLoading] = useState(false);
+    const { loading, error } = useSelector((state) => state.brand);
+    const { organizationDetails } = useSelector((state) => state.dashboard);
+    const orgId = organizationDetails?.id;
+
     const [file, setFile] = useState(null);
-    const onSubmit = (e) => {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append('file', file);
-        axiosInterceptorInstance
-            .post(`/brand?name=${e.name}&monthlyAdSpend=${e.monthlyAdSpend}&website=${e.website}&orgId=${2}`, formData)
-            .then((res) => {
-                setLoading(false)
-                setStep(3)
-            })
-    }
+
+    const onSubmit = (data) => {
+        const formData = { ...data, file, orgId };
+        dispatch(submitBrandDetails(formData)).unwrap()
+            .then(() => {
+                setStep(3);
+            });
+    };
+
     return (
         <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
@@ -97,10 +93,11 @@ export default function BrandDetails({ setStep }) {
                         { value: "GREATER_THAN_ONE_CR", label: "100L+" },
                     ]} />
 
-                <Button className='w-full'>
-                    Continue
-                </Button>
+                <FormSubmitButtonWithIcon
+                    isLoading={loading}
+                    text="Continue" />
+                {error && <p className="text-red-500">{error}</p>}
             </form>
         </section>
-    )
+    );
 }

@@ -1,18 +1,31 @@
 "use client"
 
 import { InputText } from '@/app/(auth)/_components/FormElements';
-import React from 'react'
+import { Button } from '@/components/ui/button';
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 export default function StoresSettings() {
     const organizationDetails = useSelector((state) => state.dashboard.organizationDetails);
-    console.log(organizationDetails);
-    const { register, handleSubmit, formState: { errors } } = useForm({
+
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         mode: "onBlur"
     });
     const onSubmit = (e) => {
+        var data = new FormData();
+        data.append('name', e.name);
+        data.append('email', e.email);
+        data.append('website', e.website);
+        data.append('id', organizationDetails?.id);
+        data.append('organizationType', organizationDetails?.organizationType);
+        console.log(data);
     }
+    useEffect(() => {
+        setValue('name', organizationDetails?.name)
+        // setValue('email', organizationDetails?.email)//TODO
+        setValue('website', organizationDetails?.website)
+    }, [organizationDetails?.id])
     return (
         <div className="px-6">
             <h3 className='text-xl font-bold mt-4'>
@@ -50,12 +63,18 @@ export default function StoresSettings() {
                     placeholder="Company Website"
                     register={register}
                     required={false}
-                    name="url"
-                    errors={errors['url']}
+                    name="website"
+                    errors={errors['website']}
                     className="" />
                 <p className='text-xs -mt-3 text-[#031B15CC]'>
                     Thus will be used for all organization releated communication including emergencies and mission-critical tasks.
                 </p>
+                <Button
+                    type="submit"
+                    className="mt-8"
+                >
+                    Save changes
+                </Button>
             </form>
         </div>
     )

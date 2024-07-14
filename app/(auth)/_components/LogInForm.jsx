@@ -27,8 +27,7 @@ export default function LogInForm({ }) {
     const onSubmit = (data) => {
         dispatch(login(data)).unwrap()
             .then(() => {
-                console.log('error');
-                router.replace('/dashboard');
+                router.replace('/stores');
             })
             .catch(({ data, email }) => {
                 if (data?.errorCode === "EMAIL_NOT_VERIFIED") {

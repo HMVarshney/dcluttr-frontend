@@ -9,13 +9,12 @@ export function middleware(request) {
         //TODO: Redirect to the module based on the user role.
         console.log("in login");
         if (cookies().get("accessToken")) {
-            return NextResponse.redirect(new URL('/dashboard', request.url));
+            return NextResponse.redirect(new URL('/stores', request.url));
         }
         return NextResponse.next();
     }
 
-    if (request.nextUrl.pathname.includes('/dashboard')) {
-        console.log("dashboard");
+    if (request.nextUrl.pathname.includes('/stores') || request.nextUrl.pathname.includes('/dashboard')) {
         if (!cookies().get("accessToken")) {
             return NextResponse.redirect(new URL('/log-in', request.url));
         }

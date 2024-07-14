@@ -5,8 +5,11 @@ import { Plus } from 'lucide-react'
 import Image from 'next/image'
 import { Gear } from 'phosphor-react'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 export default function AllBrands() {
+    const { brandsList } = useSelector((state) => state.brand)
+
     return (
         <>
             <div className='flex items-center justify-center gap-2 p-6 '>
@@ -26,7 +29,7 @@ export default function AllBrands() {
                 </Button>
             </div>
             <div className='flex flex-col items-stretch justify-center gap-6  px-6 '>
-                {[1, 2, 3,].map((item, index) => (
+                {brandsList.map((item, index) => (
                     <div key={index} className='flex items-center justify-center gap-2 py-6 px-4 bg-white rounded-lg shadow'>
                         <Image
                             src="/temp/mama_earth_logo.png"

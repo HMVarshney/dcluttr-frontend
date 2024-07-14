@@ -12,7 +12,7 @@ export default function LoginWithGoogle() {
     useEffect(() => {
         if (searchParams.get('token')) {
             setCookie('accessToken', searchParams.get('token'))
-            router.replace(`/dashboard`)
+            router.replace(`/stores`)
         }
     }, [])
     return (
