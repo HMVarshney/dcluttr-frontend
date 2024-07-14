@@ -8,11 +8,11 @@ import { useState } from "react";
 import OTPVerification from "../_components/OTPVerification";
 import OtherDetails from "../_components/OtherDetails";
 import StepBox from "@/components/StepBox";
+import { useSelector } from "react-redux";
 
 
 export default function Home() {
-  const [step, setStep] = useState(1);
-  const [email, setEmail] = useState('');
+  const { step } = useSelector((state) => state.auth);
   return (
     <main className="h-full">
       <div className="flex items-center justify-between py-2.5 px-12 border-b">
@@ -47,9 +47,9 @@ export default function Home() {
           </Link>
         </Hint>
       </div>
-      {step === 1 && <CreateAccount setStep={setStep} setEmail={setEmail} />}
-      {step === 2 && <OTPVerification setStep={setStep} email={email} />}
-      {step === 3 && <OtherDetails setStep={setStep} />}
+      {step === 1 && <CreateAccount />}
+      {step === 2 && <OTPVerification />}
+      {step === 3 && <OtherDetails />}
     </main>
   );
 }

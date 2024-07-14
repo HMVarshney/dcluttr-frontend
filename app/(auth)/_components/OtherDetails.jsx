@@ -10,9 +10,13 @@ import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { setStep, submitOrganizationDetails } from '@/lib/store/features/authSlice';
 
 
-export default function OtherDetails({ setStep, isBF = false }) {
+export default function OtherDetails({ isBF = false }) {
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.auth);
     const router = useRouter()
     const ref = useRef()
 
@@ -20,32 +24,24 @@ export default function OtherDetails({ setStep, isBF = false }) {
         mode: "onBlur"
     });
 
-    const [isLoading, setLoading] = useState(false);
     const [file, setFile] = useState(null);
-    const onSubmit = (e) => {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('name', e.name);
-        formData.append('organizationType', e.organizationType);
-        formData.append('website', e.website);
-        axiosInterceptorInstance.post(`/organization/add`, formData)
-            .then((res) => {
+    const onSubmit = (data) => {
+        const formData = { ...data, file };
+        dispatch(submitOrganizationDetails(formData)).unwrap()
+            .then(() => {
                 if (isBF) {
-                    setStep(false)
+                    dispatch(setStep(false));
                 } else {
-                    router.replace(`/log-in`)
+                    router.replace('/log-in');
                 }
-            }).finally(() => {
-                setLoading(false)
-            })
+            });
     }
     return (
         <section className={cn('h-[calc(100vh-66px)] flex items-center justify-center', { 'h-auto': isBF })}>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-xl w-full'>
                 {!isBF && <>
                     <div className='text-sm mb-6 flex items-center'>
-                        <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(2)} /><span className='text-black font-light ml-2 '>Back</span>
+                        <ArrowLeft className='w-5 cursor-pointer' onClick={() => dispatch(setStep(2))} /><span className='text-black font-light ml-2 '>Back</span>
                     </div>
                     <h3 className='font-bold text-2xl'>
                         Other details
@@ -112,7 +108,7 @@ export default function OtherDetails({ setStep, isBF = false }) {
                 </p>
 
                 <FormSubmitButtonWithIcon
-                    isLoading={isLoading}
+                    isLoading={loading}
                     text={isBF ? "Create" : "Sign up"} />
             </form>
         </section>

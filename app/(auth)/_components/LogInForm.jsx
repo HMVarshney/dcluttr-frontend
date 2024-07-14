@@ -10,31 +10,43 @@ import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import { setCookie } from '@/lib/utils';
 import LoginWithGoogle from './LoginWithGoogle';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, resendOTP, setEmail, setStep } from '@/lib/store/features/authSlice';
+import { toast } from 'sonner';
 
 export default function LogInForm({ }) {
     const router = useRouter()
+    const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, setError } = useForm({
         mode: "onBlur"
     });
 
+    const isLoading = useSelector((state) => state.auth.loading);
 
 
-    const [isLoading, setLoading] = useState(false);
-    const onSubmit = (e) => {
-        setLoading(true);
-        axiosInterceptorInstance.post('/auth/login', e)
-            .then((res) => {
-                if (res.data?.accessToken) {
-                    setCookie('accessToken', res.data?.accessToken)
-                    router.replace(`/dashboard`)
+    const onSubmit = (data) => {
+        dispatch(login(data)).unwrap()
+            .then(() => {
+                console.log('error');
+                router.replace('/dashboard');
+            })
+            .catch(({ data, email }) => {
+                if (data?.errorCode === "EMAIL_NOT_VERIFIED") {
+                    router.replace('/sign-up');
+                    dispatch(setStep(2));
+                    dispatch(resendOTP(email));
+                    toast("", {
+                        duration: 5000,
+                        description: data?.message,
+                        variant: "destructive"
+                    });
+                } else {
+                    setError('password', {
+                        type: 'manual',
+                        message: data?.message,
+                    });
                 }
-            }).catch((err) => {
-                console.log(err)
-                setError('password', {
-                    type: 'manual',
-                    message: err.response.data.message
-                })
-            }).finally(() => setLoading(false))
+            });
     }
     return (
         <section className='h-[calc(100vh-66px)] flex pt-28 justify-center'>

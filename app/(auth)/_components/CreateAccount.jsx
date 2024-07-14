@@ -5,40 +5,23 @@ import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
 import Link from 'next/link';
-import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
 import LoginWithGoogle from './LoginWithGoogle';
+import { signUp } from "@/lib/store/features/authSlice";
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function CreateAccount({ setStep, setEmail }) {
+export default function CreateAccount() {
+    const dispatch = useDispatch();
     const ref = useRef()
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur"
     });
 
-    const [isLoading, setLoading] = useState(false);
-    const onSubmit = (e) => {
-        const signUpRequest = JSON.stringify({ ...e, mobile: e.mobile ? e.mobile : null })
+    const isLoading = useSelector((state) => state.auth.loading);
 
-        const formData = new FormData();
-        formData.append('file', ref.current);
-        formData.append('signUpRequest', signUpRequest);
-        setLoading(true);
-        axiosInterceptorInstance.post(`/auth/signup`, formData)
-            .then((res) => {
-                setEmail(e.email)
-                axiosInterceptorInstance
-                    .post('/auth/otp/generate', {
-                        "email": e.email
-                    }).then((res) => {
-                        setStep(2)
-                    }).catch((err) => {
-                        console.log(err);
-                    }).finally(() => {
-                        setLoading(false)
-                    })
-            }).catch((err) => {
-                setLoading(false)
-            })
-    }
+    const onSubmit = (e) => {
+        const data = { ...e, file: ref.current };
+        dispatch(signUp(data));
+    };
     return (
         <section className='h-[calc(100vh-66px)] flex items-center justify-center'>
             <div className='max-w-xl w-full'>

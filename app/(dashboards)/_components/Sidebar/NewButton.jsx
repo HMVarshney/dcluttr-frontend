@@ -22,7 +22,7 @@ export default function NewButton() {
             </DialogTrigger>
             <DialogContent className="bg-white border-none max-w-[480px] ">
                 <OtherDetails setStep={(e) => {
-                    setOpen(e)
+                    setOpen(e)//TODO
                     dispatch(fetchUserDetails())
                 }} isBF={true} />
             </DialogContent>

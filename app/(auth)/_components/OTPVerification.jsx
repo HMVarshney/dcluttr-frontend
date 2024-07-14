@@ -10,52 +10,34 @@ import { Input } from '@/components/ui/input';
 import dynamic from 'next/dynamic';
 import { ArrowLeft } from 'lucide-react';
 import { setCookie } from '@/lib/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { resendOTP, verifyOTP, setStep } from '@/lib/store/features/authSlice';
 const CustomCount = dynamic(() => import('./FormElements').then((mod) => mod.CustomCount), { ssr: false });
 
 
-export default function OTPVerification({ setStep, email }) {
+export default function OTPVerification() {
+    const dispatch = useDispatch();
+    const { email, loading, error } = useSelector((state) => state.auth);
     const { handleSubmit, formState: { errors }, control, watch } = useForm({
         mode: "onBlur"
     });
-
-    const [isLoading, setLoading] = useState(false);
     const [isDisabled, setDisabled] = useState(true);
     const [num, setNum] = useState(0);
     const onSubmit = (e) => {
-        setLoading(true);
-        axiosInterceptorInstance
-            .post('/auth/otp/verify', {
-                "email": email,
-                "otp": e.otp
-            }).then((res) => {
-                if (res.data?.accessToken) {
-                    setCookie('accessToken', res.data?.accessToken)
-                    setCookie('refreshToken', res.data?.refreshToken)
-                    setStep(3);
-                }
-            }).catch((err) => {
-                console.log(err);
-            }).finally(() => {
-                setLoading(false)
-            })
+        dispatch(verifyOTP({ email, otp: e.otp }));
     }
 
     const handleResend = () => {
         setDisabled(true);
-        axiosInterceptorInstance
-            .post('/auth/otp/resend', {
-                "email": email,
-            }).then((res) => {
-                setNum(pre => pre + 1);
-            }).catch((err) => {
-                console.log(err);
-            })
+        dispatch(resendOTP(email)).then(() => {
+            setNum((prev) => prev + 1);
+        });
     }
     return (
         <section className='h-[calc(100vh-66px)] flex pl-28 pt-28'>
             <form onSubmit={handleSubmit(onSubmit)} className='max-w-md w-full'>
                 <div className='text-sm mb-6 flex items-center'>
-                    <ArrowLeft className='w-5 cursor-pointer' onClick={() => setStep(1)} /><span className='text-black font-light ml-2 '>Back</span>
+                    <ArrowLeft className='w-5 cursor-pointer' onClick={() => dispatch(setStep(1))} /><span className='text-black font-light ml-2 '>Back</span>
                 </div>
                 <h3 className='font-bold text-2xl'>
                     OTP Verification
@@ -65,7 +47,7 @@ export default function OTPVerification({ setStep, email }) {
                 </p>
                 <p className='text-base mt-4'>
                     {email}<span className='text-primary underline font-semibold ml-5 cursor-pointer'
-                        onClick={() => setStep(1)}>Change</span>
+                        onClick={() => dispatch(setStep(1))}>Change</span>
                 </p>
 
 
@@ -100,7 +82,7 @@ export default function OTPVerification({ setStep, email }) {
 
 
                 <FormSubmitButton
-                    isLoading={isLoading}
+                    isLoading={loading}
                     text="Verify" />
             </form>
         </section>

@@ -16,8 +16,8 @@ export default function List() {
 
     return (
         <ul className='space-y-4'>
-            {organizationAuthorities.map((org) => (
-                <div className='aspect-square relative' key={org.name}>
+            {organizationAuthorities.map((org, i) => (
+                <div className='aspect-square relative' key={i}>
                     <Hint
                         label={org.organizationName}
                         side="right"
