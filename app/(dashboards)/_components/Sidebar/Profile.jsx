@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux'; // Import useSelector from react-redu
 
 export default function Profile() {
     const { replace } = useRouter();
-    const userDetails = useSelector((state) => state.dashboard.userDetails);
+    const userDetails = useSelector((state) => state.user.userDetails);
 
     return (
         <div className='flex flex-col items-center justify-center gap-5'>

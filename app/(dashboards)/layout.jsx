@@ -5,7 +5,7 @@ import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 import { Mulish } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useDispatch } from "react-redux";
-import { fetchUserDetails } from "@/lib/store/features/dashboardSlice";
+import { fetchUserDetails } from "@/lib/store/features/userSlice";
 import { fetchAllOrganization } from "@/lib/store/features/organizationSlice";
 const mulish = Mulish({ subsets: ["latin"] });
 

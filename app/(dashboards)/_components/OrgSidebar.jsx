@@ -7,10 +7,10 @@ import React from 'react';
 import Navbar from './Sidebar/Navbar';
 import { cn } from '@/lib/utils';
 import { useSelector, useDispatch } from 'react-redux'; // Import necessary hooks
-import { setSideBarClose } from '@/lib/store/features/dashboardSlice';
+import { setSideBarClose } from '@/lib/store/features/userSlice';
 
 export default function OrgSideBar({ sideBarList }) {
-    const isOpen = useSelector((state) => state.dashboard.sideBarClose); // Get isOpen from Redux store
+    const isOpen = useSelector((state) => state.user.sideBarClose); // Get isOpen from Redux store
     const dispatch = useDispatch();
 
     const handleToggle = () => {
