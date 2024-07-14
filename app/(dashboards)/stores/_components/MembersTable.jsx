@@ -84,7 +84,6 @@ export const columns = [
                         <span className="font-medium text-destructive">Delete</span>
                     </button>
                 </ConfirmModal>
-
             )
         },
     },
@@ -92,7 +91,6 @@ export const columns = [
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
-            const user = row.original
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -100,16 +98,17 @@ export const columns = [
                             Modify User Access
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
+                    <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuLabel> Modify Access</DropdownMenuLabel>
+                        {/* <DropdownMenuItem
                             onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Copy ID
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator /> */}
+                        <DropdownMenuItem>Admin</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Action 1</DropdownMenuItem>
-                        <DropdownMenuItem>Action 2</DropdownMenuItem>
+                        <DropdownMenuItem>Marker</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

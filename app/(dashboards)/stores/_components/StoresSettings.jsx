@@ -2,21 +2,25 @@
 
 import { InputText } from '@/app/(auth)/_components/FormElements';
 import { Button } from '@/components/ui/button';
+import { resetState, updateOrganization } from '@/lib/store/features/organizationSlice';
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 export default function StoresSettings({ organizationDetails }) {
+    const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         mode: "onBlur"
     });
     const onSubmit = (e) => {
-        var data = new FormData();
-        data.append('name', e.name);
-        data.append('email', e.email);
-        data.append('website', e.website);
-        data.append('id', organizationDetails?.id);
-        data.append('organizationType', organizationDetails?.organizationType);
-        console.log(data);
+        var data = {
+            ...e,
+            id: organizationDetails?.id,
+            organizationType: organizationDetails?.organizationType
+        };
+        dispatch(updateOrganization(data)).unwrap()
+            .then(() => {
+            });
     }
 
     useEffect(() => {
