@@ -2,8 +2,8 @@
 
 import React, { Fragment } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import CustomTooltip from './CustomTooltip';
-import CustomActiveDot from './CustomActiveDot';
+import CustomTooltip from '@/components/CustomTooltip';
+import CustomActiveDot from '@/components/CustomActiveDot';
 import { ArrowUp } from 'lucide-react';
 
 

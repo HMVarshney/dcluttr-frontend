@@ -3,7 +3,7 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ChartHeader from './ChartHeader';
 import ChartFooter from './ChartFooter';
-import CustomTooltip from './CustomTooltip';
+import CustomTooltip from '@/components/CustomTooltip';
 
 // const data = [
 //   { name: 'A', uv: 4000, pv: 2400 },

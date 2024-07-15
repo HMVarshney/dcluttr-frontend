@@ -2,8 +2,8 @@
 
 import React, { Fragment } from 'react';
 import { AreaChart as Charts, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import CustomTooltip from './CustomTooltip';
-import CustomActiveDot from './CustomActiveDot';
+import CustomTooltip from '@/components/CustomTooltip';
+import CustomActiveDot from '@/components/CustomActiveDot';
 import moment from 'moment';
 import { Skeleton } from '@/components/ui/skeleton';
 import ChartHeader from './ChartHeader';
