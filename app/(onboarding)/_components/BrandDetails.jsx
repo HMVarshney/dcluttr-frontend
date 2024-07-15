@@ -40,7 +40,7 @@ export default function BrandDetails({ setStep }) {
                 <p className='text-base mt-1.5'>
                     You’re just minutes away from transforming your data into profitable growth
                 </p>
-                <div className='flex mt-10 items-center' onClick={() => ref.current.click()}>
+                <div className='flex mt-10 items-center cursor-pointer' onClick={() => ref.current.click()}>
                     <Image
                         src={file ? URL.createObjectURL(file) : '/image_placeholder.svg'}
                         width={56}

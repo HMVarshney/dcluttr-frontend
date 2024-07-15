@@ -36,7 +36,7 @@ export default function Profile() {
                     onClick={(e) => e.stopPropagation()}
                     side="top"
                     sideOffset={0}
-                    className="w-40 ml-10 p-1.5">
+                    className="w-48 ml-10 p-1.5">
                     <div className='text-sm font-bold p-2.5'>
                         My Profile
                     </div>
