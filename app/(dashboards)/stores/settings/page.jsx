@@ -17,7 +17,7 @@ import Loading from '@/app/(auth)/loading'
 import { getAllUsersOfOrganization } from '@/lib/store/features/organizationSlice'
 
 
-export default function page() {
+export default function Page() {
     const dispatch = useDispatch()
     const { usersList, status, organizationDetails } = useSelector((state) => state.organization)
     useEffect(() => {

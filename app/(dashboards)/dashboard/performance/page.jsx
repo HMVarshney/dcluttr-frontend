@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import React from 'react'
 import Header from './_components/Header';
 import AllPerformanceChart from './_components/AllPerformanceChart';
+import VennChart from './_components/VennChart';
 
 const data = {
     title: 'Spends',
@@ -68,6 +69,9 @@ export default function page() {
             <Header />
             <div className='m-6'>
                 <AllPerformanceChart data={data} details={{ title: '' }} />
+            </div>
+            <div className='m-6'>
+                <VennChart />
             </div>
         </ScrollArea>
     )

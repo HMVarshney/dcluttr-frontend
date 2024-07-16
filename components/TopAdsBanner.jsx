@@ -8,11 +8,11 @@ export default function OrbitingCirclesDemo() {
             </span>
 
             {/* Inner Circles */}
-            {[<Icons.googleDrive />,
-            <Icons.openai />,
-            <Icons.notion />,
-            <Icons.gitHub />,
-            <Icons.whatsapp />,
+            {[<Icons.googleDrive key={0} />,
+            <Icons.openai key={1} />,
+            <Icons.notion key={2} />,
+            <Icons.gitHub key={3} />,
+            <Icons.whatsapp key={4} />,
             ].map(
                 (Icon, i) => (
                     <OrbitingCircles
@@ -28,11 +28,11 @@ export default function OrbitingCirclesDemo() {
             )}
 
             {/* Outer Circles (reverse) */}
-            {[<Icons.googleDrive />,
-            <Icons.openai />,
-            <Icons.notion />,
-            <Icons.gitHub />,
-            <Icons.whatsapp />,
+            {[<Icons.googleDrive key={7} />,
+            <Icons.openai key={8} />,
+            <Icons.notion key={9} />,
+            <Icons.gitHub key={10} />,
+            <Icons.whatsapp key={11} />,
             ].map(
                 (Icon, i) => (
                     <OrbitingCircles

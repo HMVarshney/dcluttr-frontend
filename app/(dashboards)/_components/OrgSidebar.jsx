@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { CaretDoubleRight } from 'phosphor-react';
 import Link from 'next/link';
-import React from 'react';
+import React, { Fragment } from 'react';
 import Navbar from './Sidebar/Navbar';
 import { cn } from '@/lib/utils';
 import { useSelector, useDispatch } from 'react-redux'; // Import necessary hooks
@@ -26,12 +26,26 @@ export default function OrgSideBar({ sideBarList }) {
                         <CaretDoubleRight size={16} weight="bold" />
                     </Button>
                     {sideBarList.map((item, index) => (
-                        <Button key={index} asChild variant={"ghost"} size={"lg"} className={cn('w-full font-normal justify-start transition-all', isOpen ? 'px-1' : 'px-4')}>
-                            <Link href={item.href}>
-                                {item.icon}
-                                <span className={cn('text-sm font-medium transition-all max-w-96 opacity-100 line-clamp-1 ml-2', { 'max-w-0 opacity-0 ml-0': isOpen })}>{item.name}</span>
-                            </Link>
-                        </Button>
+                        <Fragment key={index}>
+                            <Button asChild variant={"ghost"} size={"lg"} className={cn('w-full font-normal justify-start transition-all', isOpen ? 'px-1' : 'px-4')}>
+                                <Link href={item.href}>
+                                    {item.icon}
+                                    <span className={cn('text-sm font-medium transition-all max-w-96 opacity-100 line-clamp-1 ml-2', { 'max-w-0 opacity-0 ml-0': isOpen })}>{item.name}</span>
+                                </Link>
+                            </Button>
+                            {item.level2 && (
+                                <div className={cn('flex flex-col gap-y-1 pl-3 ml-6 border-s-2', { 'hidden': isOpen })}>
+                                    {item.level2.map((item2, index2) => (
+                                        <Button key={index2} asChild variant={"ghost"} size={"lg"} className={cn('w-full font-normal justify-start transition-all', isOpen ? 'px-1' : 'px-4')}>
+                                            <Link href={item2.href}>
+                                                {item2.icon}
+                                                <span className={cn('text-sm font-medium transition-all max-w-96 opacity-100 line-clamp-1 ml-2', { 'max-w-0 opacity-0 ml-0': isOpen })}>{item2.name}</span>
+                                            </Link>
+                                        </Button>
+                                    ))}
+                                </div>
+                            )}
+                        </Fragment>
                     ))}
                 </div>
             </div>

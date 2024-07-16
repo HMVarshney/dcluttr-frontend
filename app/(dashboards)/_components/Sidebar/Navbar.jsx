@@ -1,58 +1,53 @@
-import { ChevronsUpDown } from 'lucide-react'
-import React, { useEffect } from 'react'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { setBrand } from '@/lib/store/features/brandSlice';
+import Image from 'next/image';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Navbar({ isOpen }) {
-    // const router = useRouter();
-    // const { status, allOrganization } = useSelector((state) => state.organization);
-    const { brandsList } = useSelector((state) => state.brand);
+    const dispatch = useDispatch();
+    const { brandsList, selectedBrand, isLoadingBrandsList } = useSelector((state) => state.brand);
 
-    // useEffect(() => {
-    //     if (allOrganization?.length && status === "succeeded" && !brandsList?.length) {
-    //         router.push('/welcome');
-    //     }
-    // }, [allOrganization?.length, status])
+    const handleBrandChange = (brandId) => {
+        const selected = brandsList.find((brand) => brand.id === brandId);
+        dispatch(setBrand(selected));
+    };
 
     return (
         <div className='w-full py-4 border-b flex gap-4'>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <div className='h-9 border rounded-md w-full flex items-center p-1.5 cursor-pointer' >
-                        <div className='text-[10px] bg-[#309E96] aspect-square min-w-6 content-center text-center rounded-md text-white mr-2'>
-                            SS
-                        </div>
-                        <div className={cn('text-sm font-semibold transition-all max-w-96 opacity-100 line-clamp-1', { 'max-w-0 opacity-0': isOpen })}>
-                            Start Struck by...
-                        </div>
-                        <ChevronsUpDown className='w-4 h-4 ml-auto' />
-                    </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-52">
-                    <DropdownMenuLabel>Select brand</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {brandsList?.map((brand) => (
-                        <DropdownMenuItem
-                            key={brand}
-                        // onClick={() => router.push(`/dashboards/${brand.id}`)}
-                        >
-                            Brand name {brand}
-                        </DropdownMenuItem>
-                    ))}
-                </DropdownMenuContent>
-            </DropdownMenu>
+            {isLoadingBrandsList ?
+                <Skeleton className='w-full h-9 border' /> :
+                <Select
+                    value={selectedBrand?.id}
+                    onValueChange={handleBrandChange}
+                >
+                    <SelectTrigger className="w-full p-1.5 h-9">
+                        <SelectValue placeholder="Select a brand" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {brandsList.map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                                <div className='flex items-center gap-3'>
+                                    <Image
+                                        src={option.brandLogo}
+                                        alt={option.brandName}
+                                        width={24}
+                                        height={24}
+                                        className="aspect-square rounded-md"
+                                    />
+                                    {option.brandName}
+                                </div>
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>}
         </div>
-    )
+    );
 }
-
-

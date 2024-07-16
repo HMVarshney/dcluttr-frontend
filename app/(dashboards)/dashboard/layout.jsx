@@ -13,7 +13,21 @@ const sideBarList = [
     {
         name: "Performance",
         href: "/dashboard/performance",
-        icon: <PresentationChart className='h-5 w-5 text-icon' />
+        icon: <PresentationChart className='h-5 w-5 text-icon' />,
+        level2: [
+            {
+                name: "All",
+                href: "/dashboard/performance",
+            },
+            {
+                name: "Meta Ads",
+                href: "/dashboard/performance/meta-ads",
+            },
+            {
+                name: "Google Ads",
+                href: "/dashboard/performance/google-ads",
+            },
+        ]
     },
     {
         name: "Products",

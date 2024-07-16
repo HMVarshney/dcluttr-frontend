@@ -18,11 +18,10 @@ import Notifications from '@/components/Notifications'
 import moment from 'moment'
 import AllBrands from './_components/AllBrands'
 import BrandDetails from './_components/BrandDetails'
-import Loading from '@/app/(auth)/loading'
 import { useSelector } from 'react-redux'
 
 export default function Page() {
-    const { status, brandsList } = useSelector((state) => state.brand)
+    const { isLoadingBrandsList, brandsList } = useSelector((state) => state.brand)
     const [dateRange, setDateRange] = useState({
         from: moment('2019-01-01', "YYYY-MM-DD")._d,
         to: moment('2022-12-23', "YYYY-MM-DD")._d,
@@ -52,9 +51,9 @@ export default function Page() {
                     <Notifications />
                 </div>
             </div>
-            {status === "idle" && <Loading />}
-            {brandsList?.length === 0 && <EmptyStores />}
-            {brandsList?.length > 0 && <AllBrands />}
+            {(brandsList?.length > 0 || isLoadingBrandsList) ?
+                <AllBrands />
+                : <EmptyStores />}
             {/* <BrandDetails /> */}
         </ScrollArea>
     )
