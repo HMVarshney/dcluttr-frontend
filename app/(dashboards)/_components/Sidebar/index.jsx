@@ -11,14 +11,14 @@ import Image from 'next/image'
 export default function SideBar() {
     return (
         <div className='h-full'>
-            <div className='border-b py-[9.3px]'>
+            <div className='border-b py-[15.5px]'>
                 <Link href='/'>
                     <Image
                         src="/logoIcon.svg"
                         alt="logo"
                         width={100}
                         height={100}
-                        className='min-w-12 w-12 mx-auto'
+                        className='min-w-9 w-9 mx-auto'
                     />
                 </Link>
             </div>
