@@ -26,65 +26,63 @@ export default function AllPerformanceChart({ isLoading = false, data, details, 
   return (
     <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
       <ChartHeader />
-      <div className='border rounded-lg mx-4 my-6'>
-        <div className='flex items-center justify-between px-4 pt-2.5'>
-          <div className=' text-2xl font-bold text-black'>
-            ₹2,45,982
+      <div className='flex items-center justify-between px-4 pt-2.5'>
+        <div className=' text-2xl font-bold text-black'>
+          ₹2,45,982
+        </div>
+        <div className=''>
+          <div className='text-sm font-semibold text-green-600 flex items-center justify-end'>
+            <ArrowUp className='w-4' />
+            2.4%
           </div>
-          <div className=''>
-            <div className='text-sm font-semibold text-green-600 flex items-center justify-end'>
-              <ArrowUp className='w-4' />
-              2.4%
-            </div>
-            <div className='text-[10px] text-gray-400 text-right'>
-              vs 2.69 last month
-            </div>
+          <div className='text-[10px] text-gray-400 text-right'>
+            vs 2.69 last month
           </div>
         </div>
-        {isLoading
-          ? <Skeleton className="w-[calc(100%-32px)] h-[212px] my-4 rounded-md mx-auto" />
-          : <ResponsiveContainer width="100%" height={212}>
-            <Charts
-              data={data.data}
-              margin={{
-                top: 10, right: 16, left: -20, bottom: 0,
-              }}
-            >
-              <CartesianGrid
-                strokeWidth={1}
-                stroke="#D1D3DA8F"
-              />
-              <XAxis
-                dataKey={data.dataKeyXAxis
-                  ? (ele) => moment(ele["orders.created_at"]).format('D MMM YY')
-                  : null} axisLine={false} tickLine={false}
-                tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
-
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
-
-              <Tooltip content={<CustomTooltip />} />
-
-              {data.series?.map(ele => <Fragment key={ele.name}>
-                <Area
-                  type="monotone"
-                  dataKey={ele.dataKey}
-                  stroke={ele.color}
-                  strokeDasharray={ele.type !== 'area' ? "2 2" : null}
-                  fillOpacity={1} fill={`url(#${ele.name}-${ele.id})`}
-                  activeDot={<CustomActiveDot />}
-                />
-                {ele.type === 'area' &&
-                  <defs>
-                    <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
-                      <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>}
-              </Fragment>)}
-
-            </Charts>
-          </ResponsiveContainer>}
       </div>
+      {isLoading
+        ? <Skeleton className="w-[calc(100%-32px)] h-[212px] my-4 rounded-md mx-auto" />
+        : <ResponsiveContainer width="100%" height={212}>
+          <Charts
+            data={data.data}
+            margin={{
+              top: 10, right: 16, left: -20, bottom: 0,
+            }}
+          >
+            <CartesianGrid
+              strokeWidth={1}
+              stroke="#D1D3DA8F"
+            />
+            <XAxis
+              dataKey={data.dataKeyXAxis
+                ? (ele) => moment(ele["orders.created_at"]).format('D MMM YY')
+                : null} axisLine={false} tickLine={false}
+              tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
+
+            <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7583', fontSize: 10, fontWeight: 400 }} />
+
+            <Tooltip content={<CustomTooltip />} />
+
+            {data.series?.map(ele => <Fragment key={ele.name}>
+              <Area
+                type="monotone"
+                dataKey={ele.dataKey}
+                stroke={ele.color}
+                strokeDasharray={ele.type !== 'area' ? "2 2" : null}
+                fillOpacity={1} fill={`url(#${ele.name}-${ele.id})`}
+                activeDot={<CustomActiveDot />}
+              />
+              {ele.type === 'area' &&
+                <defs>
+                  <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
+                    <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
+                  </linearGradient>
+                </defs>}
+            </Fragment>)}
+
+          </Charts>
+        </ResponsiveContainer>}
       <ChartFooter data={data} />
     </div>
   );

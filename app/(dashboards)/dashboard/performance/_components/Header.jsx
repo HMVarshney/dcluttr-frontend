@@ -18,13 +18,11 @@ import Notifications from '@/components/Notifications';
 import ExportFileFormat from '@/components/ExportFileFormat';
 import { SquareHalf } from 'phosphor-react';
 import TopAdsBanner from '@/components/TopAdsBanner';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 export default function Header() {
-    const [dateRange, setDateRange] = useState({
-        from: moment('2019-01-01', "YYYY-MM-DD")._d,
-        to: moment('2022-12-23', "YYYY-MM-DD")._d,
-        value: null
-    });
+
     return (
         <>
             <div className='sticky top-0 z-10'>
@@ -45,11 +43,17 @@ export default function Header() {
                             Last updated: 12:56 PM
                         </div>
                     </div>
+
+                    <Input
+                        value={''}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="🔍  Filter source"
+                        className="w-[152px] h-[38px]"
+                    />
                     <Switcher />
                     <Button variant="outline" className="px-2.5">
                         <SquareHalf className='w-5 h-5' />
                     </Button>
-                    <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />
                     <ExportFileFormat />
                     <Notifications />
                 </div>
