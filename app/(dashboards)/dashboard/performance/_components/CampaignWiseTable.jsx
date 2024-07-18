@@ -19,22 +19,49 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Switch } from "@/components/ui/switch"
+import { ArrowUpDown } from "lucide-react"
 
 
 export const columns = [
   {
-    accessorKey: "email",
+    accessorKey: "id",
     header: ({ column }) => {
       return (
-        <Button variant="secondary" className="w-40 p-0 bg-white">
-          Modify User Access
+        <Checkbox
+          className=" " />
+      )
+    },
+    cell: ({ row }) => (
+      <Checkbox
+        className=" " />
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <Switch />
+    ),
+  },
+  {
+    accessorKey: "campaign",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Campaign
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
     cell: ({ row }) => {
       return (
         <Button variant="secondary" className="w-40 p-0 bg-white">
-          Modify User Access
+          {row.getValue("campaign")}
         </Button>
       )
     },

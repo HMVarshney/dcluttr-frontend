@@ -69,6 +69,7 @@ const usersList = [
         id: 1,
         email: "QWuXK@example.com",
         role: "admin",
+        campaign: "TOTF - Conv-purchase - usa -all place.."
     },
 ]
 export default function page() {
