@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 
 export default function page() {
     const isOpen = useSelector((state) => state.user.sideBarClose);
-    console.log(isOpen);
+
     return (
         <ScrollArea className={cn('rounded-md bg-[#FAFAFA] h-full border w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
             <Header />

@@ -40,8 +40,8 @@ export default function Navbar({ isOpen }) {
                         <SelectValue placeholder="Select a brand" />
                     </SelectTrigger>
                     <SelectContent>
-                        {brandsList.map((option) => (
-                            <SelectItem key={option.id} value={option.id}>
+                        {brandsList.map((option, i) => (
+                            <SelectItem key={i} value={option.id}>
                                 <div className='flex items-center gap-3'>
                                     <Image
                                         src={option.brandLogo}
