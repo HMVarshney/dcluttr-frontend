@@ -3,9 +3,9 @@
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import React from 'react'
-import AllPerformanceChart from '../_components/AllPerformanceChart';
-import VennChart from '../_components/VennChart';
 import Header from '../_components/Header';
+import CampaignWiseDonutChart from '../_components/CampaignWiseDonutChart';
+import LiveOrdersTable from '../_components/LiveOrdersTable';
 
 const data = {
     title: 'Spends',
@@ -67,11 +67,9 @@ export default function page() {
     return (
         <ScrollArea className='rounded-md bg-[#FAFAFA] h-full border'>
             <Header />
-            <div className='m-6'>
-                <AllPerformanceChart data={data} details={{ title: '' }} />
-            </div>
-            <div className='m-6'>
-                <VennChart />
+            <div className='m-6 flex gap-4'>
+                <CampaignWiseDonutChart />
+                <LiveOrdersTable />
             </div>
         </ScrollArea>
     )
