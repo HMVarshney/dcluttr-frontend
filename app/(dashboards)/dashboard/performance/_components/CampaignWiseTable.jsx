@@ -7,12 +7,12 @@ import EditTableAttribution from './EditTableAttribution';
 import { Button } from '@/components/ui/button';
 import { SquareHalf } from 'phosphor-react';
 import { useDispatch } from 'react-redux';
-import { getData } from '@/lib/store/features/metaAdsSlice';
+import { getCampaignData } from '@/lib/store/features/metaAdsSlice';
 
 export default function CampaignWiseTable({ usersList }) {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getData())
+    dispatch(getCampaignData())
   }, [])
 
 
@@ -26,19 +26,70 @@ export default function CampaignWiseTable({ usersList }) {
     "": ""
   };
 
+  // const columnNames = [
+  //   { name: 'Time', minWidth: '200px', sticky: false },
+  //   { name: 'Type', minWidth: '92px', sticky: false },
+  //   { name: 'Instrument', minWidth: '250px', sticky: false },
+  //   { name: 'Product', minWidth: '200px', sticky: false },
+  //   { name: 'Quantity', minWidth: '120px', sticky: false },
+  //   { name: 'LTP', minWidth: '120px', sticky: false },
+  //   { name: 'Price', minWidth: '100px', sticky: false },
+  //   { name: 'Order Type', minWidth: '100px', sticky: false },
+  //   { name: 'Trgr. Price', minWidth: '120px', sticky: false },
+  //   { name: 'Market protection', minWidth: '200px', sticky: false },
+  //   { name: 'Status', minWidth: '120px', sticky: true },
+  // ];
   const columnNames = [
-    { name: 'Time', minWidth: '200px', sticky: false },
-    { name: 'Type', minWidth: '92px', sticky: false },
-    { name: 'Instrument', minWidth: '250px', sticky: false },
-    { name: 'Product', minWidth: '200px', sticky: false },
-    { name: 'Quantity', minWidth: '120px', sticky: false },
-    { name: 'LTP', minWidth: '120px', sticky: false },
-    { name: 'Price', minWidth: '100px', sticky: false },
-    { name: 'Order Type', minWidth: '100px', sticky: false },
-    { name: 'Trgr. Price', minWidth: '120px', sticky: false },
-    { name: 'Market protection', minWidth: '200px', sticky: false },
-    { name: 'Status', minWidth: '120px', sticky: true },
+    {
+      header: 'Purchase Value Sum',
+      accessorKey: 'google_campaign_stream.purchase_value_sum'
+    },
+    {
+      header: 'Ad Spend Sum',
+      accessorKey: 'google_campaign_stream.ad_spend_sum'
+    },
+    {
+      header: 'Purchase Sum',
+      accessorKey: 'google_campaign_stream.purchase_sum'
+    },
+    {
+      header: 'Impressions Sum',
+      accessorKey: 'google_campaign_stream.impressions_sum'
+    },
+    {
+      header: 'Clicks Sum',
+      accessorKey: 'google_campaign_stream.clicks_sum'
+    },
+    {
+      header: 'Vtc Sum',
+      accessorKey: 'google_campaign_stream.vtc_sum'
+    },
+    {
+      header: 'Ctr',
+      accessorKey: 'google_campaign_stream.ctr'
+    },
+    {
+      header: 'Cpc',
+      accessorKey: 'google_campaign_stream.cpc'
+    },
+    {
+      header: 'Cpm',
+      accessorKey: 'google_campaign_stream.cpm'
+    },
+    {
+      header: 'Roas',
+      accessorKey: 'google_campaign_stream.roas'
+    },
+    {
+      header: 'Aov',
+      accessorKey: 'google_campaign_stream.aov'
+    },
+    {
+      header: 'Cpa',
+      accessorKey: 'google_campaign_stream.cpa'
+    }
   ];
+
 
   return (
     <div className="w-[calc(100vw-372px)]">
@@ -69,7 +120,7 @@ export default function CampaignWiseTable({ usersList }) {
             <div className='flex w-full flex-row justify-between bg-[#EDEDED] items-center self-stretch border-b-[0.5px] border-[#EDEDED]'>
               {columnNames.map((column, i) => (
                 <div key={i} className={`flex justify-center self-stretch items-center gap-2.5 flex-[1_0_0] py-[12px] text-sm font-medium leading-1 text-[#747474] ${column?.sticky ? 'sticky right-0 bg-[#F5F5F5] ' : ''} `} style={{ minWidth: column.minWidth }}>
-                  {column.name}
+                  {column.header}
                   {column.sticky && <div className='flex w-6 h-6 justify-center items-center shrink-0 rounded border-[#9D9D9D] hover:bg-slate-100 cursor-pointer bg-[#FFF] p-[4.5px] border-[0.6px] border-solid'>
                     <MoveRight />
                   </div>}

@@ -54,7 +54,7 @@ export default function BiddingStrategyTable() {
             <div className="px-6 pb-8 w-full overflow-x-auto">
                 <div className="rounded-md border shadow max-w-full overflow-x-auto relative">
                     {loading ?
-                        <Skeleton />
+                        <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
                         : <BiddingStrategyTables annotation={data?.results?.[0]?.annotation} data={data?.results?.[0]?.data} />
                     }
                 </div>
@@ -72,15 +72,18 @@ export function BiddingStrategyTables({ annotation, data }) {
         }));
     }, [annotation]);
 
-    const transformedData = data.map(item => {
-        const flattenedData = {};
-        for (const [key, value] of Object.entries(item)) {
-            // Flatten the nested properties into a single level
-            flattenedData[key?.replace("google_bidding_strategy.", "")] = value;
-        }
-        return flattenedData;
-    });
+    const transformedData = useMemo(() => {
+        return data.map(item => {
+            const flattenedData = {};
+            for (const [key, value] of Object.entries(item)) {
+                // Flatten the nested properties into a single level
+                flattenedData[key?.replace("google_bidding_strategy.", "")] = value;
+            }
+            return flattenedData;
+        });
+    }, [data]);
 
+    console.log({ columns, transformedData });
 
     // const [sorting, setSorting] = useState([]);
 
