@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table"
 import { SquareHalf, Trash } from "phosphor-react"
 import { useDispatch } from "react-redux"
-import { getAdSets, getCampaignData } from "@/lib/store/features/metaAdsSlice"
+import { getAds, getAdSets, getCampaignData } from "@/lib/store/features/metaAdsSlice"
 import EditTableAttribution from "../EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
@@ -28,47 +28,56 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import CampaignTable from "./CampaignTable"
-import AdSetsTable from "./AdSetsTable"
 
 
 export default function CampaignWiseTable() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { loading, error, data } = useSelector((state) => state.metaAds.campaignData);
   const { loading: adSetsLoading, error: adSetsError, data: adSetsData } = useSelector((state) => state.metaAds.adSetsData);
+  const { loading: adsLoading, error: adsError, data: adsData } = useSelector((state) => state.metaAds.adsData);
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(getAds())
+    dispatch(getAdSets())
     dispatch(getCampaignData())
   }, [])
-  const [openAdSets, setOpenAdSets] = useState("")
 
   const columns = [
     {
-      accessorKey: "google_campaign_id",
-      header: ({ column }) => {
-        return (
-          <Checkbox
-            className=" " />
-        )
-      },
-      cell: ({ row }) => (
-        <Checkbox
-          className=" " />
+      accessorKey: 'id',
+      header: ({ table }) => (
+        <div className="flex gap-4">
+          <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+          Status
+        </div>
       ),
+      cell: ({ row, getValue }) => (
+        <div className="flex gap-4">
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+          <Switch />
+        </div>
+      ),
+      // footer: props => props.column.id,
     },
     {
-      accessorKey: "google_campaign_id",
-      header: "Status",
-      cell: ({ row }) => (
-        <Switch />
-      ),
-    },
-    {
-      accessorKey: "google_campaign_name",
+      accessorKey: "name",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className="w-96"
+            className="w-72 justify-start"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Campaign
@@ -77,20 +86,32 @@ export default function CampaignWiseTable() {
         )
       },
       cell: ({ row }) => (
-        <div className="w-96" onClick={() => {
-          setOpenAdSets(row.id)
-          dispatch(getAdSets())
-        }}>
-          {row.getValue("google_campaign_name")}
+        <div
+          className={cn('w-72 line-clamp-1',
+            { "pl-4": row.depth === 1 },
+            { "pl-8": row.depth === 2 },
+          )}
+          {...{
+            onClick: row.getToggleExpandedHandler(),
+            style: { cursor: 'pointer' },
+          }}
+        >
+          {/* {row.getCanExpand() ? (
+              {row.getIsExpanded() ? '👇' : '👉'}
+          ) : (
+            '🔵'
+          )} */}
+          {row.getValue("name")}
         </div>
       ),
     },
     {
-      accessorKey: "google_campaign_stream_purchase_value_sum",
+      accessorKey: "purchase_value_sum",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
+            className="justify-start"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Purchase Value Sum
@@ -101,135 +122,49 @@ export default function CampaignWiseTable() {
     },
     {
       header: 'Ad Spend Sum',
-      accessorKey: 'google_campaign_stream_ad_spend_sum'
+      accessorKey: 'ad_spend_sum'
     },
     {
       header: 'Purchase Sum',
-      accessorKey: 'google_campaign_stream_purchase_sum'
+      accessorKey: 'purchase_sum'
     },
     {
       header: 'Impressions Sum',
-      accessorKey: 'google_campaign_stream_impressions_sum'
+      accessorKey: 'impressions_sum'
     },
     {
       header: 'Clicks Sum',
-      accessorKey: 'google_campaign_stream_clicks_sum'
+      accessorKey: 'clicks_sum'
     },
     {
       header: 'Vtc Sum',
-      accessorKey: 'google_campaign_stream_vtc_sum'
+      accessorKey: 'vtc_sum'
     },
     {
       header: 'Ctr',
-      accessorKey: 'google_campaign_stream_ctr'
+      accessorKey: 'ctr'
     },
     {
       header: 'Cpc',
-      accessorKey: 'google_campaign_stream_cpc'
+      accessorKey: 'cpc'
     },
     {
       header: 'Cpm',
-      accessorKey: 'google_campaign_stream_cpm'
+      accessorKey: 'cpm'
     },
     {
       header: 'Roas',
-      accessorKey: 'google_campaign_stream_roas'
+      accessorKey: 'roas'
     },
     {
       header: 'Aov',
-      accessorKey: 'google_campaign_stream_aov'
+      accessorKey: 'aov'
     },
     {
       header: 'Cpa',
-      accessorKey: 'google_campaign_stream_cpa'
+      accessorKey: 'cpa'
     }
   ];
-
-  const columnsAdsSet = [
-    {
-      accessorKey: "google_ad_group_name",
-      cell: ({ row }) => (
-        <Checkbox
-          className=" " />
-      ),
-    },
-    {
-      accessorKey: "google_ad_group_id",
-      header: "Status",
-      cell: ({ row }) => (
-        <Switch />
-      ),
-    },
-    {
-      accessorKey: "google_ad_group_name",
-      cell: ({ row }) => (
-        <div className="w-80 max-w-80 line-clamp-1" onClick={() => {
-          setOpenAdSets(row.id)
-          dispatch(getAdSets())
-        }}>
-          {row.getValue("google_ad_group_name")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "google_ad_group_stream_purchase_value_sum",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Purchase Value Sum
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-    },
-    {
-      header: 'Ad Spend Sum',
-      accessorKey: 'google_ad_group_stream_ad_spend_sum'
-    },
-    {
-      header: 'Purchase Sum',
-      accessorKey: 'google_ad_group_stream_purchase_sum'
-    },
-    {
-      header: 'Impressions Sum',
-      accessorKey: 'google_ad_group_stream_impressions_sum'
-    },
-    {
-      header: 'Clicks Sum',
-      accessorKey: 'google_ad_group_stream_clicks_sum'
-    },
-    {
-      header: 'Vtc Sum',
-      accessorKey: 'google_ad_group_stream_vtc_sum'
-    },
-    {
-      header: 'Ctr',
-      accessorKey: 'google_ad_group_stream_ctr'
-    },
-    {
-      header: 'Cpc',
-      accessorKey: 'google_ad_group_stream_cpc'
-    },
-    {
-      header: 'Cpm',
-      accessorKey: 'google_ad_group_stream_cpm'
-    },
-    {
-      header: 'Roas',
-      accessorKey: 'google_ad_group_stream_roas'
-    },
-    {
-      header: 'Aov',
-      accessorKey: 'google_ad_group_stream_aov'
-    },
-    {
-      header: 'Cpa',
-      accessorKey: 'google_ad_group_stream_cpa'
-    }
-  ]
 
 
   return (
@@ -249,16 +184,48 @@ export default function CampaignWiseTable() {
           </Button>
         </EditTableAttribution>
       </div>
-      <div className="px-6 pb-8 w-full overflow-x-auto">
-        <div className="rounded-md border shadow">
+      <div className="px-6 pb-8 w-full">
+        <div className="rounded-md overflow-hidden border shadow">
           {loading ?
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-            : <CampaignTable data={data?.results?.[0]?.data?.slice(0, 10)} columns={columns} openAdSets={openAdSets}>
-              {adSetsData?.results?.[0]?.data.length > 0 &&
-                <AdSetsTable data={adSetsData?.results?.[0]?.data?.slice(0, 10)} columns={columnsAdsSet} />}
+            : <CampaignTable
+              data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
+              ({
+                ...l1,
+                subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
+                ({
+                  ...l2,
+                  subRows: adsData?.results?.[0]?.data?.slice(0, 4)
+                }))
+              }))}
+              columns={columns}>
             </CampaignTable>}
         </div>
       </div>
     </div>
   );
+}
+
+
+function IndeterminateCheckbox({
+  indeterminate,
+  className = '',
+  ...rest
+}) {
+  const ref = React.useRef(null)
+
+  useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + ' cursor-pointer'}
+      {...rest}
+    />
+  )
 }
