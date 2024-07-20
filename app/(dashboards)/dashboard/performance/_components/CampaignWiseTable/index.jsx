@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo, useState } from "react"
+import React, { Children, Fragment, useEffect, useMemo, useState } from "react"
 import {
   flexRender,
   getCoreRowModel,
@@ -21,22 +21,25 @@ import {
 import { SquareHalf, Trash } from "phosphor-react"
 import { useDispatch } from "react-redux"
 import { getAdSets, getCampaignData } from "@/lib/store/features/metaAdsSlice"
-import EditTableAttribution from "./EditTableAttribution"
+import EditTableAttribution from "../EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
+import CampaignTable from "./CampaignTable"
+import AdSetsTable from "./AdSetsTable"
 
 
 export default function CampaignWiseTable() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { loading, error, data } = useSelector((state) => state.metaAds.campaignData);
+  const { loading: adSetsLoading, error: adSetsError, data: adSetsData } = useSelector((state) => state.metaAds.adSetsData);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCampaignData())
   }, [])
-
+  const [openAdSets, setOpenAdSets] = useState("")
 
   const columns = [
     {
@@ -65,7 +68,7 @@ export default function CampaignWiseTable() {
         return (
           <Button
             variant="ghost"
-            className="w-80"
+            className="w-96"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Campaign
@@ -74,7 +77,10 @@ export default function CampaignWiseTable() {
         )
       },
       cell: ({ row }) => (
-        <div className="w-80" onClick={() => dispatch(getAdSets())}>
+        <div className="w-96" onClick={() => {
+          setOpenAdSets(row.id)
+          dispatch(getAdSets())
+        }}>
           {row.getValue("google_campaign_name")}
         </div>
       ),
@@ -139,6 +145,91 @@ export default function CampaignWiseTable() {
     }
   ];
 
+  const columnsAdsSet = [
+    {
+      accessorKey: "google_ad_group_name",
+      cell: ({ row }) => (
+        <Checkbox
+          className=" " />
+      ),
+    },
+    {
+      accessorKey: "google_ad_group_id",
+      header: "Status",
+      cell: ({ row }) => (
+        <Switch />
+      ),
+    },
+    {
+      accessorKey: "google_ad_group_name",
+      cell: ({ row }) => (
+        <div className="w-80 max-w-80 line-clamp-1" onClick={() => {
+          setOpenAdSets(row.id)
+          dispatch(getAdSets())
+        }}>
+          {row.getValue("google_ad_group_name")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "google_ad_group_stream_purchase_value_sum",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Purchase Value Sum
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+    },
+    {
+      header: 'Ad Spend Sum',
+      accessorKey: 'google_ad_group_stream_ad_spend_sum'
+    },
+    {
+      header: 'Purchase Sum',
+      accessorKey: 'google_ad_group_stream_purchase_sum'
+    },
+    {
+      header: 'Impressions Sum',
+      accessorKey: 'google_ad_group_stream_impressions_sum'
+    },
+    {
+      header: 'Clicks Sum',
+      accessorKey: 'google_ad_group_stream_clicks_sum'
+    },
+    {
+      header: 'Vtc Sum',
+      accessorKey: 'google_ad_group_stream_vtc_sum'
+    },
+    {
+      header: 'Ctr',
+      accessorKey: 'google_ad_group_stream_ctr'
+    },
+    {
+      header: 'Cpc',
+      accessorKey: 'google_ad_group_stream_cpc'
+    },
+    {
+      header: 'Cpm',
+      accessorKey: 'google_ad_group_stream_cpm'
+    },
+    {
+      header: 'Roas',
+      accessorKey: 'google_ad_group_stream_roas'
+    },
+    {
+      header: 'Aov',
+      accessorKey: 'google_ad_group_stream_aov'
+    },
+    {
+      header: 'Cpa',
+      accessorKey: 'google_ad_group_stream_cpa'
+    }
+  ]
 
 
   return (
@@ -162,86 +253,12 @@ export default function CampaignWiseTable() {
         <div className="rounded-md border shadow">
           {loading ?
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-            : <TableComponents data={data?.results?.[0]?.data} columns={columns} />}
+            : <CampaignTable data={data?.results?.[0]?.data?.slice(0, 10)} columns={columns} openAdSets={openAdSets}>
+              {adSetsData?.results?.[0]?.data.length > 0 &&
+                <AdSetsTable data={adSetsData?.results?.[0]?.data?.slice(0, 10)} columns={columnsAdsSet} />}
+            </CampaignTable>}
         </div>
       </div>
     </div>
   );
-}
-
-
-
-
-export function TableComponents({ data, columns }) {
-  const allColumns = useMemo(() => columns, [columns]);
-  const allData = useMemo(() => data, [data]);
-  console.log({ allData })
-
-  const [sorting, setSorting] = useState([])
-  const [rowSelection, setRowSelection] = useState({})
-
-
-  const table = useReactTable({
-    data: allData,
-    columns: allColumns,
-    state: {
-      sorting,
-      rowSelection,
-    },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
-  })
-  return (
-    <Table className="rounded-md bg-white">
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                </TableHead>
-              )
-            })}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && "selected"}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell
-              colSpan={columns.length}
-              className="h-24 text-center"
-            >
-              No results.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  )
 }

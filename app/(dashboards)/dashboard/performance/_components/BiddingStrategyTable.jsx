@@ -67,21 +67,12 @@ export default function BiddingStrategyTable() {
 export function BiddingStrategyTables({ annotation, data }) {
     const columns = useMemo(() => {
         return Object.entries(annotation.measures).map(([key, value]) => ({
-            accessorKey: key?.replace("google_bidding_strategy.", ""),
-            header: value.shortTitle || "",
+            accessorKey: key,
+            header: value.shortTitle || value.title,
         }));
     }, [annotation]);
 
-    const transformedData = useMemo(() => {
-        return data.map(item => {
-            const flattenedData = {};
-            for (const [key, value] of Object.entries(item)) {
-                // Flatten the nested properties into a single level
-                flattenedData[key?.replace("google_bidding_strategy.", "")] = value;
-            }
-            return flattenedData;
-        });
-    }, [data]);
+    const transformedData = useMemo(() => data, [data]);
 
     console.log({ columns, transformedData });
 
