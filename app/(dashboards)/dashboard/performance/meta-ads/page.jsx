@@ -69,7 +69,11 @@ const usersList = [
         id: 1,
         email: "QWuXK@example.com",
         role: "admin",
-        campaign: "TOTF - Conv-purchase - usa -all place.."
+        campaign: "TOTF - Conv-purchase - usa -all place..",
+        subRows: [
+            { id: 2, status: 'Inactive', campaign: 'Sub-Campaign A1' },
+            { id: 3, status: 'Active', campaign: 'Sub-Campaign A2' }
+        ]
     },
 ]
 export default function page() {

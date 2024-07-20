@@ -2,15 +2,12 @@
 
 
 import { useEffect, useState } from 'react';
-import cube from '@cubejs-client/core';
 import AreaChart from './AreaChart';
 import DatePickerWithRange from '@/components/DatePickerWithRange';
 import moment from 'moment';
+import cubeJsInterceptorInstance from '@/lib/cubejsInterceptorInstance';
 
-const cubeApi = cube(
-    process.env.NEXT_PUBLIC_CUBEJS_TOKEN,
-    { apiUrl: process.env.NEXT_PUBLIC_CUBEJS_API_URL }
-);
+
 
 export default function TestChart() {
 
@@ -26,25 +23,25 @@ export default function TestChart() {
 
     const loadData = () => {
         setData(null);
-        cubeApi
+        cubeJsInterceptorInstance
             .load({
-                "measures": [
-                    "orders.mau",
-                    "orders.wau"
-                ],
-                "limit": 5000,
-                "timeDimensions": [
-                    {
-                        "dimension": "orders.created_at",
-                        "granularity": "quarter",
-                        "dateRange": dateRange.value
-                            ? dateRange.value
-                            : [
-                                dateRange.from ? moment(dateRange.from).format("YYYY-MM-DD") : "2019-01-01",
-                                dateRange.to ? moment(dateRange.to).format("YYYY-MM-DD") : "2022-12-23"
-                            ]
-                    }
-                ]
+                // "measures": [
+                //     // "orders.mau",
+                //     // "orders.wau"
+                // ],
+                // "limit": 5000,
+                // "timeDimensions": [
+                //     {
+                //         "dimension": "orders.created_at",
+                //         "granularity": "quarter",
+                //         "dateRange": dateRange.value
+                //             ? dateRange.value
+                //             : [
+                //                 dateRange.from ? moment(dateRange.from).format("YYYY-MM-DD") : "2019-01-01",
+                //                 dateRange.to ? moment(dateRange.to).format("YYYY-MM-DD") : "2022-12-23"
+                //             ]
+                //     }
+                // ]
             })
             .then(({ loadResponses }) => {
                 setData(loadResponses?.[0]?.data);
