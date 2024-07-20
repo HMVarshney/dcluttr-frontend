@@ -56,7 +56,7 @@ export default function Navbar({ isOpen }) {
                         ))}
                     </SelectContent>
                 </Select>}
-            <Button variant="icon" className={cn('min-w-4 h-9 transition-all p-0', isOpen ? 'rotate-180' : 'rotate-0')} onClick={handleToggle}>
+            <Button variant="icon" className={cn('min-w-4 h-9 transition-all p-0', !isOpen ? 'rotate-180' : 'rotate-0')} onClick={handleToggle}>
                 <CaretDoubleRight size={16} weight="bold" color='#027056' />
             </Button>
         </div>

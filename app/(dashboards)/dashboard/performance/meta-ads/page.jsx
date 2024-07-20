@@ -19,7 +19,7 @@ export default function page() {
         <ScrollArea className={cn('rounded-md bg-[#FAFAFA] h-full border w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
             <Header />
             <CampaignWiseTable />
-            <BiddingStrategyTable />
+            {/* <BiddingStrategyTable /> */}
             {/* <div className='m-6'>
                 <AllPerformanceChart data={data} details={{ title: '' }} />
             </div> */}

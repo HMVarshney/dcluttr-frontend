@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table"
 import { SquareHalf, Trash } from "phosphor-react"
 import { useDispatch } from "react-redux"
-import { getCampaignData } from "@/lib/store/features/metaAdsSlice"
+import { getAdSets, getCampaignData } from "@/lib/store/features/metaAdsSlice"
 import EditTableAttribution from "./EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
@@ -29,102 +29,6 @@ import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 
 
-
-const columns = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => {
-      return (
-        <Checkbox
-          className=" " />
-      )
-    },
-    cell: ({ row }) => (
-      <Checkbox
-        className=" " />
-    ),
-  },
-  {
-    accessorKey: "id",
-    header: "Status",
-    cell: ({ row }) => (
-      <Switch />
-    ),
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          className="w-80"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Campaign
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-  },
-  {
-    accessorKey: "purchase_value_sum",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Purchase Value Sum
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-  },
-  {
-    header: 'Ad Spend Sum',
-    accessorKey: 'ad_spend_sum'
-  },
-  {
-    header: 'Purchase Sum',
-    accessorKey: 'purchase_sum'
-  },
-  {
-    header: 'Impressions Sum',
-    accessorKey: 'impressions_sum'
-  },
-  {
-    header: 'Clicks Sum',
-    accessorKey: 'clicks_sum'
-  },
-  {
-    header: 'Vtc Sum',
-    accessorKey: 'vtc_sum'
-  },
-  {
-    header: 'Ctr',
-    accessorKey: 'ctr'
-  },
-  {
-    header: 'Cpc',
-    accessorKey: 'cpc'
-  },
-  {
-    header: 'Cpm',
-    accessorKey: 'cpm'
-  },
-  {
-    header: 'Roas',
-    accessorKey: 'roas'
-  },
-  {
-    header: 'Aov',
-    accessorKey: 'aov'
-  },
-  {
-    header: 'Cpa',
-    accessorKey: 'cpa'
-  }
-];
 export default function CampaignWiseTable() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { loading, error, data } = useSelector((state) => state.metaAds.campaignData);
@@ -133,6 +37,107 @@ export default function CampaignWiseTable() {
     dispatch(getCampaignData())
   }, [])
 
+
+  const columns = [
+    {
+      accessorKey: "google_campaign_id",
+      header: ({ column }) => {
+        return (
+          <Checkbox
+            className=" " />
+        )
+      },
+      cell: ({ row }) => (
+        <Checkbox
+          className=" " />
+      ),
+    },
+    {
+      accessorKey: "google_campaign_id",
+      header: "Status",
+      cell: ({ row }) => (
+        <Switch />
+      ),
+    },
+    {
+      accessorKey: "google_campaign_name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-80"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Campaign
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => (
+        <div className="w-80" onClick={() => dispatch(getAdSets())}>
+          {row.getValue("google_campaign_name")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "google_campaign_stream_purchase_value_sum",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Purchase Value Sum
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+    },
+    {
+      header: 'Ad Spend Sum',
+      accessorKey: 'google_campaign_stream_ad_spend_sum'
+    },
+    {
+      header: 'Purchase Sum',
+      accessorKey: 'google_campaign_stream_purchase_sum'
+    },
+    {
+      header: 'Impressions Sum',
+      accessorKey: 'google_campaign_stream_impressions_sum'
+    },
+    {
+      header: 'Clicks Sum',
+      accessorKey: 'google_campaign_stream_clicks_sum'
+    },
+    {
+      header: 'Vtc Sum',
+      accessorKey: 'google_campaign_stream_vtc_sum'
+    },
+    {
+      header: 'Ctr',
+      accessorKey: 'google_campaign_stream_ctr'
+    },
+    {
+      header: 'Cpc',
+      accessorKey: 'google_campaign_stream_cpc'
+    },
+    {
+      header: 'Cpm',
+      accessorKey: 'google_campaign_stream_cpm'
+    },
+    {
+      header: 'Roas',
+      accessorKey: 'google_campaign_stream_roas'
+    },
+    {
+      header: 'Aov',
+      accessorKey: 'google_campaign_stream_aov'
+    },
+    {
+      header: 'Cpa',
+      accessorKey: 'google_campaign_stream_cpa'
+    }
+  ];
 
 
 
@@ -157,7 +162,7 @@ export default function CampaignWiseTable() {
         <div className="rounded-md border shadow">
           {loading ?
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-            : <TableComponents data={data?.results?.[0]?.data} />}
+            : <TableComponents data={data?.results?.[0]?.data} columns={columns} />}
         </div>
       </div>
     </div>
@@ -167,17 +172,9 @@ export default function CampaignWiseTable() {
 
 
 
-export function TableComponents({ data }) {
-  const allData = useMemo(() => {
-    return data.map(item => {
-      const flattenedData = {};
-      for (const [key, value] of Object.entries(item)) {
-        // Flatten the nested properties into a single level
-        flattenedData[key?.replace("google_campaign_stream.", "")?.replace("google_campaign.", "")] = value;
-      }
-      return flattenedData;
-    });
-  }, [data]);
+export function TableComponents({ data, columns }) {
+  const allColumns = useMemo(() => columns, [columns]);
+  const allData = useMemo(() => data, [data]);
   console.log({ allData })
 
   const [sorting, setSorting] = useState([])
@@ -186,7 +183,7 @@ export function TableComponents({ data }) {
 
   const table = useReactTable({
     data: allData,
-    columns,
+    columns: allColumns,
     state: {
       sorting,
       rowSelection,
