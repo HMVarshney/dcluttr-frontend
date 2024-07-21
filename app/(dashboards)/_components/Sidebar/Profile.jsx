@@ -14,7 +14,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { deleteCookie } from '@/lib/utils';
+import { addDelay, deleteCookie } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux'; // Import useSelector from react-redux
 
@@ -55,9 +55,10 @@ export default function Profile() {
                         <ChevronRight className='w-4 h-4 ml-auto' />
                     </DropdownMenuItem>
                     <DropdownMenuItem className='flex gap-2 p-2.5 cursor-pointer'
-                        onClick={(e) => {
-                            replace("/log-in");
+                        onClick={async (e) => {
                             deleteCookie("accessToken");
+                            await addDelay(1000);
+                            replace("/log-in");
                         }}>
                         <LogOut className='w-4 h-4' />
                         <div className='text-sm'>Sign Out</div>

@@ -14,9 +14,9 @@ export function middleware(request) {
         return NextResponse.next();
     }
 
-    if (request.nextUrl.pathname.includes('/stores') || request.nextUrl.pathname.includes('/dashboard')) {
+    if (request.nextUrl.pathname.startsWith('/stores') || request.nextUrl.pathname.startsWith('/dashboard')) {
         if (!cookies().get("accessToken")) {
-            return NextResponse.redirect(new URL('/log-in', request.url));
+            return NextResponse.redirect(new URL(`/log-in?redirect=${request.url}`, request.url));
         }
         return NextResponse.next()
     }
@@ -35,9 +35,9 @@ export const config = {
          * - _next/image (image optimization files)
          * - favicon.ico (favicon file)
          */
-        // {
-        //     source : '/((?!api|_next/static|_next/image|favicon.ico).*)',
-        // },
+        {
+            source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+        },
         {
             source: '/:path*'
         }

@@ -7,15 +7,16 @@ import { useForm } from 'react-hook-form';
 import { FormSubmitButtonWithIcon, InputEmail, InputNumber, InputPassword, InputText } from './FormElements';
 import Link from 'next/link';
 import axiosInterceptorInstance from '@/lib/axiosInterceptorInstance';
-import { setCookie } from '@/lib/utils';
+import { addDelay, setCookie } from '@/lib/utils';
 import LoginWithGoogle from './LoginWithGoogle';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, resendOTP, setEmail, setStep } from '@/lib/store/features/authSlice';
 import { toast } from 'sonner';
 
 export default function LogInForm({ }) {
     const router = useRouter()
+    const searchParams = useSearchParams();
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, setError } = useForm({
         mode: "onBlur"
@@ -26,8 +27,9 @@ export default function LogInForm({ }) {
 
     const onSubmit = (data) => {
         dispatch(login(data)).unwrap()
-            .then(() => {
-                router.replace('/stores');
+            .then(async () => {
+                await addDelay(1000);
+                router.replace(searchParams.get('redirect') || '/stores');
             })
             .catch(({ data, email }) => {
                 if (data?.errorCode === "EMAIL_NOT_VERIFIED") {
