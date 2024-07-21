@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   PieChart,
   Pie,
@@ -17,23 +17,34 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAdsType } from '@/lib/store/features/googleAdsSlice';
 
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 }
-];
 
 const COLORS = ['#74EED8', '#78C77B', '#DF6EFB', '#FFCF54'];
 
 const CampaignWiseDonutChart = () => {
+  const { loading, error, data: allData } = useSelector((state) => state.googleAds.adsType);
+
+  const data = useMemo(() => {
+    return allData?.results?.[0]?.data?.map((item) => {
+      return {
+        name: item.google_campaign_type_campaign_type,
+        value: parseInt(item.google_campaign_type_clicks_sum)
+      }
+    })
+  }, [allData])
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAdsType())
+  }, [])
   return (
     <div className='w-full'>
       <div className='text-xl font-bold mb-4'>
         Channel overlap
       </div>
-      <div className='shadow rounded-lg bg-white w-full h-[calc(100%-44px)] overflow-hidden group'>
+      <div className='shadow rounded-lg bg-white w-full h-[calc(100%-44px)] overflow-hidden group flex flex-col justify-between items-stretch'>
         <div className='flex gap-2.5 items-center p-4 border-b border-[#F1F1F1]'>
           <div className='text-base font-bold'>
             Attribution model: Linear
@@ -72,7 +83,7 @@ const CampaignWiseDonutChart = () => {
               paddingAngle={0}
               dataKey="value"
             >
-              {data.map((entry, index) => (
+              {data?.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

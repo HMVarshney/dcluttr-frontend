@@ -6,7 +6,7 @@ import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SquareHalf, Trash } from "phosphor-react"
 import { useDispatch } from "react-redux"
-import { getAds, getAdSets, getCampaignData } from "@/lib/store/features/metaAdsSlice"
+import { getAdsMeta, getAdSetsMeta, getCampaignDataMeta } from "@/lib/store/features/metaAdsSlice"
 import EditTableAttribution from "../EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
@@ -22,9 +22,9 @@ export default function CampaignWiseTable() {
   const { loading: adsLoading, error: adsError, data: adsData } = useSelector((state) => state.metaAds.adsData);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAds())
-    dispatch(getAdSets())
-    dispatch(getCampaignData())
+    dispatch(getAdsMeta())
+    dispatch(getAdSetsMeta())
+    dispatch(getCampaignDataMeta())
   }, [])
 
   const columns = [
@@ -166,20 +166,24 @@ export default function CampaignWiseTable() {
       </div>
       <div className="px-6 pb-8 w-full">
         <div className="rounded-md overflow-hidden border shadow">
-          {loading ?
+          {(loading || adSetsLoading || adsLoading) ?
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-            : <CampaignTable
-              data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
-              ({
-                ...l1,
-                subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
-                ({
-                  ...l2,
-                  subRows: adsData?.results?.[0]?.data?.slice(0, 4)
-                }))
-              }))}
-              columns={columns}>
-            </CampaignTable>}
+            : (
+              (error || adSetsError || adsError) ?
+                <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
+                :
+                <CampaignTable
+                  data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
+                  ({
+                    ...l1,
+                    subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
+                    ({
+                      ...l2,
+                      subRows: adsData?.results?.[0]?.data?.slice(0, 4)
+                    }))
+                  }))}
+                  columns={columns}>
+                </CampaignTable>)}
         </div>
       </div>
     </div>

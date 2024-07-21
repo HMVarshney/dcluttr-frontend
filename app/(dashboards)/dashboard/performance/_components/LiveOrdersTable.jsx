@@ -37,7 +37,7 @@ export default function LiveOrdersTable() {
                         {[...Array(6)].map((_, index) => (
                             <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                                 <td className="text-base font-medium px-3 py-4 border-b col-span-2 text-[#0F5AFF]">
-                                    Karthikeyan Karthikeyan
+                                    Karthikeyan
                                 </td>
                                 <td className="text-base font-medium px-3 py-4 border-b text-[#4E5E5A]">
                                     ₹8,526.32

@@ -21,7 +21,7 @@ import {
 } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
-import { getBiddingStrategy } from "@/lib/store/features/metaAdsSlice";
+import { getBiddingStrategyMeta } from "@/lib/store/features/metaAdsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +32,7 @@ export default function BiddingStrategyTable() {
     console.log("Component rerendered", loading, error, data);
 
     useEffect(() => {
-        dispatch(getBiddingStrategy());
+        dispatch(getBiddingStrategyMeta());
     }, []);
     return (
         <div className={cn(' w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
@@ -55,7 +55,9 @@ export default function BiddingStrategyTable() {
                 <div className="rounded-md border shadow max-w-full overflow-x-auto relative">
                     {loading ?
                         <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-                        : <BiddingStrategyTables annotation={data?.results?.[0]?.annotation} data={data?.results?.[0]?.data?.slice(0, 8)} />
+                        : error ?
+                            <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
+                            : <BiddingStrategyTables annotation={data?.results?.[0]?.annotation} data={data?.results?.[0]?.data?.slice(0, 8)} />
                     }
                 </div>
             </div>

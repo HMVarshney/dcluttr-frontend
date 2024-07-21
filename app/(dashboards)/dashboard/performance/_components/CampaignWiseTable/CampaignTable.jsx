@@ -23,7 +23,7 @@ const getCommonPinningStyles = (data) => {
   const { column } = data
   const isPinned = column.getIsPinned()
 
-  console.log(data.getContext());
+  // console.log(data.getContext());
   return {
     boxShadow: column.id === 'name' ? '-1px 0 1px -1px gray inset' : undefined,
     left: isPinned === 'left' ? `${column.getStart('left') - 0}px` : undefined,
@@ -40,7 +40,7 @@ const getCommonPinningStyles = (data) => {
 export default function CampaignTable({ data, columns, children }) {
   const allColumns = useMemo(() => columns, [columns]);
   const allData = useMemo(() => data, [data]);
-  console.log({ allData })
+  // console.log({ allData })
 
   const [sorting, setSorting] = useState([])
   const [rowSelection, setRowSelection] = useState({})
