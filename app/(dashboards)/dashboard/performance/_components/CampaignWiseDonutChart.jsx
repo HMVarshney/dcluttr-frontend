@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select"
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdsType } from '@/lib/store/features/googleAdsSlice';
+import { getAdsTypeGoogle } from '@/lib/store/features/googleAdsSlice';
 
 
 const COLORS = ['#74EED8', '#78C77B', '#DF6EFB', '#FFCF54'];
@@ -37,7 +37,7 @@ const CampaignWiseDonutChart = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAdsType())
+    dispatch(getAdsTypeGoogle())
   }, [])
   return (
     <div className='w-full'>

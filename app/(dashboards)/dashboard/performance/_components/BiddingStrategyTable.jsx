@@ -22,17 +22,25 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { getBiddingStrategyMeta } from "@/lib/store/features/metaAdsSlice";
+import { getBiddingStrategyGoogle } from "@/lib/store/features/googleAdsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export default function BiddingStrategyTable() {
+export default function BiddingStrategyTable({ isGoogle }) {
     const isOpen = useSelector((state) => state.user.sideBarClose);
     const dispatch = useDispatch();
-    const { loading, error, data } = useSelector((state) => state.metaAds.biddingStrategy);
-    console.log("Component rerendered", loading, error, data);
+    const { biddingStrategyMetaLoading, biddingStrategyMetaError, biddingStrategyMetaData } = useSelector((state) => state.metaAds);
+    const { biddingStrategyGoogleLoading, biddingStrategyGoogleError, biddingStrategyGoogleData } = useSelector((state) => state.googleAds);
+
+    const annotation = isGoogle ? biddingStrategyGoogleData?.results?.[0]?.annotation : biddingStrategyMetaData?.results?.[0]?.annotation
+    const data = isGoogle ? biddingStrategyGoogleData?.results?.[0]?.data?.slice(0, 8) : biddingStrategyMetaData?.results?.[0]?.data?.slice(0, 8)
 
     useEffect(() => {
-        dispatch(getBiddingStrategyMeta());
+        if (isGoogle) {
+            dispatch(getBiddingStrategyGoogle());
+        } else {
+            dispatch(getBiddingStrategyMeta());
+        }
     }, []);
     return (
         <div className={cn(' w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
@@ -53,11 +61,11 @@ export default function BiddingStrategyTable() {
             </div>
             <div className="px-6 pb-8 w-full overflow-x-auto">
                 <div className="rounded-md border shadow max-w-full overflow-x-auto relative">
-                    {loading ?
+                    {(isGoogle ? biddingStrategyGoogleLoading : biddingStrategyMetaLoading) ?
                         <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-                        : error ?
-                            <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
-                            : <BiddingStrategyTables annotation={data?.results?.[0]?.annotation} data={data?.results?.[0]?.data?.slice(0, 8)} />
+                        : biddingStrategyMetaError ?
+                            <div className="text-destructive p-4 shadow-sm">{biddingStrategyMetaError ?? biddingStrategyGoogleError}</div>
+                            : <Tables annotation={annotation} data={data} />
                     }
                 </div>
             </div>
@@ -66,7 +74,7 @@ export default function BiddingStrategyTable() {
 }
 
 
-export function BiddingStrategyTables({ annotation, data }) {
+export function Tables({ annotation, data }) {
     const columns = useMemo(() => {
         return Object.entries(annotation.measures).map(([key, value]) => ({
             accessorKey: key,
@@ -95,7 +103,7 @@ export function BiddingStrategyTables({ annotation, data }) {
 
 
     return (
-        <Table className="rounded-md bg-white text-base">
+        <Table className="rounded-md bg-white text-sm">
             <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>

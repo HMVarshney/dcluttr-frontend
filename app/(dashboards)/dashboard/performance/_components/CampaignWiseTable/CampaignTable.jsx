@@ -33,7 +33,8 @@ const getCommonPinningStyles = (data) => {
     zIndex: isPinned ? 1 : 0,
     background: isPinned === 'left' ? '#ffffff96' : undefined,
     backdropFilter: isPinned ? 'blur(10px)' : undefined,
-    WebkitBackdropFilter: 'blur(100px)',
+    WebkitBackdropFilter: isPinned ? 'blur(10px)' : undefined,
+    borderRadius: isPinned ? '12px 0px 0px 12px' : undefined,
   }
 }
 
@@ -68,7 +69,7 @@ export default function CampaignTable({ data, columns, children }) {
     onRowSelectionChange: setRowSelection,
   })
   return (
-    <Table className="rounded-md bg-white text-base">
+    <Table className="rounded-md bg-white text-sm " >
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>

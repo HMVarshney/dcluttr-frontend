@@ -1,9 +1,21 @@
+"use client"
 import OrbitingCircles from "@/components/magicui/orbiting-circles";
+import { setHideBanner } from "@/lib/store/features/userSlice";
+import { X } from "phosphor-react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function OrbitingCirclesDemo() {
+    const dispatch = useDispatch();
+    const hideBanner = useSelector((state) => state.user.hideBanner);
+
+    if (hideBanner) return null;
     return (
-        <div className="my-3 mx-6 relative flex h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border bg-background shadow-sm">
-            <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300 bg-clip-text text-center text-6xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
+        <div className="my-3 mx-6 flex h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border shadow-sm bg-primary relative">
+            <X size={18} className="absolute top-4 right-4 cursor-pointer" color="#ffffff"
+                onClick={() => dispatch(setHideBanner(true))} />
+
+
+            <span className="pointer-events-none whitespace-pre-wrap text-white text-center text-2xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
                 Attribution
             </span>
 

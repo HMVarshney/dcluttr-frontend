@@ -4,7 +4,7 @@ import React, { useEffect, } from "react"
 
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { SquareHalf, Trash } from "phosphor-react"
+import { AsteriskSimple, CaretDown, CaretRight, SquareHalf, Trash } from "phosphor-react"
 import { useDispatch } from "react-redux"
 import { getAdsMeta, getAdSetsMeta, getCampaignDataMeta } from "@/lib/store/features/metaAdsSlice"
 import EditTableAttribution from "../EditTableAttribution"
@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
 import CampaignTable from "./CampaignTable"
 
 
-export default function CampaignWiseTable() {
+export default function MetaAdsDetails() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { loading, error, data } = useSelector((state) => state.metaAds.campaignData);
   const { loading: adSetsLoading, error: adSetsError, data: adSetsData } = useSelector((state) => state.metaAds.adSetsData);
@@ -39,17 +39,16 @@ export default function CampaignWiseTable() {
               onChange: table.getToggleAllRowsSelectedHandler(),
             }}
           />
-          <div className="flex items-center justify-center text-base w-20">
+          <div className="flex items-center justify-center text-sm w-20">
             Status
           </div>
-          <Button
-            variant="ghost"
-            className="w-72 justify-start text-base"
+          <div
+            className="w-72 flex items-center justify-start text-sm"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Campaign
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+            <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
+          </div>
         </div>
       ),
       cell: ({ row, getValue }) => (
@@ -65,7 +64,7 @@ export default function CampaignWiseTable() {
             <Switch />
           </div>
           <div
-            className={cn('w-72 line-clamp-1 text-primary font-semibold',
+            className={cn('w-72 flex items-center gap-2',
               { "pl-4": row.depth === 1 },
               { "pl-8": row.depth === 2 },
             )}
@@ -74,12 +73,13 @@ export default function CampaignWiseTable() {
               style: { cursor: 'pointer' },
             }}
           >
-            {/* {row.getCanExpand() ? (
-              {row.getIsExpanded() ? '👇' : '👉'}
-          ) : (
-            '🔵'
-          )} */}
-            {row.getValue("name")}
+            {row.getCanExpand() ? (
+              row.getIsExpanded() ? <CaretDown /> : <CaretRight />
+            ) : null}
+            {/* <AsteriskSimple size={10} />} */}
+            <span className="line-clamp-1 text-primary font-semibold ">
+              {row.getValue("name")}
+            </span>
           </div>
         </div>
       ),
@@ -89,40 +89,70 @@ export default function CampaignWiseTable() {
       accessorKey: "purchase_value_sum",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            className="justify-start text-base"
+          <div
+            className="justify-start flex items-center w-56 text-sm"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Purchase Value Sum
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+            <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
+          </div>
         )
       },
+      width: 200
     },
     {
       header: 'Ad Spend Sum',
-      accessorKey: 'ad_spend_sum'
+      accessorKey: 'ad_spend_sum',
+      cell: ({ row }) => (
+        <div className="min-w-[120px]">
+          {row.getValue("ad_spend_sum")}
+        </div>
+      )
     },
     {
       header: 'Purchase Sum',
-      accessorKey: 'purchase_sum'
+      accessorKey: 'purchase_sum',
+      cell: ({ row }) => (
+        <div className="min-w-[120px]">
+          {row.getValue("purchase_sum")}
+        </div>
+      )
     },
     {
       header: 'Impressions Sum',
-      accessorKey: 'impressions_sum'
+      accessorKey: 'impressions_sum',
+      cell: ({ row }) => (
+        <div className="min-w-[120px]">
+          {row.getValue("impressions_sum")}
+        </div>
+      )
     },
     {
-      header: 'Clicks Sum',
-      accessorKey: 'clicks_sum'
+      header: 'Link clicks Sum',
+      accessorKey: 'link_clicks_sum',
+      cell: ({ row }) => (
+        <div className="min-w-[100px]">
+          {row.getValue("link_clicks_sum")}
+        </div>
+      )
     },
     {
       header: 'Vtc Sum',
-      accessorKey: 'vtc_sum'
+      accessorKey: 'vtc_sum',
+      cell: ({ row }) => (
+        <div className="min-w-[80px]">
+          {row.getValue("vtc_sum")}
+        </div>
+      )
     },
     {
       header: 'Ctr',
-      accessorKey: 'ctr'
+      accessorKey: 'ctr',
+      cell: ({ row }) => (
+        <div className="min-w-[120px]">
+          {row.getValue("ctr")}
+        </div>
+      )
     },
     {
       header: 'Cpc',
@@ -208,7 +238,7 @@ function IndeterminateCheckbox({
     <input
       type="checkbox"
       ref={ref}
-      className={cn("min-w-[18px] h-5 accent-primary hover:accent-primary/80 rounded", className + ' cursor-pointer')}
+      className={cn("min-w-4 h-4 accent-primary hover:accent-primary/80 rounded", className + ' cursor-pointer')}
       {...rest}
     />
   )
