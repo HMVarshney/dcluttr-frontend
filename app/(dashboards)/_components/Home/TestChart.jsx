@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import AreaChart from './AreaChart';
 import DatePickerWithRange from '@/components/DatePickerWithRange';
 import moment from 'moment';
-import cubeJsInterceptorInstance from '@/lib/cubejsInterceptorInstance';
+import cubeJsApi from '@/lib/cubeJsApi';
 
 
 
@@ -23,7 +23,7 @@ export default function TestChart() {
 
     const loadData = () => {
         setData(null);
-        cubeJsInterceptorInstance
+        cubeJsApi
             .load({
                 // "measures": [
                 //     // "orders.mau",
