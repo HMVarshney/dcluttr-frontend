@@ -1,30 +1,15 @@
 "use client"
 
-import React, { Children, Fragment, useEffect, useMemo, useState } from "react"
-import {
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
+import React, { useEffect, } from "react"
+
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { SquareHalf, Trash } from "phosphor-react"
 import { useDispatch } from "react-redux"
 import { getAds, getAdSets, getCampaignData } from "@/lib/store/features/metaAdsSlice"
 import EditTableAttribution from "../EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import CampaignTable from "./CampaignTable"
@@ -44,9 +29,9 @@ export default function CampaignWiseTable() {
 
   const columns = [
     {
-      accessorKey: 'id',
-      header: ({ table }) => (
-        <div className="flex gap-4">
+      accessorKey: 'name',
+      header: ({ table, column }) => (
+        <div className="flex items-center gap-4">
           <IndeterminateCheckbox
             {...{
               checked: table.getIsAllRowsSelected(),
@@ -54,11 +39,21 @@ export default function CampaignWiseTable() {
               onChange: table.getToggleAllRowsSelectedHandler(),
             }}
           />
-          Status
+          <div className="flex items-center justify-center text-base w-20">
+            Status
+          </div>
+          <Button
+            variant="ghost"
+            className="w-72 justify-start text-base"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Campaign
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       ),
       cell: ({ row, getValue }) => (
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <IndeterminateCheckbox
             {...{
               checked: row.getIsSelected(),
@@ -66,44 +61,29 @@ export default function CampaignWiseTable() {
               onChange: row.getToggleSelectedHandler(),
             }}
           />
-          <Switch />
-        </div>
-      ),
-      // footer: props => props.column.id,
-    },
-    {
-      accessorKey: "name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-72 justify-start"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <div className="flex items-center justify-center w-20">
+            <Switch />
+          </div>
+          <div
+            className={cn('w-72 line-clamp-1 text-primary font-semibold',
+              { "pl-4": row.depth === 1 },
+              { "pl-8": row.depth === 2 },
+            )}
+            {...{
+              onClick: row.getToggleExpandedHandler(),
+              style: { cursor: 'pointer' },
+            }}
           >
-            Campaign
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => (
-        <div
-          className={cn('w-72 line-clamp-1',
-            { "pl-4": row.depth === 1 },
-            { "pl-8": row.depth === 2 },
-          )}
-          {...{
-            onClick: row.getToggleExpandedHandler(),
-            style: { cursor: 'pointer' },
-          }}
-        >
-          {/* {row.getCanExpand() ? (
+            {/* {row.getCanExpand() ? (
               {row.getIsExpanded() ? '👇' : '👉'}
           ) : (
             '🔵'
           )} */}
-          {row.getValue("name")}
+            {row.getValue("name")}
+          </div>
         </div>
       ),
+      // footer: props => props.column.id,
     },
     {
       accessorKey: "purchase_value_sum",
@@ -111,7 +91,7 @@ export default function CampaignWiseTable() {
         return (
           <Button
             variant="ghost"
-            className="justify-start"
+            className="justify-start text-base"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Purchase Value Sum
@@ -224,7 +204,7 @@ function IndeterminateCheckbox({
     <input
       type="checkbox"
       ref={ref}
-      className={className + ' cursor-pointer'}
+      className={cn("min-w-[18px] h-5 accent-primary hover:accent-primary/80 rounded", className + ' cursor-pointer')}
       {...rest}
     />
   )

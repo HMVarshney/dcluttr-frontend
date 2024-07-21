@@ -55,7 +55,7 @@ export default function BiddingStrategyTable() {
                 <div className="rounded-md border shadow max-w-full overflow-x-auto relative">
                     {loading ?
                         <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-                        : <BiddingStrategyTables annotation={data?.results?.[0]?.annotation} data={data?.results?.[0]?.data} />
+                        : <BiddingStrategyTables annotation={data?.results?.[0]?.annotation} data={data?.results?.[0]?.data?.slice(0, 8)} />
                     }
                 </div>
             </div>
@@ -68,7 +68,8 @@ export function BiddingStrategyTables({ annotation, data }) {
     const columns = useMemo(() => {
         return Object.entries(annotation.measures).map(([key, value]) => ({
             accessorKey: key,
-            header: value.shortTitle || value.title,
+            header: <div className="min-w-32">{value.shortTitle || value.title}</div>,
+            cell: (info) => <div className="min-w-32">{info.getValue()}</div>,
         }));
     }, [annotation]);
 
@@ -92,7 +93,7 @@ export function BiddingStrategyTables({ annotation, data }) {
 
 
     return (
-        <Table className="rounded-md bg-white">
+        <Table className="rounded-md bg-white text-base">
             <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
