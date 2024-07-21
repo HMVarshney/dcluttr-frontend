@@ -38,7 +38,7 @@ const getCommonPinningStyles = (data) => {
   }
 }
 
-export default function CampaignTable({ data, columns, children }) {
+export default function CampaignTable({ data = [], columns }) {
   const allColumns = useMemo(() => columns, [columns]);
   const allData = useMemo(() => data, [data]);
   // console.log({ allData })
