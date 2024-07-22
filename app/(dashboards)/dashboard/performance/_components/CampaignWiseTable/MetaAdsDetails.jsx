@@ -61,7 +61,7 @@ export default function MetaAdsDetails() {
             }}
           />
           <div className="flex items-center justify-center w-20">
-            <Switch />
+            <Switch checked={row.original.status === "ACTIVE"} onCheckedChange={() => { alert("Coming Soon") }} />
           </div>
           <div
             className={cn('w-72 flex items-center gap-2',
@@ -199,21 +199,21 @@ export default function MetaAdsDetails() {
           {(loading || adSetsLoading || adsLoading) ?
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
             : (
-              (error || adSetsError || adsError) ?
-                <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
-                :
-                <CampaignTable
-                  data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
+              // (error || adSetsError || adsError) ?
+              //   <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
+              //   :
+              <CampaignTable
+                data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
+                ({
+                  ...l1,
+                  subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
                   ({
-                    ...l1,
-                    subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
-                    ({
-                      ...l2,
-                      subRows: adsData?.results?.[0]?.data?.slice(0, 4)
-                    }))
-                  }))}
-                  columns={columns}>
-                </CampaignTable>)}
+                    ...l2,
+                    subRows: adsData?.results?.[0]?.data?.slice(0, 4)
+                  }))
+                }))}
+                columns={columns}>
+              </CampaignTable>)}
         </div>
       </div>
     </div>

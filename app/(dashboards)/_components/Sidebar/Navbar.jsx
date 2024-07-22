@@ -44,7 +44,7 @@ export default function Navbar({ isOpen }) {
                             <SelectItem key={i} value={option.id}>
                                 <div className='flex items-center gap-3'>
                                     <Image
-                                        src={option.brandLogo}
+                                        src={option.brandLogo || "/image_placeholder.svg"}
                                         alt={option.brandName}
                                         width={24}
                                         height={24}
