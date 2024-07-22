@@ -12,7 +12,7 @@ const sideBarList = [
     },
     {
         name: "Performance",
-        href: "/dashboard/performance/meta-ads",
+        href: "/dashboard/performance",
         icon: <PresentationChart className='h-5 w-5 text-[#7E8986]' />,
         level2: [
             {

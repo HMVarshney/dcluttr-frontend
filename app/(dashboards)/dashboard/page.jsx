@@ -4,7 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import React, { useState } from 'react'
 import SimpleAreaChart from '../_components/Home/SimpleAreaChart'
 import AreaChart from '../_components/Home/AreaChart';
-import TestChart from '../_components/Home/TestChart';
+// import TestChart from '../_components/Home/TestChart';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Header from '../_components/Header';
 import { Forward, Pencil } from 'lucide-react';
@@ -194,7 +194,7 @@ export default function Page() {
                 </Droppable>
             </DragDropContext>
 
-            <TestChart />
+            {/* <TestChart /> */}
 
             <div className='m-8 flex gap-8'>
                 <SimpleAreaChart data={data} details={{ title: 'Spends and Revenue Performance', }} />

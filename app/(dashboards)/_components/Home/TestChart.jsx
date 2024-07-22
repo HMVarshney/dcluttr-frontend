@@ -23,7 +23,8 @@ export default function TestChart() {
 
     const loadData = () => {
         setData(null);
-        cubeJsApi
+        const api = cubeJsApi();
+        api
             .load({
                 // "measures": [
                 //     // "orders.mau",

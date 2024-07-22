@@ -50,7 +50,7 @@ export default function Navbar({ isOpen }) {
                                         height={24}
                                         className="aspect-square rounded-md"
                                     />
-                                    {option.brandName}
+                                    <span className='line-clamp-1'>{option.brandName}</span>
                                 </div>
                             </SelectItem>
                         ))}

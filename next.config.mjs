@@ -25,6 +25,15 @@ const nextConfig = {
             },
         ],
     },
+    redirects() {
+        return [
+            {
+                source: "/dashboard/performance",
+                destination: "/dashboard/performance/meta-ads",
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

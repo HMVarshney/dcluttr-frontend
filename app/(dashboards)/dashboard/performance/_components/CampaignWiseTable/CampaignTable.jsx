@@ -41,7 +41,7 @@ const getCommonPinningStyles = (data) => {
 export default function CampaignTable({ data = [], columns }) {
   const allColumns = useMemo(() => columns, [columns]);
   const allData = useMemo(() => data, [data]);
-  // console.log({ allData })
+  console.log({ allData })
 
   const [sorting, setSorting] = useState([])
   const [rowSelection, setRowSelection] = useState({})

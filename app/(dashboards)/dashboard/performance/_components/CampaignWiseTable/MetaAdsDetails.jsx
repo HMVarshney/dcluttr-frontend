@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, } from "react"
+import React, { useEffect, useMemo, } from "react"
 
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import EditTableAttribution from "../EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
 import { Switch } from "@/components/ui/switch"
-import { cn } from "@/lib/utils"
+import { cn, convertToNestedStructure } from "@/lib/utils"
 import CampaignTable from "./CampaignTable"
 
 
@@ -26,7 +26,7 @@ export default function MetaAdsDetails() {
     dispatch(getAdSetsMeta())
     dispatch(getCampaignDataMeta())
   }, [])
-
+  console.log(data, adSetsData, adsData);
   const columns = [
     {
       accessorKey: 'name',
@@ -196,24 +196,25 @@ export default function MetaAdsDetails() {
       </div>
       <div className="px-6 pb-8 w-full">
         <div className="rounded-md overflow-hidden border shadow">
-          {(loading || adSetsLoading || adsLoading) ?
-            <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-            : (
-              // (error || adSetsError || adsError) ?
-              //   <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
-              //   :
-              <CampaignTable
-                data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
-                ({
-                  ...l1,
-                  subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
-                  ({
-                    ...l2,
-                    subRows: adsData?.results?.[0]?.data?.slice(0, 4)
-                  }))
-                }))}
-                columns={columns}>
-              </CampaignTable>)}
+          {(
+            // loading || adSetsLoading || adsLoading) ?
+            // <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
+            // : (
+            // (error || adSetsError || adsError) ?
+            //   <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
+            //   :
+            <CampaignTable
+              data={data?.results?.[0]?.data?.map(l1 =>
+              ({
+                ...l1,
+                // subRows: adSetsData?.results?.[0]?.data?.map(l2 =>
+                // ({
+                //   ...l2,
+                subRows: adsData?.results?.[0]?.data?.filter(l3 => l3.campaign_id === l1.campaign_id)
+                // }))
+              }))}
+              columns={columns}>
+            </CampaignTable>)}
         </div>
       </div>
     </div>
