@@ -16,7 +16,7 @@ import CustomTooltip from '@/components/CustomTooltip';
 
 export default function CustomBarChart({ data, details, dragHandleProps }) {
   return (
-    <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
+    <div className='border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white w-full overflow-hidden group'>
       <ChartHeader details={details} dragHandleProps={dragHandleProps} />
       <ResponsiveContainer width="100%" height={160}>
         <BarChart

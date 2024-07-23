@@ -15,7 +15,7 @@ console.error = (...args) => {
 
 export default function AreaChart({ isLoading = false, data, details, dragHandleProps = {} }) {
   return (
-    <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
+    <div className='border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white w-full overflow-hidden group'>
       <ChartHeader details={details} dragHandleProps={dragHandleProps} />
       {isLoading
         ? <Skeleton className="w-[calc(100%-32px)] h-[128px] my-4 rounded-md mx-auto" />

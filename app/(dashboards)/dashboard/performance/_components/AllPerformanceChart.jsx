@@ -24,7 +24,7 @@ console.error = (...args) => {
 
 export default function AllPerformanceChart({ isLoading = false, data, details, }) {
   return (
-    <div className='shadow rounded-lg bg-white w-full overflow-hidden group'>
+    <div className='border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white w-full overflow-hidden group'>
       <ChartHeader />
       <div className='flex items-center justify-between px-4 pt-2.5'>
         <div className=' text-2xl font-bold text-black'>
