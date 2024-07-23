@@ -9,7 +9,7 @@ export default function Switcher() {
             <Label htmlFor="line-chart">
                 <LineChart className='w-5 h-5' />
             </Label>
-            <Switch id="line-chart" />
+            <Switch id="line-chart" className="w-6 h-4" iconClass="w-3 h-3 data-[state=checked]:translate-x-2" />
         </div>
     )
 }

@@ -13,15 +13,21 @@ import {
 } from "@/components/ui/breadcrumb"
 import Switcher from '@/components/Switcher'
 import DatePickerWithRange from '@/components/DatePickerWithRange';
-import { Button } from '@/components/ui/button';
-import Notifications from '@/components/Notifications';
-import ExportFileFormat from '@/components/ExportFileFormat';
-import { SquareHalf } from 'phosphor-react';
+// import { Button } from '@/components/ui/button';
+// import Notifications from '@/components/Notifications';
+// import ExportFileFormat from '@/components/ExportFileFormat';
+// import { SquareHalf } from 'phosphor-react';
 import TopAdsBanner from '@/components/TopAdsBanner';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+// import { Input } from '@/components/ui/input';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+    const pathname = usePathname()
+    const [dateRange, setDateRange] = useState({
+        from: moment('2019-01-01', "YYYY-MM-DD")._d,
+        to: moment('2022-12-23', "YYYY-MM-DD")._d,
+        value: null
+    });
 
     return (
         <>
@@ -35,7 +41,7 @@ export default function Header() {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink>All</BreadcrumbLink>
+                                    <BreadcrumbLink>{pathname.includes('meta') ? "Meta" : "Google"} ads</BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -44,18 +50,19 @@ export default function Header() {
                         </div>
                     </div>
 
-                    <Input
+                    {/* <Input
                         value={''}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="🔍  Filter source"
                         className="w-[152px] h-[38px]"
-                    />
+                    /> */}
                     <Switcher />
-                    <Button variant="outline" className="px-2.5">
+                    {/* <Button variant="outline" className="px-2.5">
                         <SquareHalf className='w-5 h-5' />
                     </Button>
                     <ExportFileFormat />
-                    <Notifications />
+                    <Notifications /> */}
+                    <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />
                 </div>
             </div>
             <TopAdsBanner />
