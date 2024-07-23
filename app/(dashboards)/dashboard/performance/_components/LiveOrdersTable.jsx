@@ -8,7 +8,7 @@ export default function LiveOrdersTable() {
             <div className='text-xl font-bold mb-4'>
                 Live Orders
             </div>
-            <div className="shadow rounded-lg bg-white overflow-hidden h-[calc(100%-44px)]">
+            <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white overflow-hidden h-[calc(100%-44px)]">
                 <div className='flex gap-2.5 items-center p-4 border-b border-[#F1F1F1]'>
                     <div className='text-base font-bold'>
                         Attribution model: Linear

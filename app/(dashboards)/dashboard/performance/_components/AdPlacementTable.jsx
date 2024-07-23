@@ -21,26 +21,20 @@ import {
 } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
-import { getBiddingStrategyMeta } from "@/lib/store/features/metaAdsSlice";
-import { getBiddingStrategyGoogle } from "@/lib/store/features/googleAdsSlice";
+import { getAdsPlacementMeta } from "@/lib/store/features/metaAdsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export default function BiddingStrategyTable({ isGoogle }) {
+export default function AdPlacementTable({ isGoogle = false }) {
     const isOpen = useSelector((state) => state.user.sideBarClose);
     const dispatch = useDispatch();
-    const { biddingStrategyMetaLoading, biddingStrategyMetaError, biddingStrategyMetaData } = useSelector((state) => state.metaAds);
-    const { biddingStrategyGoogleLoading, biddingStrategyGoogleError, biddingStrategyGoogleData } = useSelector((state) => state.googleAds);
+    const { adsPlacementMetaLoading, adsPlacementMetaError, adsPlacementMetaData } = useSelector((state) => state.metaAds);
 
-    const annotation = isGoogle ? biddingStrategyGoogleData?.results?.[0]?.annotation : biddingStrategyMetaData?.results?.[0]?.annotation
-    const data = isGoogle ? biddingStrategyGoogleData?.results?.[0]?.data?.slice(0, 8) : biddingStrategyMetaData?.results?.[0]?.data?.slice(0, 8)
+    const annotation = adsPlacementMetaData?.results?.[0]?.annotation
+    const data = adsPlacementMetaData?.results?.[0]?.data?.slice(0, 8)
 
     useEffect(() => {
-        if (isGoogle) {
-            dispatch(getBiddingStrategyGoogle());
-        } else {
-            dispatch(getBiddingStrategyMeta());
-        }
+        dispatch(getAdsPlacementMeta());
     }, []);
     return (
         <div className={cn(' w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
@@ -60,11 +54,11 @@ export default function BiddingStrategyTable({ isGoogle }) {
                 </EditTableAttribution>
             </div>
             <div className="px-6 pb-8 w-full overflow-x-auto">
-                <div className="rounded-md border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] max-w-full overflow-x-auto relative">
-                    {(isGoogle ? biddingStrategyGoogleLoading : biddingStrategyMetaLoading) ?
+                <div className="rounded-md border shadow max-w-full overflow-x-auto relative">
+                    {(adsPlacementMetaLoading) ?
                         <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-                        : (isGoogle ? biddingStrategyGoogleError : biddingStrategyMetaError) ?
-                            <div className="text-destructive p-4 shadow-sm">{biddingStrategyMetaError ?? biddingStrategyGoogleError}</div>
+                        : (adsPlacementMetaError) ?
+                            <div className="text-destructive p-4 shadow-sm">{adsPlacementMetaError}</div>
                             : <Tables annotation={annotation} data={data} />
                     }
                 </div>

@@ -21,33 +21,91 @@ import {
 } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDispatch, useSelector } from "react-redux";
-import { getBiddingStrategyMeta } from "@/lib/store/features/metaAdsSlice";
-import { getBiddingStrategyGoogle } from "@/lib/store/features/googleAdsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-
-export default function BiddingStrategyTable({ isGoogle }) {
+const columns = [
+    {
+        header: "Campaign Type",
+        accessorKey: "campaign_type",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Purchase Value Sum",
+        accessorKey: "purchase_value_sum",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Ad Spend Sum",
+        accessorKey: "ad_spend_sum",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Purchase Sum",
+        accessorKey: "purchase_sum",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Impressions Sum",
+        accessorKey: "impressions_sum",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Clicks Sum",
+        accessorKey: "clicks_sum",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Vtc Sum",
+        accessorKey: "vtc_sum",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Ctr",
+        accessorKey: "ctr",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Cpc",
+        accessorKey: "cpc",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Cpm",
+        accessorKey: "cpm",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Roas",
+        accessorKey: "roas",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Aov",
+        accessorKey: "aov",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    },
+    {
+        header: "Cpa",
+        accessorKey: "cpa",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+    }
+];
+export default function CampaignTypeTable({ isGoogle = false }) {
     const isOpen = useSelector((state) => state.user.sideBarClose);
     const dispatch = useDispatch();
-    const { biddingStrategyMetaLoading, biddingStrategyMetaError, biddingStrategyMetaData } = useSelector((state) => state.metaAds);
-    const { biddingStrategyGoogleLoading, biddingStrategyGoogleError, biddingStrategyGoogleData } = useSelector((state) => state.googleAds);
+    const { loading, error, data: allData } = useSelector((state) => state.googleAds.adsType);
 
-    const annotation = isGoogle ? biddingStrategyGoogleData?.results?.[0]?.annotation : biddingStrategyMetaData?.results?.[0]?.annotation
-    const data = isGoogle ? biddingStrategyGoogleData?.results?.[0]?.data?.slice(0, 8) : biddingStrategyMetaData?.results?.[0]?.data?.slice(0, 8)
+    const data = allData?.results?.[0]?.data
 
     useEffect(() => {
-        if (isGoogle) {
-            dispatch(getBiddingStrategyGoogle());
-        } else {
-            dispatch(getBiddingStrategyMeta());
-        }
+        // dispatch(getAdsPlacementMeta());
     }, []);
     return (
         <div className={cn(' w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
             <div className='flex items-center justify-center gap-2 p-6'>
                 <div className='mr-auto'>
                     <div className='text-xl font-bold'>
-                        Bidding Strategy
+                        Campaign Type
                     </div>
                     <div className='text-[#4F4D55] text-xs'>
                         Find all the analytics for store
@@ -60,12 +118,12 @@ export default function BiddingStrategyTable({ isGoogle }) {
                 </EditTableAttribution>
             </div>
             <div className="px-6 pb-8 w-full overflow-x-auto">
-                <div className="rounded-md border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] max-w-full overflow-x-auto relative">
-                    {(isGoogle ? biddingStrategyGoogleLoading : biddingStrategyMetaLoading) ?
+                <div className="rounded-md border shadow max-w-full overflow-x-auto relative">
+                    {(loading) ?
                         <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-                        : (isGoogle ? biddingStrategyGoogleError : biddingStrategyMetaError) ?
-                            <div className="text-destructive p-4 shadow-sm">{biddingStrategyMetaError ?? biddingStrategyGoogleError}</div>
-                            : <Tables annotation={annotation} data={data} />
+                        : (error) ?
+                            <div className="text-destructive p-4 shadow-sm">{error}</div>
+                            : <Tables columns={columns} data={data} />
                     }
                 </div>
             </div>
@@ -74,18 +132,8 @@ export default function BiddingStrategyTable({ isGoogle }) {
 }
 
 
-export function Tables({ annotation = {}, data = [] }) {
-    const columns = useMemo(() => {
-        return Object.entries(annotation.measures ?? {}).map(([key, value]) => ({
-            accessorKey: key,
-            header: <div className="min-w-32">{value.shortTitle || value.title}</div>,
-            cell: (info) => <div className="min-w-32">{info.getValue()}</div>,
-        }));
-    }, [annotation]);
-
+export function Tables({ columns = [], data = [] }) {
     const transformedData = useMemo(() => data, [data]);
-
-    console.log({ columns, transformedData });
 
     // const [sorting, setSorting] = useState([]);
 

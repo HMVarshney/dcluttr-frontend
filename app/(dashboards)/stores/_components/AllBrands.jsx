@@ -44,10 +44,10 @@ export default function AllBrands() {
                     : brandsList.map((item, index) => (
                         <div key={item.id} className='flex items-center justify-center gap-2 py-6 px-4 bg-white rounded-lg shadow'>
                             <Image
-                                src={item.brandLogo}
+                                src={item.brandLogo || "/image_placeholder.svg"}
                                 width={400}
                                 height={400}
-                                className='rounded-lg border w-36 h-20 object-contain'
+                                className='rounded-lg border w-36 h-20 object-cover'
                                 alt={item.brandName}
                             />
                             <div className='mr-auto ml-4'>
