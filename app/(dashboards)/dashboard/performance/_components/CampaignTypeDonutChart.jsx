@@ -22,10 +22,10 @@ import { getAdsTypeGoogle } from '@/lib/store/features/googleAdsSlice';
 
 
 const COLORS = [
-  { color: '#74EED8', campaign_type: 'PERFORMANCE_MAX', active: true },
-  { color: '#78C77B', campaign_type: 'SEARCH', active: true },
-  { color: '#DF6EFB', campaign_type: 'VIDEO', active: true },
-  { color: '#FFCF54', campaign_type: 'DISCOVERY', active: true },
+  { color: '#B1BA88', campaign_type: 'PERFORMANCE_MAX', active: true },
+  { color: '#C3D8CC', campaign_type: 'SEARCH', active: true },
+  { color: '#E87C67', campaign_type: 'VIDEO', active: true },
+  { color: '#EDA2A2', campaign_type: 'DISCOVERY', active: true },
 ];
 
 const CampaignTypeDonutChart = () => {
