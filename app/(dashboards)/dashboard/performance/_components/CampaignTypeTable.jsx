@@ -111,7 +111,7 @@ export default function CampaignTypeTable({ isGoogle = false }) {
                         Find all the analytics for store
                     </div>
                 </div>
-                <EditTableAttribution>
+                <EditTableAttribution columns={columns}>
                     <Button variant="outline" className="px-2.5">
                         <SquareHalf className='w-5 h-5' />
                     </Button>

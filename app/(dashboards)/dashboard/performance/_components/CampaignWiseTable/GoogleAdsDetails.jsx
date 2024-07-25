@@ -193,14 +193,16 @@ export default function GoogleAdsDetails() {
                 <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
                 :
                 <CampaignTable
-                  data={data?.results?.[0]?.data?.slice(0, 4)?.map(l1 =>
+                  data={data?.results?.[0]?.data?.map(l1 =>
                   ({
                     ...l1,
-                    subRows: adSetsData?.results?.[0]?.data?.slice(0, 4)?.map(l2 =>
-                    ({
-                      ...l2,
-                      subRows: adsData?.results?.[0]?.data?.slice(0, 4)
-                    }))
+                    subRows: adSetsData?.results?.[0]?.data
+                      ?.filter(f1 => f1.campaign_resource_name === l1.id)
+                      ?.map(l2 =>
+                      ({
+                        ...l2,
+                        subRows: adsData?.results?.[0]?.data?.filter(f2 => f2.resource_name?.includes(l2.id))
+                      }))
                   }))}
                   columns={columns}>
                 </CampaignTable>)}
