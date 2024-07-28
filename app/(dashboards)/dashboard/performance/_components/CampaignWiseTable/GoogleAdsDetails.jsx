@@ -13,6 +13,7 @@ import { useSelector } from "react-redux"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import CampaignTable from "./CampaignTable"
+import IndeterminateCheckbox from "@/components/IndeterminateCheckbox"
 
 
 export default function GoogleAdsDetails() {

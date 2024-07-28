@@ -32,6 +32,11 @@ const nextConfig = {
                 destination: "/dashboard/performance/meta-ads",
                 permanent: true,
             },
+            {
+                source: "/dashboard/products",
+                destination: "/dashboard/products/analytics",
+                permanent: true,
+            },
         ];
     },
 };
