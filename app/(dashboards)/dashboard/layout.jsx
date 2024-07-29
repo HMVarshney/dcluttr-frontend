@@ -28,7 +28,21 @@ const sideBarList = [
     {
         name: "Products",
         href: "/dashboard/products",
-        icon: <Package className='h-5 w-5 text-[#7E8986]' />
+        icon: <Package className='h-5 w-5 text-[#7E8986]' />,
+        level2: [
+            {
+                name: "Analytics",
+                href: "/dashboard/products/analytics",
+            },
+            {
+                name: "Cart",
+                href: "/dashboard/products/cart",
+            },
+            {
+                name: "Sets",
+                href: "/dashboard/products/sets",
+            },
+        ]
     },
     {
         name: "Creatives",

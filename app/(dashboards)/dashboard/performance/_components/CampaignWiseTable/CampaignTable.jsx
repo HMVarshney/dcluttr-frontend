@@ -26,15 +26,12 @@ const getCommonPinningStyles = (data) => {
   // console.log(data.getContext());
   return {
     boxShadow: column.id === 'name' ? '-1px 0 1px -1px gray inset' : undefined,
-    left: isPinned === 'left' ? `${column.getStart('left') - 0}px` : undefined,
+    left: isPinned === 'left' ? column.getStart('left') : undefined,
     opacity: isPinned ? 1 : 1,
     position: isPinned ? 'sticky' : 'relative',
     width: column.getSize(),
     zIndex: isPinned ? 1 : 0,
-    background: isPinned === 'left' ? '#ffffff96' : undefined,
-    backdropFilter: isPinned ? 'blur(10px)' : undefined,
-    WebkitBackdropFilter: isPinned ? 'blur(10px)' : undefined,
-    borderRadius: isPinned ? '12px 0px 0px 12px' : undefined,
+    background: isPinned === 'left' ? '#ffffff' : undefined,
   }
 }
 
