@@ -5,7 +5,7 @@ import { setCookie } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 
-export default function LoginWithGoogle() {
+function LoginWithGoogle() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -14,7 +14,7 @@ export default function LoginWithGoogle() {
       setCookie("accessToken", searchParams.get("token"));
       router.replace(`/stores`);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [router, searchParams]);
 
   return (
     <Button
@@ -49,3 +49,5 @@ export default function LoginWithGoogle() {
     </Button>
   );
 }
+
+export default LoginWithGoogle;

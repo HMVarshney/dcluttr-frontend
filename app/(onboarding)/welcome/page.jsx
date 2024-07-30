@@ -1,44 +1,97 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import WelcomeToDcluttr from "../_components/WelcomeToDcluttr";
 import BrandDetails from "../_components/BrandDetails";
 import PendingApproval from "../_components/PendingApproval";
 import ConnectYourData from "../_components/ConnectYourData";
-import InstallDcluttrPixel from "../_components/InstallDcluttrPixel";
 import AllDoneStartUsingDcluttr from "../_components/AllDoneStartUsingDcluttr";
 import DecluttrNotWorksInPhone from "@/components/DecluttrNotWorksInPhone";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { createQueryString } from "@/lib/utils/request.utils";
+import { fetchBrandById } from "@/lib/store/features/brandSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import Loading from "@/app/(auth)/loading";
 
 export default function Page() {
-  const [step, setStep] = useState(1);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+
+  const {
+    brandDetails: { loading, brandDetails }
+  } = useSelector((state) => state.brand);
+
+  const step = Number(searchParams.get("step"));
+  const brandId = searchParams.get("brand");
+
+  const setStep = useCallback(
+    (stepNumber) => {
+      const url = pathname + `?${createQueryString(searchParams, { step: stepNumber })}`;
+      router.replace(url);
+    },
+    [pathname, router, searchParams]
+  );
+
+  const goNext = () => setStep(step + 1);
+
+  useEffect(() => {
+    if (!step) {
+      setStep(1);
+    }
+  }, [step, setStep]);
+
+  useEffect(() => {
+    if (brandId) {
+      dispatch(fetchBrandById(brandId));
+    }
+  }, [brandId, dispatch]);
+
+  useEffect(() => {
+    if (step < 4 && brandDetails[brandId] && brandDetails[brandId].brandSettings.approved) {
+      setStep(4);
+    }
+    if (step < 3 && brandDetails[brandId]) {
+      setStep(3);
+    }
+  }, [brandDetails, brandId, setStep, step]);
+
+  if (!step) return null;
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <main className="w-full h-full ">
+    <main className="w-full h-full">
       <DecluttrNotWorksInPhone />
       <div className="lg:grid grid-cols-12 h-full hidden">
         <div className="col-span-5 bg-[#F5F5F5] h-full flex flex-col items-stretch justify-center px-8">
           <div className=" flex justify-between items-center">
-            <Link href="/" className="w-[240px] flex gap-1 items-center">
+            <div className="w-[240px] flex gap-1 items-center">
               <Image src="/logoIcon.svg" alt="logo" width={100} height={100} className="w-8 object-contain" />
               <span className="font-extrabold text-xl text-black">Decluttr</span>
+            </div>
+            <Link href="/stores">
+              <span className="text-primary text-sm">Return to All Stores</span>
             </Link>
-            <div className="text-primary text-sm">Return to All Stores</div>
           </div>
           <div className="border border-[#0000001F] bg-white rounded-lg p-4 mt-4">
             <div className="font-medium text-sm text-black mb-2">{(((step - 1) / 7) * 100)?.toFixed(0)}% Completed</div>
             <Progress value={(((step - 1) / 7) * 100)?.toFixed(0)} className="bg-[#0000001F]" />
           </div>
-
           <div className="border border-[#0000001F] bg-white rounded-lg p-4 flex flex-col gap-2.5 mt-12">
             <div className="font-bold text-lg text-black mb-2.5">Steps involved for Onboarding</div>
             {[
               {
                 title: "Welcome",
-                disc: "Avg. time to complete: 3 mins",
+                disc: "",
                 btnText: "Let’s go!"
               },
               {
@@ -55,11 +108,6 @@ export default function Page() {
                 title: "Connect your Data",
                 disc: "Avg. time to complete: 3 mins",
                 btnText: "Completed"
-              },
-              {
-                title: "Install Dcluttr Pixel",
-                disc: "Avg. time to complete: 3 mins",
-                btnText: "None Added"
               },
               {
                 title: "All Set",
@@ -107,17 +155,13 @@ export default function Page() {
           </div>
         </div>
         <div className="col-span-7">
-          <main
-            className="w-full h-full "
-            // onClick={() => setStep(pre => pre < 6 ? pre + 1 : 1)}
-          >
-            {step === 1 && <WelcomeToDcluttr setStep={setStep} />}
-            {step === 2 && <BrandDetails setStep={setStep} />}
-            {step === 3 && <PendingApproval setStep={setStep} />}
-            {step === 4 && <ConnectYourData setStep={setStep} />}
-            {step === 5 && <InstallDcluttrPixel />}
-            {step === 6 && <AllDoneStartUsingDcluttr />}
-          </main>
+          <div className="w-full h-full">
+            {step === 1 && <WelcomeToDcluttr goNext={goNext} />}
+            {step === 2 && <BrandDetails goNext={goNext} />}
+            {step === 3 && <PendingApproval goNext={goNext} />}
+            {step === 4 && <ConnectYourData goNext={goNext} />}
+            {step === 5 && <AllDoneStartUsingDcluttr />}
+          </div>
         </div>
       </div>
     </main>
