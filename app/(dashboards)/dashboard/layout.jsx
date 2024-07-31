@@ -6,7 +6,7 @@ import OrgSideBar from "../_components/OrgSidebar";
 
 const sideBarList = [
     {
-        name: "Dashboard",
+        name: "Overview",
         href: "/dashboard",
         icon: <House className='h-5 w-5 text-[#7E8986]' />
     },

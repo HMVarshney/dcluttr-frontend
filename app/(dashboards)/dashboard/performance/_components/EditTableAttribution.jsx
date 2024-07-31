@@ -92,7 +92,6 @@ export default function EditTableAttribution({ children, columns }) {
         items.splice(result.destination.index, 0, reorderedItem);
 
         setTitles(items);
-
     }
     return (
         <Popover open={isOpen} onOpenChange={e => setOpen(e)}>

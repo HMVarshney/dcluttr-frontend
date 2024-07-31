@@ -141,7 +141,7 @@ const data1 = {
     ]
 };
 export default function Page() {
-    const [titles, setTitles] = useState(['ROAS', 'Revenue', 'Spends'])
+    const [titles, setTitles] = useState(['ROAS', 'Revenue', 'Spends', 'ROAS', 'Revenue', 'Spends',])
     const handleOnDragEnd = (result) => {
         console.log(result);
         if (!result.destination) return;
@@ -178,7 +178,7 @@ export default function Page() {
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="imageUrls" direction='horizontal'>
                     {provided => (
-                        <div className='m-6 flex gap-3' {...provided.droppableProps} ref={provided.innerRef}>
+                        <div className='m-6 grid grid-cols-3 gap-3' {...provided.droppableProps} ref={provided.innerRef}>
                             {titles.map((title, i) => (
                                 <Draggable key={i} draggableId={`image-${i}`} index={i}>
                                     {provided => (
