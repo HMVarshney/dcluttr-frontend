@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
+    useReactTable
+} from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -17,35 +17,25 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { Trash } from "phosphor-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import InvitePeopleButton from "./InvitePeopleButton"
-import ConfirmModal from "@/components/ConfirmModal"
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Trash } from "phosphor-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import InvitePeopleButton from "./InvitePeopleButton";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export const columns = [
     {
         accessorKey: "email",
         header: ({ column }) => {
             return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
+                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     User details
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
-            )
+            );
         },
         cell: ({ row }) => {
             return (
@@ -59,15 +49,13 @@ export const columns = [
                         <div className="text-sm opacity-50">{row.getValue("email")}</div>
                     </div>
                 </div>
-            )
-        },
+            );
+        }
     },
     {
         accessorKey: "role",
         header: "Role",
-        cell: ({ row }) => (
-            <div className="capitalize">{row.original?.organizationRole?.name}</div>
-        ),
+        cell: ({ row }) => <div className="capitalize">{row.original?.organizationRole?.name}</div>
     },
     {
         accessorKey: "id",
@@ -78,14 +66,15 @@ export const columns = [
                     disabled={false}
                     header={`Delete ${row.original.fullName}`}
                     description={`Are you sure you want to delete ${row.original.fullName}?`}
-                    onConfirm={() => alert('deleted')}>
+                    onConfirm={() => alert("deleted")}
+                >
                     <button className="flex items-center gap-1">
                         <Trash size={20} className="text-destructive" weight="bold" />
                         <span className="font-medium text-destructive">Delete</span>
                     </button>
                 </ConfirmModal>
-            )
-        },
+            );
+        }
     },
     {
         id: "actions",
@@ -111,37 +100,33 @@ export const columns = [
                         <DropdownMenuItem>Marker</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-            )
-        },
-    },
-]
+            );
+        }
+    }
+];
 
 export default function MembersTable({ usersList }) {
-    const [sorting, setSorting] = useState([])
-    const [rowSelection, setRowSelection] = useState({})
+    const [sorting, setSorting] = useState([]);
+    const [rowSelection, setRowSelection] = useState({});
 
     const table = useReactTable({
         data: usersList,
         columns,
         state: {
             sorting,
-            rowSelection,
+            rowSelection
         },
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        onRowSelectionChange: setRowSelection,
-    })
+        onRowSelectionChange: setRowSelection
+    });
 
     return (
         <div className="px-6 pb-8">
-            <h3 className='text-xl font-bold mt-4'>
-                Members
-            </h3>
-            <p className='text-xs mt-1 mb-6 text-[#4F4D55]'>
-                Find all the brand for store
-            </p>
+            <h3 className="text-xl font-bold mt-4">Members</h3>
+            <p className="text-xs mt-1 mb-6 text-[#4F4D55]">Find all the brand for store</p>
             <div className="rounded-md border shadow">
                 <Table className="rounded-md bg-white">
                     <TableHeader>
@@ -152,12 +137,9 @@ export default function MembersTable({ usersList }) {
                                         <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
-                                    )
+                                    );
                                 })}
                             </TableRow>
                         ))}
@@ -165,26 +147,17 @@ export default function MembersTable({ usersList }) {
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                >
+                                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
                                     No results.
                                 </TableCell>
                             </TableRow>
@@ -192,7 +165,9 @@ export default function MembersTable({ usersList }) {
                     </TableBody>
                 </Table>
             </div>
-            <InvitePeopleButton />
+            <InvitePeopleButton>
+                <Button className="mt-8">Invite people</Button>
+            </InvitePeopleButton>
         </div>
-    )
+    );
 }

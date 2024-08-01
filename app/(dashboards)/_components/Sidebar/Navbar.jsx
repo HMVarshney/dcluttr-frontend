@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { fetchOrganizationDetails } from "@/lib/store/features/organizationSlice";
 import NewButton from "./NewButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar({ isOpen }) {
     const dispatch = useDispatch();
@@ -23,7 +24,11 @@ export default function Navbar({ isOpen }) {
         dispatch(setSideBarClose(!isOpen));
     };
     return (
-        <div className={cn("w-full py-4 flex gap-4 transition-all", { "max-w-[78px] w-[78px] -ml-2 gap-2": isOpen })}>
+        <div
+            className={cn("w-full py-4 flex gap-4 transition-all", {
+                "max-w-[78px] w-[78px] -ml-2 gap-2": isOpen
+            })}
+        >
             {allOrganizationStatus === "loading" ? (
                 <Skeleton className="w-full h-9 border" />
             ) : (
@@ -35,13 +40,12 @@ export default function Navbar({ isOpen }) {
                         {allOrganization.map((option, i) => (
                             <SelectItem key={i} value={option.id}>
                                 <div className="flex items-center gap-3">
-                                    <Image
-                                        src={option.organizationLogo || "/image_placeholder.svg"}
-                                        alt={option.name}
-                                        width={24}
-                                        height={24}
-                                        className="aspect-square rounded"
-                                    />
+                                    <Avatar className={cn("border rounded-[5.5px] cursor-pointer transition h-6 w-6")}>
+                                        <AvatarImage src={option.organizationLogo} alt={option.name} />
+                                        <AvatarFallback className="text-xs rounded-[5.5px]">
+                                            {option.name?.[0]}
+                                        </AvatarFallback>
+                                    </Avatar>
                                     <span className="line-clamp-1">{option.name}</span>
                                 </div>
                             </SelectItem>

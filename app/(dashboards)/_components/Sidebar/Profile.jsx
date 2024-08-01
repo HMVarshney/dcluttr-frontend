@@ -14,6 +14,7 @@ import { addDelay, deleteCookie } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux"; // Import useSelector from react-redux
 import { Users } from "phosphor-react";
+import InvitePeopleButton from "../../stores/_components/InvitePeopleButton";
 
 export default function Profile() {
     const { replace } = useRouter();
@@ -21,7 +22,10 @@ export default function Profile() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-5">
-            <Users className="text-icon cursor-pointer w-7 h-7" />
+            <InvitePeopleButton>
+                <Users className="text-icon cursor-pointer w-7 h-7" />
+            </InvitePeopleButton>
+
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <Avatar>

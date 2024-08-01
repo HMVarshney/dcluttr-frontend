@@ -1,27 +1,26 @@
-"use client"
+"use client";
 
 import { GearSix, Storefront } from "phosphor-react";
 import OrgSideBar from "../_components/OrgSidebar";
 
 const sideBarList = [
     {
-        name: "All Stores",
+        name: "All stores",
         href: "/stores",
-        icon: <Storefront className='h-5 w-5 text-icon' weight="bold" />
+        icon: Storefront
     },
     {
-        name: "Settings",
+        name: "Store settings",
         href: "/stores/settings",
-        icon: <GearSix className='h-5 w-5 text-icon' weight="bold" />
-    }]
+        icon: GearSix
+    }
+];
 
 export default function StoresLayout({ children }) {
     return (
         <>
             <OrgSideBar sideBarList={sideBarList} />
-            <div className="px-5 pt-4 w-full">
-                {children}
-            </div>
+            <div className="px-5 pt-4 w-full">{children}</div>
         </>
     );
 }
