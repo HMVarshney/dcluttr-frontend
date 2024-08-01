@@ -82,15 +82,15 @@ export default function Header() {
                 </div>
                 <div className='flex items-center justify-between gap-2 py-3 px-6 bg-white border-b'>
                     <BrandList />
-                    <div className='flex gap-2'>
-                        <Button variant="outline" className=" text-[#031B15]">
+                    {/* <div className='flex gap-2'> */}
+                    {/* <Button variant="outline" className=" text-[#031B15]">
                             <TvMinimal className='w-4 h-4 mr-2' />
                             <div className='font-medium text-sm'>
                                 Customize Dashboard
                             </div>
-                        </Button>
-                        <CreateSectionButton />
-                    </div>
+                        </Button> */}
+                    <CreateSectionButton />
+                    {/* </div> */}
                 </div>
             </div>
             <TopAdsBanner />

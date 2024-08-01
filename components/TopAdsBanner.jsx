@@ -15,9 +15,12 @@ export default function OrbitingCirclesDemo() {
                 onClick={() => dispatch(setHideBanner(true))} />
 
 
-            <span className="pointer-events-none whitespace-pre-wrap text-white text-center text-2xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
-                Attribution
-            </span>
+            <div className="pointer-events-none whitespace-pre-wrap text-white text-center text-2xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
+                Overview<br />
+                <span className="text-center text-xl">
+                    Get all the important metrics at one place
+                </span>
+            </div>
 
             {/* Inner Circles */}
             {[<Icons.googleDrive key={0} />,
