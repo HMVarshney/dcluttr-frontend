@@ -30,6 +30,7 @@ export default function Page() {
 
   const step = Number(searchParams.get("step"));
   const brandId = searchParams.get("brand");
+  const orgId = searchParams.get("orgId");
 
   const setStep = useCallback(
     (stepNumber) => {
@@ -59,6 +60,9 @@ export default function Page() {
     }
     if (step < 3 && brandDetails[brandId]) {
       setStep(3);
+    }
+    if (step > 2 && !brandId) {
+      setStep(1);
     }
   }, [brandDetails, brandId, setStep, step]);
 
@@ -159,7 +163,7 @@ export default function Page() {
             {step === 1 && <WelcomeToDcluttr goNext={goNext} />}
             {step === 2 && <BrandDetails goNext={goNext} />}
             {step === 3 && <PendingApproval goNext={goNext} />}
-            {step === 4 && <ConnectYourData goNext={goNext} />}
+            {step === 4 && <ConnectYourData goNext={goNext} brandId={brandId} orgId={orgId} />}
             {step === 5 && <AllDoneStartUsingDcluttr />}
           </div>
         </div>

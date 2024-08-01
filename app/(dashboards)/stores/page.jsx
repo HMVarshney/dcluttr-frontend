@@ -40,7 +40,11 @@ function Page() {
         </div>
       </div>
       {currentOrgBrands?.length > 0 || isLoadingBrandsList ? (
-        <AllBrands brandList={currentOrgBrands} isLoadingBrandsList={isLoadingBrandsList} />
+        <AllBrands
+          brandList={currentOrgBrands}
+          orgId={organizationDetails.id}
+          isLoadingBrandsList={isLoadingBrandsList}
+        />
       ) : (
         <EmptyStores />
       )}
