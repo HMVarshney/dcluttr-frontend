@@ -1,147 +1,146 @@
-"use client"
+"use client";
 
-import { ScrollArea } from '@/components/ui/scroll-area'
-import React, { useState } from 'react'
-import SimpleAreaChart from '../_components/Home/SimpleAreaChart'
-import AreaChart from '../_components/Home/AreaChart';
+import { ScrollArea } from "@/components/ui/scroll-area";
+import React, { useState } from "react";
+import SimpleAreaChart from "../_components/Home/SimpleAreaChart";
+import AreaChart from "../_components/Home/AreaChart";
 // import TestChart from '../_components/Home/TestChart';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Header from '../_components/Header';
-import { Forward, Pencil } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import ExportFileFormat from '@/components/ExportFileFormat';
-import CustomBarChart from '../_components/Home/CustomBarChart';
-
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Header from "../_components/Header";
+import { Forward, Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import ExportFileFormat from "@/components/ExportFileFormat";
+import CustomBarChart from "../_components/Home/CustomBarChart";
 
 const data = {
-    title: 'Spends',
+    title: "Spends",
     series: [
         {
             name: "Spends",
             dataKey: "s",
             id: 1,
-            color: '#2EB76F',
-            type: 'area'
+            color: "#2EB76F",
+            type: "area"
         },
         {
             name: "Revenue",
             dataKey: "r",
             id: 2,
-            color: '#9A66ED',
-            type: 'area'
-        },
+            color: "#9A66ED",
+            type: "area"
+        }
     ],
     data: [
         {
-            name: 'A',
+            name: "A",
             s: 8,
             r: 1,
-            amt: 24,
+            amt: 24
         },
         {
-            name: 'B',
+            name: "B",
             s: 5,
             r: 10,
-            amt: 22,
+            amt: 22
         },
         {
-            name: 'C',
+            name: "C",
             s: 12,
             r: 10,
-            amt: 22,
+            amt: 22
         },
         {
-            name: 'D',
+            name: "D",
             s: 10,
             r: 17,
-            amt: 20,
+            amt: 20
         },
         {
-            name: 'E',
+            name: "E",
             s: 14,
             r: 25,
-            amt: 21,
+            amt: 21
         },
         {
-            name: 'F',
+            name: "F",
             s: 10,
             r: 19,
-            amt: 25,
+            amt: 25
         },
         {
-            name: 'G',
+            name: "G",
             s: 20,
             r: 25,
-            amt: 21,
-        },
+            amt: 21
+        }
     ]
 };
 
 const data1 = {
-    title: 'Spends',
+    title: "Spends",
     series: [
         {
             name: "Spends",
             dataKey: "s",
             id: 3,
-            color: '#DB3500CC',
-            type: 'line'
+            color: "#DB3500CC",
+            type: "line"
         },
         {
             name: "Revenue",
             dataKey: "r",
             id: 4,
-            color: '#2EB76F',
-            type: 'area'
-        },
+            color: "#2EB76F",
+            type: "area"
+        }
     ],
     data: [
         {
-            name: 'A',
+            name: "A",
             s: 8,
             r: 0,
-            amt: 24,
+            amt: 24
         },
         {
-            name: 'B',
+            name: "B",
             s: 5,
             r: 10,
-            amt: 22,
+            amt: 22
         },
         {
-            name: 'C',
+            name: "C",
             s: 12,
             r: 10,
-            amt: 22,
+            amt: 22
         },
         {
-            name: 'D',
+            name: "D",
             s: 10,
             r: 17,
-            amt: 20,
+            amt: 20
         },
         {
-            name: 'E',
+            name: "E",
             s: 14,
             r: 25,
-            amt: 21,
+            amt: 21
         },
         {
-            name: 'F',
+            name: "F",
             s: 10,
             r: 19,
-            amt: 25,
+            amt: 25
         },
         {
-            name: 'G',
+            name: "G",
             s: 20,
             r: 25,
-            amt: 21,
-        },
+            amt: 21
+        }
     ]
 };
 export default function Page() {
-    const [titles, setTitles] = useState(['ROAS', 'Revenue', 'Spends', 'ROAS', 'Revenue', 'Spends',])
+    const [titles, setTitles] = useState(["ROAS", "Revenue", "Spends", "ROAS", "Revenue", "Spends"]);
     const handleOnDragEnd = (result) => {
         console.log(result);
         if (!result.destination) return;
@@ -150,40 +149,41 @@ export default function Page() {
         items.splice(result.destination.index, 0, reorderedItem);
 
         setTitles(items);
-
-    }
+    };
     return (
-        <ScrollArea className='rounded-md bg-[#FAFAFA] h-full border'>
+        <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
             <Header />
-            <div className='flex items-center justify-between gap-2 my-3 mx-6'>
-                <div className=''>
-                    <div className='font-bold text-xl'>
-                        Store
-                    </div>
-                    <div className='text-[#4F4D55] text-sm'>
-                        Find all the analytics for store
-                    </div>
+            <div className="flex items-center justify-between gap-2 my-3 mx-6">
+                <div className="">
+                    <div className="font-bold text-xl">Home</div>
+                    <div className="text-[#4F4D55] text-sm">Metrics from all your marketing channels</div>
                 </div>
-                <div className='flex gap-2'>
+                <div className="flex gap-2">
                     <Button variant="outline" className=" text-[#031B15]">
-                        <Pencil className='w-4 h-4 mr-2' />
-                        <div className='font-medium text-sm'>
-                            Edit
-                        </div>
+                        <Pencil className="w-4 h-4 mr-2" />
+                        <div className="font-medium text-sm">Edit</div>
                     </Button>
                     <ExportFileFormat />
                 </div>
             </div>
 
             <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId="imageUrls" direction='horizontal'>
-                    {provided => (
-                        <div className='m-6 grid grid-cols-3 gap-3' {...provided.droppableProps} ref={provided.innerRef}>
+                <Droppable droppableId="imageUrls" direction="horizontal">
+                    {(provided) => (
+                        <div
+                            className="m-6 grid grid-cols-3 gap-3"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
                             {titles.map((title, i) => (
                                 <Draggable key={i} draggableId={`image-${i}`} index={i}>
-                                    {provided => (
+                                    {(provided) => (
                                         <div ref={provided.innerRef} {...provided.draggableProps} className=" w-full">
-                                            <AreaChart data={data1} details={{ title }} dragHandleProps={provided.dragHandleProps} />
+                                            <AreaChart
+                                                data={data1}
+                                                details={{ title }}
+                                                dragHandleProps={provided.dragHandleProps}
+                                            />
                                         </div>
                                     )}
                                 </Draggable>
@@ -196,18 +196,18 @@ export default function Page() {
 
             {/* <TestChart /> */}
 
-            <div className='m-8 flex gap-8'>
-                <SimpleAreaChart data={data} details={{ title: 'Spends and Revenue Performance', }} />
-                <SimpleAreaChart data={data} details={{ title: 'ROAS', }} />
+            <div className="m-8 flex gap-8">
+                <SimpleAreaChart data={data} details={{ title: "Spends and Revenue Performance" }} />
+                <SimpleAreaChart data={data} details={{ title: "ROAS" }} />
             </div>
 
-            <div className='m-8 flex gap-8'>
-                <AreaChart data={data} details={{ title: 'Spends and Revenue Performance', }} />
-                <CustomBarChart data={data} details={{ title: 'ROAS', }} />
+            <div className="m-8 flex gap-8">
+                <AreaChart data={data} details={{ title: "Spends and Revenue Performance" }} />
+                <CustomBarChart data={data} details={{ title: "ROAS" }} />
             </div>
             {/*  <div className='h-screen' />
             <div className='h-screen' />
             <div className='h-screen' />*/}
         </ScrollArea>
-    )
+    );
 }
