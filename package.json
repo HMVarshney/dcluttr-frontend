@@ -34,6 +34,7 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^11.3.2",
     "input-otp": "^1.2.4",
+    "json-2-csv": "^5.5.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.395.0",
     "moment": "^2.30.1",
