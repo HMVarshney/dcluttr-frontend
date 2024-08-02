@@ -66,6 +66,7 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
                             <Button
                                 onClick={() => {
                                     setOpen(false)
+                                    console.log(ele);
                                     setDateRange(ele)
                                 }}
                                 size="sm"

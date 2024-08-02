@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import OrbitingCircles from "@/components/magicui/orbiting-circles";
 import { setHideBanner } from "@/lib/store/features/userSlice";
+import Image from "next/image";
 import { X } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,54 +12,55 @@ export default function OrbitingCirclesDemo() {
     if (hideBanner) return null;
     return (
         <div className="my-3 mx-6 flex h-[120px] flex-col items-center justify-center overflow-hidden rounded-lg border shadow-sm bg-primary relative">
-            <X size={18} className="absolute top-4 right-4 cursor-pointer" color="#ffffff"
-                onClick={() => dispatch(setHideBanner(true))} />
+            <X
+                size={18}
+                className="absolute top-4 right-4 cursor-pointer"
+                color="#ffffff"
+                onClick={() => dispatch(setHideBanner(true))}
+            />
 
-
-            <span className="pointer-events-none whitespace-pre-wrap text-white text-center text-2xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
-                Attribution
-            </span>
+            <div className="pointer-events-none whitespace-pre-wrap text-white text-center text-2xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
+                Overview
+                <br />
+                <span className="text-center text-xs font-normal">Get all the important metrics at one place</span>
+            </div>
 
             {/* Inner Circles */}
-            {[<Icons.googleDrive key={0} />,
-            <Icons.openai key={1} />,
-            <Icons.notion key={2} />,
-            <Icons.gitHub key={3} />,
-            <Icons.whatsapp key={4} />,
-            ].map(
-                (Icon, i) => (
-                    <OrbitingCircles
-                        key={i}
-                        className="size-[30px] border-none bg-transparent"
-                        radius={180}
-                        duration={70}
-                        delay={i * 7}
-                    >
-                        {Icon}
-                    </OrbitingCircles>
-                )
-            )}
+            {[
+                <Image key={0} src="/band-logo/google.png" alt="Overview" width={100} height={100} className="w-6" />,
+                <Image key={1} src="/band-logo/meta.png" alt="Overview" width={100} height={100} className="w-6" />,
+                <Image key={2} src="/band-logo/shopify.png" alt="Overview" width={100} height={100} className="w-6" />,
+                <Image key={3} src="/band-logo/save_file.png" alt="Overview" width={100} height={100} className="w-6" />
+            ].map((Icon, i) => (
+                <OrbitingCircles
+                    key={i}
+                    className="size-[36px] border-none bg-white"
+                    radius={180}
+                    duration={40}
+                    delay={i * 10}
+                >
+                    {Icon}
+                </OrbitingCircles>
+            ))}
 
             {/* Outer Circles (reverse) */}
-            {[<Icons.googleDrive key={7} />,
-            <Icons.openai key={8} />,
-            <Icons.notion key={9} />,
-            <Icons.gitHub key={10} />,
-            <Icons.whatsapp key={11} />,
-            ].map(
-                (Icon, i) => (
-                    <OrbitingCircles
-                        key={i}
-                        className="size-[40px] border-none bg-transparent"
-                        radius={286}
-                        duration={70}
-                        delay={i * 7}
-                        reverse
-                    >
-                        {Icon}
-                    </OrbitingCircles>
-                )
-            )}
+            {[
+                <Image key={0} src="/band-logo/google.png" alt="Overview" width={100} height={100} className="w-6" />,
+                <Image key={1} src="/band-logo/meta.png" alt="Overview" width={100} height={100} className="w-6" />,
+                <Image key={2} src="/band-logo/shopify.png" alt="Overview" width={100} height={100} className="w-6" />,
+                <Image key={3} src="/band-logo/save_file.png" alt="Overview" width={100} height={100} className="w-6" />
+            ].map((Icon, i) => (
+                <OrbitingCircles
+                    key={i}
+                    className="size-[36px] border-none bg-white"
+                    radius={260}
+                    duration={60}
+                    delay={i * 25}
+                    reverse
+                >
+                    {Icon}
+                </OrbitingCircles>
+            ))}
         </div>
     );
 }
@@ -73,13 +75,7 @@ const Icons = {
         </svg>
     ),
     notion: () => (
-        <svg
-            width="100"
-            height="100"
-            viewBox="0 0 100 100"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M6.017 4.313l55.333 -4.087c6.797 -0.583 8.543 -0.19 12.817 2.917l17.663 12.443c2.913 2.14 3.883 2.723 3.883 5.053v68.243c0 4.277 -1.553 6.807 -6.99 7.193L24.467 99.967c-4.08 0.193 -6.023 -0.39 -8.16 -3.113L3.3 79.94c-2.333 -3.113 -3.3 -5.443 -3.3 -8.167V11.113c0 -3.497 1.553 -6.413 6.017 -6.8z"
                 fill="#ffffff"
@@ -93,22 +89,12 @@ const Icons = {
         </svg>
     ),
     openai: () => (
-        <svg
-            width="100"
-            height="100"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="100" height="100" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z" />
         </svg>
     ),
     googleDrive: () => (
-        <svg
-            width="100"
-            height="100"
-            viewBox="0 0 87.3 78"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="100" height="100" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z"
                 fill="#0066da"
@@ -121,14 +107,8 @@ const Icons = {
                 d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z"
                 fill="#ea4335"
             />
-            <path
-                d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z"
-                fill="#00832d"
-            />
-            <path
-                d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z"
-                fill="#2684fc"
-            />
+            <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d" />
+            <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc" />
             <path
                 d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z"
                 fill="#ffba00"
@@ -136,32 +116,13 @@ const Icons = {
         </svg>
     ),
     whatsapp: () => (
-        <svg
-            width="100"
-            height="100"
-            viewBox="0 0 175.216 175.552"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="100" height="100" viewBox="0 0 175.216 175.552" xmlns="http://www.w3.org/2000/svg">
             <defs>
-                <linearGradient
-                    id="b"
-                    x1="85.915"
-                    x2="86.535"
-                    y1="32.567"
-                    y2="137.092"
-                    gradientUnits="userSpaceOnUse"
-                >
+                <linearGradient id="b" x1="85.915" x2="86.535" y1="32.567" y2="137.092" gradientUnits="userSpaceOnUse">
                     <stop offset="0" stopColor="#57d163" />
                     <stop offset="1" stopColor="#23b33a" />
                 </linearGradient>
-                <filter
-                    id="a"
-                    width="1.115"
-                    height="1.114"
-                    x="-.057"
-                    y="-.057"
-                    colorInterpolationFilters="sRGB"
-                >
+                <filter id="a" width="1.115" height="1.114" x="-.057" y="-.057" colorInterpolationFilters="sRGB">
                     <feGaussianBlur stdDeviation="3.531" />
                 </filter>
             </defs>
@@ -188,5 +149,5 @@ const Icons = {
                 fillRule="evenodd"
             />
         </svg>
-    ),
+    )
 };

@@ -1,9 +1,9 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import React, { useEffect, useRef, useState } from "react";
-import SimpleAreaChart from "../_components/Home/SimpleAreaChart";
-import AreaChart from "../_components/Home/AreaChart";
+import React, { useState } from "react";
+import Type2Chart from "../_components/Home/Type2Chart";
+import Type1Chart from "../_components/Home/Type1Chart";
 // import TestChart from '../_components/Home/TestChart';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Header from "../_components/Header";
@@ -11,8 +11,7 @@ import { Forward, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import CustomBarChart from "../_components/Home/CustomBarChart";
-import "gridstack/dist/gridstack.min.css";
-import { GridStack } from "gridstack";
+import Type3Chart from "../_components/Home/Type3Chart";
 
 const data = {
   title: "Spends",
@@ -22,60 +21,60 @@ const data = {
       dataKey: "s",
       id: 1,
       color: "#2EB76F",
-      type: "area",
+      type: "area"
     },
     {
       name: "Revenue",
       dataKey: "r",
       id: 2,
       color: "#9A66ED",
-      type: "area",
-    },
+      type: "area"
+    }
   ],
   data: [
     {
       name: "A",
       s: 8,
       r: 1,
-      amt: 24,
+      amt: 24
     },
     {
       name: "B",
       s: 5,
       r: 10,
-      amt: 22,
+      amt: 22
     },
     {
       name: "C",
       s: 12,
       r: 10,
-      amt: 22,
+      amt: 22
     },
     {
       name: "D",
       s: 10,
       r: 17,
-      amt: 20,
+      amt: 20
     },
     {
       name: "E",
       s: 14,
       r: 25,
-      amt: 21,
+      amt: 21
     },
     {
       name: "F",
       s: 10,
       r: 19,
-      amt: 25,
+      amt: 25
     },
     {
       name: "G",
       s: 20,
       r: 25,
-      amt: 21,
-    },
-  ],
+      amt: 21
+    }
+  ]
 };
 
 const data1 = {
@@ -86,64 +85,63 @@ const data1 = {
       dataKey: "s",
       id: 3,
       color: "#DB3500CC",
-      type: "line",
+      type: "line"
     },
     {
       name: "Revenue",
       dataKey: "r",
       id: 4,
       color: "#2EB76F",
-      type: "area",
-    },
+      type: "area"
+    }
   ],
   data: [
     {
       name: "A",
       s: 8,
       r: 0,
-      amt: 24,
+      amt: 24
     },
     {
       name: "B",
       s: 5,
       r: 10,
-      amt: 22,
+      amt: 22
     },
     {
       name: "C",
       s: 12,
       r: 10,
-      amt: 22,
+      amt: 22
     },
     {
       name: "D",
       s: 10,
       r: 17,
-      amt: 20,
+      amt: 20
     },
     {
       name: "E",
       s: 14,
       r: 25,
-      amt: 21,
+      amt: 21
     },
     {
       name: "F",
       s: 10,
       r: 19,
-      amt: 25,
+      amt: 25
     },
     {
       name: "G",
       s: 20,
       r: 25,
-      amt: 21,
-    },
-  ],
+      amt: 21
+    }
+  ]
 };
-
 export default function Page() {
-  const [titles, setTitles] = useState(["ROAS", "Revenue", "Spends"]);
+  const [titles, setTitles] = useState(["Unique Customers", "Revenue", "Spends", "ROAS", "Revenue", "Spends"]);
   const handleOnDragEnd = (result) => {
     console.log(result);
     if (!result.destination) return;
@@ -153,33 +151,13 @@ export default function Page() {
 
     setTitles(items);
   };
-
-  useEffect(() => {
-    const grid = GridStack.init();
-    const data = [
-      {
-        x: 0,
-        y: 0,
-        w: 2,
-        h: 2,
-        content: <div>Hey</div>,
-      },
-    ];
-    grid.load(data);
-    // grid.addWidget({ id: "1", x: 0, y: 0, w: 1, h: 1, content: "<div>Hey</div>", noResize: true });
-    grid.on("dragstop", (event, ele) => {
-      console.log("event", event);
-      console.log("ele", ele.gridstackNode);
-    });
-  }, []);
-
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
       <Header />
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
         <div className="">
-          <div className="font-bold text-xl">Store</div>
-          <div className="text-[#4F4D55] text-sm">Find all the analytics for store</div>
+          <div className="font-bold text-xl">Home</div>
+          <div className="text-[#4F4D55] text-sm">Metrics from all your marketing channels</div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" className=" text-[#031B15]">
@@ -193,14 +171,22 @@ export default function Page() {
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="imageUrls" direction="horizontal">
           {(provided) => (
-            <div className="m-6 flex gap-3" {...provided.droppableProps} ref={provided.innerRef}>
+            <div className="m-6 grid grid-cols-3 gap-3" {...provided.droppableProps} ref={provided.innerRef}>
               {titles.map((title, i) => (
                 <Draggable key={i} draggableId={`image-${i}`} index={i}>
-                  {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} className=" w-full">
-                      <AreaChart data={data1} details={{ title }} dragHandleProps={provided.dragHandleProps} />
-                    </div>
-                  )}
+                  {(provided) => {
+                    return (
+                      <div ref={provided.innerRef} {...provided.draggableProps} className=" w-full">
+                        {title === "Unique Customers" ? (
+                          <Type3Chart data={data1} details={{ title }} dragHandleProps={provided.dragHandleProps} />
+                        ) : title === "Revenue" ? (
+                          <Type2Chart data={data1} details={{ title }} dragHandleProps={provided.dragHandleProps} />
+                        ) : (
+                          <Type1Chart data={data1} details={{ title }} dragHandleProps={provided.dragHandleProps} />
+                        )}
+                      </div>
+                    );
+                  }}
                 </Draggable>
               ))}
               {provided.placeholder}
@@ -212,18 +198,17 @@ export default function Page() {
       {/* <TestChart /> */}
 
       <div className="m-8 flex gap-8">
-        <SimpleAreaChart data={data} details={{ title: "Spends and Revenue Performance" }} />
-        <SimpleAreaChart data={data} details={{ title: "ROAS" }} />
+        <Type2Chart data={data} details={{ title: "Spends and Revenue Performance" }} />
+        <Type2Chart data={data} details={{ title: "ROAS" }} />
       </div>
 
       <div className="m-8 flex gap-8">
-        <AreaChart data={data} details={{ title: "Spends and Revenue Performance" }} />
+        <Type1Chart data={data} details={{ title: "Spends and Revenue Performance" }} />
         <CustomBarChart data={data} details={{ title: "ROAS" }} />
       </div>
       {/*  <div className='h-screen' />
             <div className='h-screen' />
             <div className='h-screen' />*/}
-      <div className="grid-stack"></div>
     </ScrollArea>
   );
 }

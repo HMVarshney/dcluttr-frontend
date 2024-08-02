@@ -2,7 +2,15 @@
 
 import OtherDetails from "@/app/(auth)/_components/OtherDetails";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
 import { fetchAllOrganization } from "@/lib/store/features/organizationSlice";
 import { Plus } from "lucide-react";
 import { useRef, useState } from "react";
@@ -15,15 +23,19 @@ export default function NewButton() {
     return (
         <Dialog open={isOpen} onOpenChange={(e) => setOpen(e)}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="p-2.5 w-10 h-10">
-                    <Plus className="text-primary " />
-                </Button>
+                <div className="flex items-center gap-3 p-3">
+                    <Plus className="text-primary " size={16} />
+                    <span className="line-clamp-1 text-sm">Create new</span>
+                </div>
             </DialogTrigger>
             <DialogContent className="bg-white border-none max-w-[480px] ">
-                <OtherDetails onDone={(e) => {
-                    setOpen(e)//TODO
-                    dispatch(fetchAllOrganization("LAST"));
-                }} isBF={true} />
+                <OtherDetails
+                    onDone={(e) => {
+                        setOpen(e); //TODO
+                        dispatch(fetchAllOrganization("LAST"));
+                    }}
+                    isBF={true}
+                />
             </DialogContent>
         </Dialog>
     );
