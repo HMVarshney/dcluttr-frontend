@@ -7,12 +7,12 @@ const sideBarList = [
   {
     name: "All Stores",
     href: "/stores",
-    icon: <Storefront className="h-5 w-5 text-icon" weight="bold" />
+    icon: Storefront
   },
   {
     name: "Settings",
     href: "/stores/settings",
-    icon: <GearSix className="h-5 w-5 text-icon" weight="bold" />
+    icon: GearSix
   }
 ];
 
