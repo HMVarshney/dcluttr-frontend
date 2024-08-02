@@ -1,28 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { connectGoogle } from "@/lib/store/features/sourceConnectSlice";
+import { connectFacebook, connectGoogle } from "@/lib/store/features/sourceConnectSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
-function ConnectGoogleModal({ openModal, onClose, value, setValue, handleSubmit }) {
+function ConnectFacebookModal({ openModal, onClose, value, setValue, handleSubmit }) {
   return (
     <Dialog open={openModal} onOpenChange={onClose}>
       <DialogContent>
         <div>
           <div className="mb-4">
-            <h2>Connect Google</h2>
+            <h2>Connect Facebook</h2>
           </div>
           <div>
             <Input
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              id="customer_id"
-              name="customer_id"
-              placeholder="Enter customer Id"
+              id="account_id"
+              name="account_id"
+              placeholder="Enter account Id"
             />
           </div>
         </div>
@@ -37,15 +37,15 @@ function ConnectGoogleModal({ openModal, onClose, value, setValue, handleSubmit 
   );
 }
 
-function ConnectGoogle({ openModal, onClose, brandId, orgId }) {
+function ConnectFacebook({ openModal, onClose, brandId, orgId }) {
   const [value, setValue] = useState("");
   const dispatch = useDispatch();
 
-  const { sourceConnectLoading } = useSelector((state) => state.sourceConnect.google);
+  const { sourceConnectLoading } = useSelector((state) => state.sourceConnect.facebook);
 
   const handleSubmit = () => {
     if (!value) return;
-    dispatch(connectGoogle({ brandId, orgId, customerId: value }))
+    dispatch(connectFacebook({ brandId, orgId, accountId: value }))
       .unwrap()
       .then(() => {
         toast.success("Connection is successful");
@@ -61,7 +61,7 @@ function ConnectGoogle({ openModal, onClose, brandId, orgId }) {
   }, [openModal]);
 
   return (
-    <ConnectGoogleModal
+    <ConnectFacebookModal
       openModal={openModal}
       onClose={onClose}
       value={value}
@@ -71,4 +71,4 @@ function ConnectGoogle({ openModal, onClose, brandId, orgId }) {
   );
 }
 
-export default ConnectGoogle;
+export default ConnectFacebook;

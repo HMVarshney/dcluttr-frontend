@@ -3,79 +3,49 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React, { useCallback, useState } from "react";
 import ConnectGoogle from "./ConnectGoogle";
-import { googleConnectUrl } from "@/lib/constants/sourceConnect";
 import { toast } from "sonner";
+import { sourceConnectURLs } from "@/lib/constants/sourceConnect";
+import ConnectFacebook from "./ConnectFacebook";
 
 const sources = [
   {
     title: "Meta Ads",
-    disc: "View Connection details",
-    btnText: "Disconnect",
-    status: "CONNECTED",
-    icon: "/icons/meta_icon.svg"
+    // disc: "View Connection details",
+    btnText: "Connect",
+    status: "NOT_CONNECTED",
+    icon: "/icons/meta_icon.svg",
+    source: "FACEBOOK"
   },
   {
     title: "Google Ads",
     btnText: "Connect",
     status: "NOT_CONNECTED",
-    icon: "/icons/google_ads_icon.svg"
+    icon: "/icons/google_ads_icon.svg",
+    source: "GOOGLE"
   },
   {
     title: "Klaviyo",
     disc: "Coming Soon",
     btnText: null,
     status: "COMING",
-    icon: "/icons/klaviyo_icon.svg"
-  },
-  {
-    title: "Snapchat Ads",
-    disc: "Coming Soon",
-    btnText: null,
-    status: "COMING",
-    icon: "/icons/snapchat_icon.svg"
-  },
-  {
-    title: "Klaviyo",
-    disc: "Coming Soon",
-    btnText: null,
-    status: "COMING",
-    icon: "/icons/klaviyo_icon.svg"
-  },
-  {
-    title: "Snapchat Ads",
-    disc: "Coming Soon",
-    btnText: null,
-    status: "COMING",
-    icon: "/icons/snapchat_icon.svg"
-  },
-  {
-    title: "Klaviyo",
-    disc: "Coming Soon",
-    btnText: null,
-    status: "COMING",
-    icon: "/icons/klaviyo_icon.svg"
-  },
-  {
-    title: "Snapchat Ads",
-    disc: "Coming Soon",
-    btnText: null,
-    status: "COMING",
-    icon: "/icons/snapchat_icon.svg"
+    icon: "/icons/klaviyo_icon.svg",
+    source: "KLAVIYO"
   }
 ];
 
 function ConnectYourData({ goNext, brandId, orgId }) {
-  const [openModalType, toggleModal] = useState("");
+  const [openModalType, toggleModal] = useState("FACEBOOK");
 
   const handleModalClose = () => toggleModal("");
 
-  const connectGoogle = useCallback(() => {
-    const loginChildWindow = window.open(googleConnectUrl, "_blank", "height=600,width=900");
+  const connectSource = useCallback((sourceName) => {
+    const loginChildWindow = window.open(sourceConnectURLs[sourceName], "_blank", "height=600,width=900");
     const checkPopup = setInterval(() => {
       try {
-        if (loginChildWindow.window.location.href.includes(window.location.href)) {
+        if (loginChildWindow.window.location.href.includes(window.location.hostname)) {
+          const callbackURL = loginChildWindow.location.href;
           loginChildWindow.close();
-          toggleModal("GOOGLE");
+          toggleModal(sourceName);
           toast.success("Authentication successful");
         }
       } catch (err) {}
@@ -111,7 +81,7 @@ function ConnectYourData({ goNext, brandId, orgId }) {
                   variant={item.status === "CONNECTED" ? "default" : "outline"}
                   className="ml-auto"
                   size="sm"
-                  onClick={connectGoogle}
+                  onClick={() => connectSource(item.source)}
                 >
                   {item.btnText}
                 </Button>
@@ -123,6 +93,12 @@ function ConnectYourData({ goNext, brandId, orgId }) {
 
       <ConnectGoogle
         openModal={openModalType === "GOOGLE"}
+        onClose={handleModalClose}
+        brandId={brandId}
+        orgId={orgId}
+      />
+      <ConnectFacebook
+        openModal={openModalType === "FACEBOOK"}
         onClose={handleModalClose}
         brandId={brandId}
         orgId={orgId}
