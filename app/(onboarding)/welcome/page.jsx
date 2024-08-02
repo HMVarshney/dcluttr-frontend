@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import WelcomeToDcluttr from "../_components/WelcomeToDcluttr";
 import BrandDetails from "../_components/BrandDetails";
 import PendingApproval from "../_components/PendingApproval";
@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Loading from "@/app/(auth)/loading";
 
-export default function Page() {
+function Welcome() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -171,3 +171,13 @@ export default function Page() {
     </main>
   );
 }
+
+function WelcomePage() {
+  return (
+    <Suspense>
+      <Welcome />
+    </Suspense>
+  );
+}
+
+export default WelcomePage;
