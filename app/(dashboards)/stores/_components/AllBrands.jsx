@@ -1,17 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { setBrand } from "@/lib/store/features/brandSlice";
 import { Plus } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Gear } from "phosphor-react";
 import React from "react";
-import { useDispatch } from "react-redux";
 
-export default function AllBrands({ brandList, isLoadingBrandsList }) {
-  const router = useRouter();
-  const dispatch = useDispatch();
+function getActionButton(brand, orgId) {
+  if (brand.brandSettings?.isApproved) {
+    return (
+      <Link href={`/dashboard?brand=${brand.id}&orgId=${orgId}`}>
+        <Button variant="outline">Go to dashboard</Button>
+      </Link>
+    );
+  } else {
+    return (
+      <Link href={`/welcome?brand=${brand.id}&orgId=${orgId}&step=3`}>
+        <Button variant="outline">Pending approval</Button>
+      </Link>
+    );
+  }
+}
 
+export default function AllBrands({ brandList, isLoadingBrandsList, orgId }) {
   return (
     <>
       <div className="flex items-center justify-center gap-2 p-6 ">
@@ -22,10 +33,12 @@ export default function AllBrands({ brandList, isLoadingBrandsList }) {
         {isLoadingBrandsList ? (
           <Skeleton className="w-[164px] h-10" />
         ) : (
-          <Button variant="default">
-            <Plus className="w-4 h-4 mr-2" />
-            <div className="font-medium text-sm">Add a new store</div>
-          </Button>
+          <Link href="/welcome">
+            <Button variant="default">
+              <Plus className="w-4 h-4 mr-2" />
+              <div className="font-medium text-sm">Add a new store</div>
+            </Button>
+          </Link>
         )}
       </div>
       <div className="flex flex-col items-stretch justify-center gap-6  px-6 ">
@@ -49,15 +62,7 @@ export default function AllBrands({ brandList, isLoadingBrandsList }) {
                 <div className="text-base font-semibold">{item.brandName}</div>
                 <div className="text-[#919191] text-sm underline">{item.brandWebsite}</div>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  dispatch(setBrand(item));
-                  router.push(`/dashboard?brand=${item.id}`);
-                }}
-              >
-                Go to dashboard
-              </Button>
+              {getActionButton(item, orgId)}
               <Button variant="icon">
                 <Gear size={24} />
               </Button>
