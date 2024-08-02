@@ -2,8 +2,8 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useState } from "react";
-import SimpleAreaChart from "../_components/Home/SimpleAreaChart";
-import AreaChart from "../_components/Home/AreaChart";
+import Type2Chart from "../_components/Home/Type2Chart";
+import Type1Chart from "../_components/Home/Type1Chart";
 // import TestChart from '../_components/Home/TestChart';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Header from "../_components/Header";
@@ -11,6 +11,7 @@ import { Forward, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import CustomBarChart from "../_components/Home/CustomBarChart";
+import Type3Chart from "../_components/Home/Type3Chart";
 
 const data = {
     title: "Spends",
@@ -140,7 +141,7 @@ const data1 = {
     ]
 };
 export default function Page() {
-    const [titles, setTitles] = useState(["ROAS", "Revenue", "Spends", "ROAS", "Revenue", "Spends"]);
+    const [titles, setTitles] = useState(["Unique Customers", "Revenue", "Spends", "ROAS", "Revenue", "Spends"]);
     const handleOnDragEnd = (result) => {
         console.log(result);
         if (!result.destination) return;
@@ -177,15 +178,35 @@ export default function Page() {
                         >
                             {titles.map((title, i) => (
                                 <Draggable key={i} draggableId={`image-${i}`} index={i}>
-                                    {(provided) => (
-                                        <div ref={provided.innerRef} {...provided.draggableProps} className=" w-full">
-                                            <AreaChart
-                                                data={data1}
-                                                details={{ title }}
-                                                dragHandleProps={provided.dragHandleProps}
-                                            />
-                                        </div>
-                                    )}
+                                    {(provided) => {
+                                        return (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                className=" w-full"
+                                            >
+                                                {title === "Unique Customers" ? (
+                                                    <Type3Chart
+                                                        data={data1}
+                                                        details={{ title }}
+                                                        dragHandleProps={provided.dragHandleProps}
+                                                    />
+                                                ) : title === "Revenue" ? (
+                                                    <Type2Chart
+                                                        data={data1}
+                                                        details={{ title }}
+                                                        dragHandleProps={provided.dragHandleProps}
+                                                    />
+                                                ) : (
+                                                    <Type1Chart
+                                                        data={data1}
+                                                        details={{ title }}
+                                                        dragHandleProps={provided.dragHandleProps}
+                                                    />
+                                                )}
+                                            </div>
+                                        );
+                                    }}
                                 </Draggable>
                             ))}
                             {provided.placeholder}
@@ -197,12 +218,12 @@ export default function Page() {
             {/* <TestChart /> */}
 
             <div className="m-8 flex gap-8">
-                <SimpleAreaChart data={data} details={{ title: "Spends and Revenue Performance" }} />
-                <SimpleAreaChart data={data} details={{ title: "ROAS" }} />
+                <Type2Chart data={data} details={{ title: "Spends and Revenue Performance" }} />
+                <Type2Chart data={data} details={{ title: "ROAS" }} />
             </div>
 
             <div className="m-8 flex gap-8">
-                <AreaChart data={data} details={{ title: "Spends and Revenue Performance" }} />
+                <Type1Chart data={data} details={{ title: "Spends and Revenue Performance" }} />
                 <CustomBarChart data={data} details={{ title: "ROAS" }} />
             </div>
             {/*  <div className='h-screen' />

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Gear } from "phosphor-react";
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import AreaChart from "../../_components/Home/AreaChart";
+import Type1Chart from "../../_components/Home/Type1Chart";
 import Link from "next/link";
 
 const data1 = {
@@ -127,7 +127,7 @@ export default function BrandDetails() {
                                                     {...provided.draggableProps}
                                                     className=" w-full"
                                                 >
-                                                    <AreaChart
+                                                    <Type1Chart
                                                         data={data1}
                                                         details={{ title }}
                                                         dragHandleProps={provided.dragHandleProps}
