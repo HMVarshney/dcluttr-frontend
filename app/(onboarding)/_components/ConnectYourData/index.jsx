@@ -34,7 +34,7 @@ const sources = [
 ];
 
 function ConnectYourData({ goNext, brandId, orgId }) {
-  const [openModalType, toggleModal] = useState("FACEBOOK");
+  const [openModalType, toggleModal] = useState("");
 
   const handleModalClose = () => toggleModal("");
 
