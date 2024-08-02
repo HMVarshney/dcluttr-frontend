@@ -1,30 +1,45 @@
 "use client"
 
-import React, { useEffect, } from "react"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 
 import { ArrowUpDown, Dot } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { AsteriskSimple, CaretDown, CaretRight, SquareHalf } from "phosphor-react"
+import { ArrowSquareOut, AsteriskSimple, CaretDown, CaretRight, SquareHalf } from "phosphor-react"
 import { useDispatch } from "react-redux"
 import { getAdsGoogle, getAdSetsGoogle, getCampaignDataGoogle } from "@/lib/store/features/googleAdsSlice"
 import EditTableAttribution from "../EditTableAttribution"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useSelector } from "react-redux"
 import { Switch } from "@/components/ui/switch"
-import { cn } from "@/lib/utils"
-import CampaignTable from "./CampaignTable"
+import { cn, getCommonPinningStyles } from "@/lib/utils"
 import IndeterminateCheckbox from "@/components/IndeterminateCheckbox"
-
+import {
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import Link from "next/link"
 
 export default function GoogleAdsDetails() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
-  const { loading, error, data } = useSelector((state) => state.googleAds.campaignData);
-  const { loading: adSetsLoading, error: adSetsError, data: adSetsData } = useSelector((state) => state.googleAds.adSetsData);
-  const { loading: adsLoading, error: adsError, data: adsData } = useSelector((state) => state.googleAds.adsData);
+  const {
+    campaignLoading, campaignError, campaignData, selectedCampaignIds,
+    adSetsLoading, adSetsError, adSetsData, selectedAdSetsIds,
+    adsLoading, adsError, adsData
+  } = useSelector((state) => state.googleAds);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAdsGoogle())
-    dispatch(getAdSetsGoogle())
     dispatch(getCampaignDataGoogle())
   }, [])
 
@@ -70,7 +85,14 @@ export default function GoogleAdsDetails() {
               { "pl-8": row.depth === 2 },
             )}
             {...{
-              onClick: row.getToggleExpandedHandler(),
+              onClick: () => {
+                row.getToggleExpandedHandler()()
+                if (row.depth === 0) {
+                  dispatch(getAdSetsGoogle([...selectedCampaignIds, row?.original?.id]))
+                } else if (row.depth === 1) {
+                  dispatch(getAdsGoogle([...selectedAdSetsIds, row?.original?.ad_group_id]))
+                }
+              },
               style: { cursor: 'pointer' },
             }}
           >
@@ -82,6 +104,13 @@ export default function GoogleAdsDetails() {
               {row.getValue("name")}
             </span>
           </div>
+          {row.original.campaign_link &&
+            <Link href={row.original.campaign_link} target="_blank">
+              <ArrowSquareOut
+                size={20}
+                className="text-primary font-semibold cursor-pointer"
+              />
+            </Link>}
         </div>
       ),
       // footer: props => props.column.id,
@@ -166,8 +195,50 @@ export default function GoogleAdsDetails() {
       accessorKey: 'cpa'
     }
   ];
+  const allColumns = useMemo(() => columns, [columns]);
+  const allData = useMemo(() => {
+    return campaignData?.map(l1 => {
+      let filterSubRows = adSetsData?.filter(f1 => f1.campaign_resource_name === l1.id)
+      return ({
+        ...l1,
+        subRows: filterSubRows.length > 0 ?
+          filterSubRows.map(l2 => {
+            let filterAds = adsData?.filter(f2 => f2.resource_name.includes(l2.ad_group_id))
+            return ({
+              ...l2,
+              subRows: filterAds?.length > 0 ? filterAds : [{}]
+            })
+          }) : [{}]
+      })
+    })
+  }, [campaignData, adSetsData, adsData]);
 
 
+  const [sorting, setSorting] = useState([])
+  const [rowSelection, setRowSelection] = useState({})
+  const [expanded, setExpanded] = useState({})
+
+  console.log(campaignData, adSetsData, adsData);
+  const table = useReactTable({
+    data: allData,
+    columns: allColumns,
+    state: {
+      sorting,
+      rowSelection,
+      expanded,
+      columnPinning: {
+        left: ['id', 'name'],
+      },
+    },
+    onExpandedChange: setExpanded,
+    getSubRows: row => row.subRows,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
+  })
   return (
     <div className={cn(' w-[calc(100vw-332px)]', { 'w-[calc(100vw-174px)]': isOpen })}>
       <div className='flex items-center justify-center gap-2 p-6'>
@@ -187,28 +258,73 @@ export default function GoogleAdsDetails() {
       </div>
       <div className="px-6 pb-8 w-full">
         <div className="rounded-md overflow-hidden border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
-          {(loading || adSetsLoading || adsLoading) ?
+          {(campaignLoading) ?// || adSetsLoading || adsLoading
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
             : (
-              (error || adSetsError || adsError) ?
-                <div className="text-destructive p-4 shadow-sm">{error ?? adSetsError ?? adsError}</div>
+              (campaignError || adSetsError || adsError) ?
+                <div className="text-destructive p-4 shadow-sm">{campaignError ?? adSetsError ?? adsError}</div>
                 :
-                <CampaignTable
-                  data={data?.results?.[0]?.data?.map(l1 =>
-                  ({
-                    ...l1,
-                    subRows: adSetsData?.results?.[0]?.data
-                      ?.filter(f1 => f1.campaign_resource_name === l1.id)
-                      ?.map(l2 =>
-                      ({
-                        ...l2,
-                        subRows: adsData?.results?.[0]?.data?.filter(f2 => f2.resource_name?.includes(l2.id))
-                      }))
-                  }))}
-                  columns={columns}>
-                </CampaignTable>)}
+                <CampaignTable table={table} />)}
         </div>
       </div>
     </div>
   );
+}
+
+export function CampaignTable({ table }) {
+  return (
+    <Table className="rounded-md bg-white text-sm " >
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => {
+              return (
+                <TableHead key={header.id}
+                  style={{ ...getCommonPinningStyles(header) }}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                </TableHead>
+              )
+            })}
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows?.length ? (
+          table.getRowModel().rows.map((row) => (
+            <TableRow key={row.id}
+              data-state={row.getIsSelected() && "selected"}
+              className={cn("text-[#4E5E5A]",
+                { "bg-[#e5ede93a] hover:bg-[#e5ede9a8]": row.depth === 1 },
+                { "bg-[#e5ede9a8] hover:bg-[#e5ede9c6]": row.depth === 2 },
+              )}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}
+                  style={{ ...getCommonPinningStyles(cell) }}>
+                  {flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell
+              colSpan={columns.length}
+              className="h-24 text-center"
+            >
+              No results.
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  )
 }

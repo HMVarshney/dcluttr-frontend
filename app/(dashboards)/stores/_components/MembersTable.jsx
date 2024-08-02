@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -12,113 +12,115 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Trash } from "phosphor-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import InvitePeopleButton from "./InvitePeopleButton";
 import ConfirmModal from "@/components/ConfirmModal";
 
-function ModifyAccessDropdown() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="secondary" className="w-40 p-0 bg-white">
-          Modify User Access
+export const columns = [
+  {
+    accessorKey: "email",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          User details
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuLabel>Modify Access</DropdownMenuLabel>
-        <DropdownMenuItem>Admin</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Marketer</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-function MembersTable({ usersList, currentUserId }) {
-  const [sorting, setSorting] = useState([]);
-
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "email",
-        header: ({ column }) => {
-          return (
-            <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-              User details
-              <ArrowUpDown className="ml-2 h-4 w-4" />
+      );
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center space-x-3">
+          <Avatar>
+            <AvatarImage src={row.original.image} alt={row.original.fullName} />
+            <AvatarFallback>{row.original.fullName.slice(0, 1)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <div className="font-bold">{row.original.fullName}</div>
+            <div className="text-sm opacity-50">{row.getValue("email")}</div>
+          </div>
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: "role",
+    header: "Role",
+    cell: ({ row }) => <div className="capitalize">{row.original?.organizationRole?.name}</div>
+  },
+  {
+    accessorKey: "id",
+    header: "Settings",
+    cell: ({ row }) => {
+      return (
+        <ConfirmModal
+          disabled={false}
+          header={`Delete ${row.original.fullName}`}
+          description={`Are you sure you want to delete ${row.original.fullName}?`}
+          onConfirm={() => alert("deleted")}
+        >
+          <button className="flex items-center gap-1">
+            <Trash size={20} className="text-destructive" weight="bold" />
+            <span className="font-medium text-destructive">Delete</span>
+          </button>
+        </ConfirmModal>
+      );
+    }
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="secondary" className="w-40 p-0 bg-white">
+              Modify User Access
             </Button>
-          );
-        },
-        cell: ({ row }) => {
-          return (
-            <div className="flex items-center space-x-3">
-              <Avatar>
-                <AvatarImage src={row.original.image} alt={row.original.fullName} />
-                <AvatarFallback>{row.original.fullName.slice(0, 1)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <div className="font-bold">{row.original.fullName}</div>
-                <div className="text-sm opacity-50">{row.getValue("email")}</div>
-              </div>
-            </div>
-          );
-        }
-      },
-      {
-        accessorKey: "role",
-        header: "Role",
-        cell: ({ row }) => <div className="capitalize">{row.original?.organizationRole?.name}</div>
-      },
-      {
-        accessorKey: "id",
-        header: "Settings",
-        cell: ({ row }) => {
-          if (row.original.id === currentUserId) return null;
-          return (
-            <ConfirmModal
-              disabled={false}
-              header={`Delete ${row.original.fullName}`}
-              description={`Are you sure you want to delete ${row.original.fullName}?`}
-              onConfirm={() => alert("deleted")}
-            >
-              <button className="flex items-center gap-1">
-                <Trash size={20} className="text-destructive" weight="bold" />
-                <span className="font-medium text-destructive">Delete</span>
-              </button>
-            </ConfirmModal>
-          );
-        }
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => {
-          if (row.original.id === currentUserId) return null;
-          return <ModifyAccessDropdown />;
-        }
-      }
-    ],
-    [currentUserId]
-  );
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuLabel> Modify Access</DropdownMenuLabel>
+            {/* <DropdownMenuItem
+                            onClick={() => navigator.clipboard.writeText(user.id)}
+                        >
+                            Copy ID
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator /> */}
+            <DropdownMenuItem>Admin</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Marker</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
+  }
+];
+
+export default function MembersTable({ usersList }) {
+  const [sorting, setSorting] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data: usersList,
     columns,
     state: {
-      sorting
+      sorting,
+      rowSelection
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection
   });
 
   return (
@@ -159,9 +161,9 @@ function MembersTable({ usersList, currentUserId }) {
           </TableBody>
         </Table>
       </div>
-      <InvitePeopleButton />
+      <InvitePeopleButton>
+        <Button className="mt-8">Invite people</Button>
+      </InvitePeopleButton>
     </div>
   );
 }
-
-export default MembersTable;

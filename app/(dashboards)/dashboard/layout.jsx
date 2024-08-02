@@ -1,61 +1,59 @@
-"use client"
+"use client";
 
 import { House, Package, PresentationChart, ImageSquare } from "phosphor-react";
 import OrgSideBar from "../_components/OrgSidebar";
 
-
 const sideBarList = [
     {
-        name: "Dashboard",
+        name: "Overview",
         href: "/dashboard",
-        icon: <House className='h-5 w-5 text-[#7E8986]' />
+        icon: House
     },
     {
-        name: "Performance",
+        name: "Channels",
         href: "/dashboard/performance",
-        icon: <PresentationChart className='h-5 w-5 text-[#7E8986]' />,
+        icon: PresentationChart,
         level2: [
             {
                 name: "Meta Ads",
-                href: "/dashboard/performance/meta-ads",
+                href: "/dashboard/performance/meta-ads"
             },
             {
                 name: "Google Ads",
-                href: "/dashboard/performance/google-ads",
-            },
+                href: "/dashboard/performance/google-ads"
+            }
         ]
     },
     {
         name: "Products",
         href: "/dashboard/products",
-        icon: <Package className='h-5 w-5 text-[#7E8986]' />,
+        icon: Package,
         level2: [
             {
                 name: "Analytics",
-                href: "/dashboard/products/analytics",
+                href: "/dashboard/products/analytics"
             },
             {
                 name: "Cart",
-                href: "/dashboard/products/cart",
+                href: "/dashboard/products/cart"
             },
             {
                 name: "Sets",
-                href: "/dashboard/products/sets",
-            },
+                href: "/dashboard/products/sets"
+            }
         ]
     },
     {
         name: "Creatives",
         href: "/dashboard/creatives",
-        icon: <ImageSquare className='h-5 w-5 text-[#7E8986]' />
-    }]
+        icon: ImageSquare
+    }
+];
 export default function DashboardLayout({ children }) {
     return (
         <>
             <OrgSideBar sideBarList={sideBarList} />
-            <div className="px-5 pt-4 w-full">
-                {children}
-            </div>
+            <div className="px-5 pt-4 w-full">{children}</div>
         </>
     );
 }

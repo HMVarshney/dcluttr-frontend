@@ -1,6 +1,6 @@
 "use client"
 
-import React, { Children, Fragment, useEffect, useMemo, useState } from "react"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 import {
   flexRender,
   getCoreRowModel,
