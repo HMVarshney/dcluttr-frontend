@@ -30,13 +30,21 @@ export default function OrbitingCirclesDemo() {
                 <Image key={0} src="/band-logo/google.png" alt="Overview" width={100} height={100} className="w-6" />,
                 <Image key={1} src="/band-logo/meta.png" alt="Overview" width={100} height={100} className="w-6" />,
                 <Image key={2} src="/band-logo/shopify.png" alt="Overview" width={100} height={100} className="w-6" />,
-                <Image key={3} src="/band-logo/save_file.png" alt="Overview" width={100} height={100} className="w-6" />
+                <Image
+                    key={4}
+                    src="/band-logo/instagram.svg"
+                    alt="Overview"
+                    width={100}
+                    height={100}
+                    className="w-6"
+                />,
+                <Image key={5} src="/band-logo/youtube.svg" alt="Overview" width={100} height={100} className="w-6" />
             ].map((Icon, i) => (
                 <OrbitingCircles
                     key={i}
                     className="size-[36px] border-none bg-white"
                     radius={180}
-                    duration={40}
+                    duration={60}
                     delay={i * 10}
                 >
                     {Icon}
@@ -48,14 +56,22 @@ export default function OrbitingCirclesDemo() {
                 <Image key={0} src="/band-logo/google.png" alt="Overview" width={100} height={100} className="w-6" />,
                 <Image key={1} src="/band-logo/meta.png" alt="Overview" width={100} height={100} className="w-6" />,
                 <Image key={2} src="/band-logo/shopify.png" alt="Overview" width={100} height={100} className="w-6" />,
-                <Image key={3} src="/band-logo/save_file.png" alt="Overview" width={100} height={100} className="w-6" />
+                <Image
+                    key={4}
+                    src="/band-logo/instagram.svg"
+                    alt="Overview"
+                    width={100}
+                    height={100}
+                    className="w-6"
+                />,
+                <Image key={5} src="/band-logo/youtube.svg" alt="Overview" width={100} height={100} className="w-6" />
             ].map((Icon, i) => (
                 <OrbitingCircles
                     key={i}
                     className="size-[36px] border-none bg-white"
                     radius={260}
                     duration={60}
-                    delay={i * 25}
+                    delay={i * 10}
                     reverse
                 >
                     {Icon}
