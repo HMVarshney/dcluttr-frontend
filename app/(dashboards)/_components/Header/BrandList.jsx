@@ -3,8 +3,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { ChevronRight, ChevronLeft, PcCase, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { cn } from "@/lib/utils";
 
 export default function BrandList() {
+    const [active, setActive] = useState("Home");
     const [titles, setTitles] = useState(["Home", "Google ads", "Meta ads", "Shopify"]);
     const handleOnDragEnd = (result) => {
         console.log(result);
@@ -15,14 +17,6 @@ export default function BrandList() {
 
         setTitles(items);
     };
-    {
-        /* <Button variant={'default'} size="xs">
-                    <Home className='w-4 h-4 mr-1' />
-                    <div className='font-medium text-sm'>
-                        Home
-                    </div>
-                </Button> */
-    }
     return (
         <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="imageUrls" direction="horizontal">
@@ -39,11 +33,16 @@ export default function BrandList() {
                                         ref={provided.innerRef}
                                         {...provided.dragHandleProps}
                                         {...provided.draggableProps}
+                                        className={cn(
+                                            "flex gap-1 items-center px-4 py-1.5 bg-white rounded-md cursor-grab",
+                                            {
+                                                "bg-primary text-white": active === title
+                                            }
+                                        )}
+                                        onClick={() => setActive(title)}
                                     >
-                                        <Button variant={"ghost"} size="xs" className={"text-[#031B15B2]"}>
-                                            {/* <PcCase className='w-4 h-4 mr-1' /> */}
-                                            <div className="font-medium text-sm">Dcluttr Pixel</div>
-                                        </Button>
+                                        <PcCase className="w-4 h-4 mr-1" />
+                                        <div className="font-medium text-sm">{title}</div>
                                     </div>
                                 )}
                             </Draggable>
