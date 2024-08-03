@@ -12,6 +12,7 @@ import { getBiddingStrategyGoogle } from "@/lib/store/features/googleAdsSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { exportCSV } from "@/lib/utils/export.utils";
+import ExportButton from "@/components/ExportButton";
 
 function exportBiddingStrategyTable(data, annotation) {
   const keys = [
@@ -59,6 +60,9 @@ export default function BiddingStrategyTable({ isGoogle }) {
           <div className="text-xl font-bold">Bidding Strategy</div>
           <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
         </div>
+        <div>
+          <ExportButton onExport={() => exportBiddingStrategyTable(data, annotation)} />
+        </div>
         <EditTableAttribution>
           <Button variant="outline" className="px-2.5">
             <SquareHalf className="w-5 h-5" />
@@ -77,9 +81,6 @@ export default function BiddingStrategyTable({ isGoogle }) {
             <Tables annotation={annotation} data={data} />
           )}
         </div>
-      </div>
-      <div>
-        <button onClick={() => exportBiddingStrategyTable(data, annotation)}>Export</button>
       </div>
     </div>
   );

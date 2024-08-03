@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { exportCSV } from "@/lib/utils/export.utils";
+import ExportButton from "@/components/ExportButton";
 
 function exportCampaignTypeTable(data, annotation) {
   const keys = [
@@ -21,7 +22,6 @@ function exportCampaignTypeTable(data, annotation) {
       value: value.shortTitle || value.title
     }))
   ];
-  console.log("annotation.dimension", annotation.dimensions);
   exportCSV(data, { keys }, "campaign_type.csv");
 }
 
@@ -106,6 +106,9 @@ export default function CampaignTypeTable({ isGoogle = false }) {
           <div className="text-xl font-bold">Campaign Type</div>
           <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
         </div>
+        <div>
+          <ExportButton onExport={() => exportCampaignTypeTable(data, allData.results[0].annotation)} />
+        </div>
         <EditTableAttribution columns={columns}>
           <Button variant="outline" className="px-2.5">
             <SquareHalf className="w-5 h-5" />
@@ -122,9 +125,6 @@ export default function CampaignTypeTable({ isGoogle = false }) {
             <Tables columns={columns} data={data} />
           )}
         </div>
-      </div>
-      <div>
-        <button onClick={() => exportCampaignTypeTable(data, allData.results[0].annotation)}>Export</button>
       </div>
     </div>
   );

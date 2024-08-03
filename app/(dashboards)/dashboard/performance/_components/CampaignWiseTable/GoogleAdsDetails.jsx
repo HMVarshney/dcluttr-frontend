@@ -22,6 +22,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
 import { exportCSV } from "@/lib/utils/export.utils";
+import ExportButton from "@/components/ExportButton";
 
 const keyNameHeaderNameMapping = {
   name: "Campaign",
@@ -44,7 +45,7 @@ function exportCampaignWiseTable(data) {
     field: keyName,
     title: headerName
   }));
-  exportCSV(data, { keys }, "data_exported.csv");
+  exportCSV(data, { keys }, "campaign_wise.csv");
 }
 
 export function CampaignTable({ table }) {
@@ -292,6 +293,9 @@ function GoogleAdsDetails() {
             <div className="text-xl font-bold">Campaign-wise distribution</div>
             <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
           </div>
+          <div>
+            <ExportButton onExport={() => exportCampaignWiseTable(allData)} />
+          </div>
           <EditTableAttribution>
             <Button variant="outline" className="px-2.5">
               <SquareHalf className="w-5 h-5" />
@@ -309,9 +313,6 @@ function GoogleAdsDetails() {
             )}
           </div>
         </div>
-      </div>
-      <div>
-        <button onClick={() => exportCampaignWiseTable(allData)}>Export</button>
       </div>
     </div>
   );
