@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArrowSquareOut, CaretDown, CaretRight, SquareHalf } from "phosphor-react";
@@ -10,19 +10,12 @@ import EditTableAttribution from "../EditTableAttribution";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSelector } from "react-redux";
 import { Switch } from "@/components/ui/switch";
-import { cn, getCommonPinningStyles } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import IndeterminateCheckbox from "@/components/IndeterminateCheckbox";
-import {
-  flexRender,
-  getCoreRowModel,
-  getExpandedRowModel,
-  getSortedRowModel,
-  useReactTable
-} from "@tanstack/react-table";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
 import { exportCSV } from "@/lib/utils/export.utils";
 import ExportButton from "@/components/ExportButton";
+import CampaignTable from "./CampaignTable";
 
 const keyNameHeaderNameMapping = {
   name: "Campaign",
@@ -40,59 +33,18 @@ const keyNameHeaderNameMapping = {
   cpa: "CPA"
 };
 
-function exportCampaignWiseTable(data) {
-  const keys = Object.entries(keyNameHeaderNameMapping).map(([keyName, headerName]) => ({
-    field: keyName,
-    title: headerName
-  }));
+function exportCampaignWiseTable(data, annotation) {
+  const keys = [
+    ...Object.entries(annotation.measures).map(([keyName, value]) => ({
+      field: keyName,
+      title: value.shortTitle || value.title
+    })),
+    ...Object.entries(annotation.dimensions).map(([keyName, value]) => ({
+      field: keyName,
+      value: value.shortTitle || value.title
+    }))
+  ];
   exportCSV(data, { keys }, "campaign_wise.csv");
-}
-
-export function CampaignTable({ table }) {
-  return (
-    <Table className="rounded-md bg-white text-sm ">
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <TableHead key={header.id} style={{ ...getCommonPinningStyles(header) }}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHead>
-              );
-            })}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && "selected"}
-              className={cn(
-                "text-[#4E5E5A]",
-                { "bg-[#e5ede93a] hover:bg-[#e5ede9a8]": row.depth === 1 },
-                { "bg-[#e5ede9a8] hover:bg-[#e5ede9c6]": row.depth === 2 }
-              )}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} style={{ ...getCommonPinningStyles(cell) }}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  );
 }
 
 function GoogleAdsDetails() {
@@ -138,7 +90,7 @@ function GoogleAdsDetails() {
             </div>
           </div>
         ),
-        cell: ({ row, getValue }) => (
+        cell: ({ row }) => (
           <div className="flex items-center gap-4">
             <IndeterminateCheckbox
               {...{
@@ -261,29 +213,7 @@ function GoogleAdsDetails() {
     });
   }, [campaignData, adSetsData, adsData]);
 
-  const [sorting, setSorting] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
-  const [expanded, setExpanded] = useState({});
-
-  const table = useReactTable({
-    data: allData,
-    columns: columns,
-    state: {
-      sorting,
-      rowSelection,
-      expanded,
-      columnPinning: {
-        left: ["id", "name"]
-      }
-    },
-    onExpandedChange: setExpanded,
-    getSubRows: (row) => row.subRows,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection
-  });
+  const annotation = campaignData?.results?.[0]?.annotation;
 
   return (
     <div>
@@ -294,7 +224,7 @@ function GoogleAdsDetails() {
             <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
           </div>
           <div>
-            <ExportButton onExport={() => exportCampaignWiseTable(allData)} />
+            <ExportButton onExport={() => exportCampaignWiseTable(allData, annotation)} />
           </div>
           <EditTableAttribution>
             <Button variant="outline" className="px-2.5">
@@ -304,12 +234,12 @@ function GoogleAdsDetails() {
         </div>
         <div className="px-6 pb-8 w-full">
           <div className="rounded-md overflow-hidden border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
-            {campaignLoading ? ( // || adSetsLoading || adsLoading
+            {campaignLoading ? (
               <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
             ) : campaignError || adSetsError || adsError ? (
               <div className="text-destructive p-4 shadow-sm">{campaignError ?? adSetsError ?? adsError}</div>
             ) : (
-              <CampaignTable table={table} />
+              <CampaignTable data={allData} columns={columns} />
             )}
           </div>
         </div>
