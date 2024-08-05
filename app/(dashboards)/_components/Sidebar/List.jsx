@@ -32,23 +32,25 @@ export default function List() {
   }
 
   return (
-    <ul className="space-y-4">
-      {currentOrgBrands.map((band, i) => (
-        <div className="aspect-square relative" key={i}>
-          <Hint label={band?.brandName} side="right">
-            <Avatar
-              className={cn(
-                "border rounded-lg cursor-pointer transition",
-                selectedBrand === band?.id && "border-2 border-primary/50"
-              )}
-              onClick={() => dispatch(setBrand(band?.id))}
-            >
-              <AvatarImage src={band?.brandLogo} alt={band?.brandName} />
-              <AvatarFallback className="text-xl rounded-lg">{band?.brandName?.[0]}</AvatarFallback>
-            </Avatar>
-          </Hint>
-        </div>
-      ))}
+ <ul className="space-y-4">
+        {currentOrgBrands.map((band, i) => (
+            <div className="aspect-square relative" key={i}>
+                <Hint label={band?.brandName} side="right">
+                    <Avatar
+                        className={cn(
+                            "border rounded-lg cursor-pointer transition",
+                            selectedBrand === band?.id && "border-2 border-primary/50"
+                        )}
+                        onClick={() => dispatch(setBrand(band?.id))}
+                    >
+                        <AvatarImage src={band?.brandLogo} alt={band?.brandName} />
+                        <AvatarFallback className="text-xl rounded-lg bg-[#B1BA88]">
+                            {band?.brandName?.[0]?.toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
+                </Hint>
+            </div>
+        ))}
     </ul>
   );
 }
