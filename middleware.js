@@ -9,7 +9,6 @@ export function middleware(request) {
     request.nextUrl.pathname.includes("/forgot-password")
   ) {
     //TODO: Redirect to the module based on the user role.
-    console.log("in login");
     if (cookies().get("accessToken")) {
       return NextResponse.redirect(new URL("/stores", request.url));
     }
