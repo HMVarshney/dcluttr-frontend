@@ -1,28 +1,26 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Hint from "@/components/Hint";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { setBrand } from "@/lib/store/features/brandSlice";
 import { Skeleton } from "@/components/ui/skeleton";
-import { setStep } from "@/lib/store/features/authSlice";
-import { useRouter } from "next/navigation";
 
 export default function List() {
-  const router = useRouter();
   const dispatch = useDispatch();
   const { brandsList, selectedBrand, isLoadingBrandsList } = useSelector((state) => state.brand);
+  const { organizationDetails, status } = useSelector((state) => state.organization);
 
-  useEffect(() => {
-    if (!brandsList?.length && !isLoadingBrandsList) {
-      dispatch(setStep(3));
-      router.push("/sign-up");
-    }
-  }, [brandsList?.length, dispatch, isLoadingBrandsList, router]);
+  const isLoading = status === "loading" || isLoadingBrandsList;
 
-  if (isLoadingBrandsList) {
+  const currentOrgBrands = useMemo(() => {
+    if (!organizationDetails) return [];
+    return brandsList.filter((brand) => brand.organizationId === organizationDetails.id);
+  }, [brandsList, organizationDetails]);
+
+  if (isLoading) {
     return (
       <ul className="space-y-4">
         <Skeleton className="aspect-square" />
@@ -35,7 +33,7 @@ export default function List() {
 
   return (
     <ul className="space-y-4">
-      {brandsList.map((band, i) => (
+      {currentOrgBrands.map((band, i) => (
         <div className="aspect-square relative" key={i}>
           <Hint label={band?.brandName} side="right">
             <Avatar

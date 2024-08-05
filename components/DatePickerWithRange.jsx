@@ -1,41 +1,38 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { CalendarDays, Calendar as CalendarIcon } from "lucide-react"
+import React, { useState } from "react";
+import { CalendarDays, Calendar as CalendarIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import moment from "moment"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import moment from "moment";
 
 const timePeriods = [
-    { label: "Today", value: 'today' },
-    { label: "Yesterday", value: 'yesterday' },
-    { label: "Last 7 days", value: 'last 7 days' },
-    { label: "Last 30 days", value: 'last 30 days' },
-    { label: "Last 90 days", value: 'last 90 days' },
-    { label: "Last 365 days", value: 'last 365 days' },
-    { label: "Last month", value: 'last months' },
-    { label: "Last 12 months", value: 'last 12 months' },
-    { label: "Last year", value: 'last year' },
-    { label: "Week to date", value: 'this week' },
-    { label: "Month to date", value: 'this month' },
-    { label: "Quarter to date", value: 'this quarter' },
-    { label: "Year to date", value: 'this year' },
-    { label: "Quarters", value: 'this quarter' }
+    { label: "Today", value: "today" },
+    { label: "Yesterday", value: "yesterday" },
+    { label: "Last 7 days", value: "last 7 days" },
+    { label: "Last 30 days", value: "last 30 days" },
+    { label: "Last 90 days", value: "last 90 days" },
+    { label: "Last 365 days", value: "last 365 days" },
+    { label: "Last month", value: "last months" },
+    { label: "Last 12 months", value: "last 12 months" },
+    { label: "Last year", value: "last year" },
+    { label: "Week to date", value: "this week" },
+    { label: "Month to date", value: "this month" },
+    { label: "Quarter to date", value: "this quarter" },
+    { label: "Year to date", value: "this year" },
+    { label: "Quarters", value: "this quarter" }
 ];
 
 export default function DatePickerWithRange({ className, dateRange, setDateRange }) {
-    const [isOpen, setOpen] = useState(false)
+    const [isOpen, setOpen] = useState(false);
+    console.log(dateRange);
 
     return (
         <div className={cn("grid gap-2", className)}>
-            <Popover open={isOpen} onOpenChange={e => setOpen(e)}>
+            <Popover open={isOpen} onOpenChange={(e) => setOpen(e)}>
                 <PopoverTrigger asChild>
                     <Button
                         id="date"
@@ -61,20 +58,21 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 flex items-stretch overflow-hidden" align="start">
-                    <div className="w-40 bg-slate-50 p-4" >
-                        {timePeriods?.map(ele =>
+                    <div className="w-40 bg-slate-50 p-4">
+                        {timePeriods?.map((ele) => (
                             <Button
                                 onClick={() => {
-                                    setOpen(false)
-                                    console.log(ele);
-                                    setDateRange(ele)
+                                    setOpen(false);
+                                    setDateRange(ele);
                                 }}
                                 size="sm"
                                 variant={"outline"}
                                 key={ele.label}
-                                className="w-full justify-start text-left text-sm border-none bg-transparent">
+                                className="w-full justify-start text-left text-sm border-none bg-transparent"
+                            >
                                 {ele.label}
-                            </Button>)}
+                            </Button>
+                        ))}
                     </div>
                     <div className="px-6 flex flex-col pt-20">
                         <div className="flex items-center gap-3 ">
@@ -91,7 +89,14 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
                             defaultMonth={dateRange?.from}
                             selected={dateRange}
                             onSelect={(range) => {
-                                setDateRange({ ...range, value: null })
+                                if (range) {
+                                    setDateRange({
+                                        from: moment(range.from).format("YYYY-MM-DD"),
+                                        to: moment(range.to).format("YYYY-MM-DD"),
+                                        value: null,
+                                        label: null
+                                    });
+                                }
                             }}
                             numberOfMonths={2}
                             className="px-0 pt-6"
@@ -108,5 +113,5 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
                 </PopoverContent>
             </Popover>
         </div>
-    )
+    );
 }
