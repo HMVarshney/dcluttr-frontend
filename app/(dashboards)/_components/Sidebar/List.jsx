@@ -1,36 +1,24 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Hint from "@/components/Hint";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { setBrand } from "@/lib/store/features/brandSlice";
 import { Skeleton } from "@/components/ui/skeleton";
-import { setStep } from "@/lib/store/features/authSlice";
-import { useRouter } from "next/navigation";
 
 export default function List() {
-    const router = useRouter();
     const dispatch = useDispatch();
     const { brandsList, selectedBrand, isLoadingBrandsList } = useSelector((state) => state.brand);
     const { organizationDetails, status } = useSelector((state) => state.organization);
 
     const isLoading = status === "loading" || isLoadingBrandsList;
 
-    // Filter brandsList
     const currentOrgBrands = useMemo(() => {
         if (!organizationDetails) return [];
         return brandsList.filter((brand) => brand.organizationId === organizationDetails.id);
-    }, [isLoading, organizationDetails]);
-
-    useEffect(() => {
-        if (!currentOrgBrands?.length && !isLoading) {
-            //TODO// HM please check this
-            dispatch(setStep(3));
-            router.push("/sign-up");
-        }
-    }, [currentOrgBrands?.length, dispatch, isLoading, router]);
+    }, [brandsList, organizationDetails]);
 
     if (isLoading) {
         return (
