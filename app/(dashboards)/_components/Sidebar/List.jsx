@@ -56,7 +56,9 @@ export default function List() {
                             onClick={() => dispatch(setBrand(band?.id))}
                         >
                             <AvatarImage src={band?.brandLogo} alt={band?.brandName} />
-                            <AvatarFallback className="text-xl rounded-lg">{band?.brandName?.[0]}</AvatarFallback>
+                            <AvatarFallback className="text-xl rounded-lg bg-[#B1BA88]">
+                                {band?.brandName?.[0]?.toUpperCase()}
+                            </AvatarFallback>
                         </Avatar>
                     </Hint>
                 </div>
