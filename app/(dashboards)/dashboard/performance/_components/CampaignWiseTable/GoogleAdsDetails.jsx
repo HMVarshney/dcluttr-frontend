@@ -16,34 +16,13 @@ import Link from "next/link";
 import { exportCSV } from "@/lib/utils/export.utils";
 import ExportButton from "@/components/ExportButton";
 import CampaignTable from "./CampaignTable";
-
-const keyNameHeaderNameMapping = {
-  name: "Campaign",
-  purchase_value_sum: "Purchase Value",
-  ad_spend_sum: "Ad Spend",
-  purchase_sum: "Purchases",
-  impressions_sum: "Impressions",
-  clicks_sum: "Clicks",
-  vtc_sum: "VTC",
-  ctr: "CTR",
-  cpc: "CPC",
-  cpm: "CPM",
-  roas: "ROAS",
-  aov: "AOV",
-  cpa: "CPA"
-};
+import { extractTitleOfAnnotation } from "@/lib/utils/cubejs.utils";
 
 function exportCampaignWiseTable(data, annotation) {
-  const keys = [
-    ...Object.entries(annotation.measures).map(([keyName, value]) => ({
-      field: keyName,
-      title: value.shortTitle || value.title
-    })),
-    ...Object.entries(annotation.dimensions).map(([keyName, value]) => ({
-      field: keyName,
-      value: value.shortTitle || value.title
-    }))
-  ];
+  const keys = Object.entries(annotation).map(([keyName, value]) => ({
+    field: keyName,
+    title: value.shortTitle || value.title
+  }));
   exportCSV(data, { keys }, "campaign_wise.csv");
 }
 
@@ -67,8 +46,11 @@ function GoogleAdsDetails() {
     dispatch(getCampaignDataGoogle());
   }, [dispatch]);
 
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    const annotation = campaignData.parsed?.columns;
+    if (!annotation) return [];
+
+    return [
       {
         accessorKey: "name",
         header: ({ table, column }) => (
@@ -85,7 +67,7 @@ function GoogleAdsDetails() {
               className="w-72 flex items-center justify-start text-sm"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              {keyNameHeaderNameMapping.name}
+              {extractTitleOfAnnotation(annotation.name)}
               <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
             </div>
           </div>
@@ -135,7 +117,7 @@ function GoogleAdsDetails() {
               className="justify-start flex items-center w-56 text-sm"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              {keyNameHeaderNameMapping.purchase_value_sum}
+              {extractTitleOfAnnotation(annotation.purchase_value_sum)}
               <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
             </div>
           );
@@ -143,68 +125,66 @@ function GoogleAdsDetails() {
         width: 200
       },
       {
-        header: keyNameHeaderNameMapping.ad_spend_sum,
+        header: extractTitleOfAnnotation(annotation.ad_spend_sum),
         accessorKey: "ad_spend_sum"
       },
       {
-        header: keyNameHeaderNameMapping.purchase_sum,
+        header: extractTitleOfAnnotation(annotation.purchase_sum),
         accessorKey: "purchase_sum"
       },
       {
-        header: keyNameHeaderNameMapping.impressions_sum,
+        header: extractTitleOfAnnotation(annotation.impressions_sum),
         accessorKey: "impressions_sum",
         cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("impressions_sum")}</div>
       },
       {
-        header: keyNameHeaderNameMapping.clicks_sum,
+        header: extractTitleOfAnnotation(annotation.clicks_sum),
         accessorKey: "clicks_sum",
         cell: ({ row }) => <div className="min-w-[100px]">{row.getValue("clicks_sum")}</div>
       },
       {
-        header: keyNameHeaderNameMapping.vtc_sum,
+        header: extractTitleOfAnnotation(annotation.vtc_sum),
         accessorKey: "vtc_sum",
         cell: ({ row }) => <div className="min-w-[80px]">{row.getValue("vtc_sum")}</div>
       },
       {
-        header: keyNameHeaderNameMapping.ctr,
+        header: extractTitleOfAnnotation(annotation.ctr),
         accessorKey: "ctr",
         cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("ctr")}</div>
       },
       {
-        header: keyNameHeaderNameMapping.cpc,
+        header: extractTitleOfAnnotation(annotation.cpc),
         accessorKey: "cpc"
       },
       {
-        header: keyNameHeaderNameMapping.cpm,
+        header: extractTitleOfAnnotation(annotation.cpm),
         accessorKey: "cpm"
       },
       {
-        header: keyNameHeaderNameMapping.roas,
+        header: extractTitleOfAnnotation(annotation.roas),
         accessorKey: "roas"
       },
       {
-        header: keyNameHeaderNameMapping.aov,
+        header: extractTitleOfAnnotation(annotation.aov),
         accessorKey: "aov"
       },
       {
-        header: keyNameHeaderNameMapping.cpa,
+        header: extractTitleOfAnnotation(annotation.cpa),
         accessorKey: "cpa"
       }
-    ],
-    [dispatch, selectedAdSetsIds, selectedCampaignIds]
-  );
+    ];
+  }, [campaignData.parsed?.columns, dispatch, selectedAdSetsIds, selectedCampaignIds]);
 
   const allData = useMemo(() => {
-    return campaignData?.results?.[0]?.data?.map((l1) => {
-      let filterSubRows = adSetsData?.data?.results?.[0]?.data?.filter((f1) => f1.campaign_resource_name === l1.id);
+    if (!campaignData.parsed) return [];
+    return campaignData.parsed?.results?.map((l1) => {
+      let filterSubRows = adSetsData.parsed?.results?.filter((f1) => f1.campaign_resource_name === l1.id);
       return {
         ...l1,
         subRows:
           filterSubRows?.length > 0
             ? filterSubRows.map((l2) => {
-                let filterAds = adsData?.data?.results?.[0]?.data?.filter((f2) =>
-                  f2.resource_name.includes(l2.ad_group_id)
-                );
+                let filterAds = adsData.parsed?.results?.filter((f2) => f2.resource_name.includes(l2.ad_group_id));
                 return {
                   ...l2,
                   subRows: filterAds?.length > 0 ? filterAds : [{}]
@@ -215,8 +195,6 @@ function GoogleAdsDetails() {
     });
   }, [campaignData, adSetsData, adsData]);
 
-  const annotation = campaignData?.results?.[0]?.annotation;
-
   return (
     <div>
       <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen })}>
@@ -226,7 +204,7 @@ function GoogleAdsDetails() {
             <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
           </div>
           <div>
-            <ExportButton onExport={() => exportCampaignWiseTable(allData, annotation)} />
+            <ExportButton onExport={() => exportCampaignWiseTable(allData, campaignData.parsed?.columns || {})} />
           </div>
           <EditTableAttribution>
             <Button variant="outline" className="px-2.5">

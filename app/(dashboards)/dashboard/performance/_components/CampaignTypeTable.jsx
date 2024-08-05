@@ -12,16 +12,11 @@ import { exportCSV } from "@/lib/utils/export.utils";
 import ExportButton from "@/components/ExportButton";
 
 function exportCampaignTypeTable(data, annotation) {
-  const keys = [
-    ...Object.entries(annotation.measures).map(([keyName, value]) => ({
-      field: keyName,
-      title: value.shortTitle || value.title
-    })),
-    ...Object.entries(annotation.dimensions).map(([keyName, value]) => ({
-      field: keyName,
-      value: value.shortTitle || value.title
-    }))
-  ];
+  const keys = Object.entries(annotation).map(([keyName, value]) => ({
+    field: keyName,
+    title: value.shortTitle || value.title
+  }));
+
   exportCSV(data, { keys }, "campaign_type.csv");
 }
 
@@ -97,7 +92,7 @@ export default function CampaignTypeTable({ isGoogle = false }) {
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { loading, error, data: allData } = useSelector((state) => state.googleAds.adsType);
 
-  const data = allData?.results?.[0]?.data;
+  const data = allData.parsed?.results || [];
 
   return (
     <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen })}>
@@ -107,7 +102,7 @@ export default function CampaignTypeTable({ isGoogle = false }) {
           <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
         </div>
         <div>
-          <ExportButton onExport={() => exportCampaignTypeTable(data, allData.results[0].annotation)} />
+          <ExportButton onExport={() => exportCampaignTypeTable(data, allData.parsed?.columns || {})} />
         </div>
         <EditTableAttribution columns={columns}>
           <Button variant="outline" className="px-2.5">

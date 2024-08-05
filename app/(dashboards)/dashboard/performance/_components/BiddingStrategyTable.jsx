@@ -15,16 +15,11 @@ import { exportCSV } from "@/lib/utils/export.utils";
 import ExportButton from "@/components/ExportButton";
 
 function exportBiddingStrategyTable(data, annotation) {
-  const keys = [
-    ...Object.entries(annotation.measures).map(([keyName, value]) => ({
-      field: keyName,
-      title: value.shortTitle || value.title
-    })),
-    ...Object.entries(annotation.dimensions).map(([keyName, value]) => ({
-      field: keyName,
-      value: value.shortTitle || value.title
-    }))
-  ];
+  const keys = Object.entries(annotation).map(([keyName, value]) => ({
+    field: keyName,
+    title: value.shortTitle || value.title
+  }));
+
   exportCSV(data, { keys }, "bidding_strategy.csv");
 }
 
@@ -39,10 +34,10 @@ export default function BiddingStrategyTable({ isGoogle }) {
   );
 
   const annotation = isGoogle
-    ? biddingStrategyGoogleData?.results?.[0]?.annotation
+    ? biddingStrategyGoogleData.parsed?.columns || {}
     : biddingStrategyMetaData?.results?.[0]?.annotation;
   const data = isGoogle
-    ? biddingStrategyGoogleData?.results?.[0]?.data?.slice(0, 8)
+    ? biddingStrategyGoogleData.parsed?.results || []
     : biddingStrategyMetaData?.results?.[0]?.data?.slice(0, 8);
 
   useEffect(() => {
@@ -88,7 +83,7 @@ export default function BiddingStrategyTable({ isGoogle }) {
 
 export function Tables({ annotation = {}, data = [] }) {
   const columns = useMemo(() => {
-    return Object.entries(annotation.measures ?? {}).map(([key, value]) => ({
+    return Object.entries(annotation ?? {}).map(([key, value]) => ({
       accessorKey: key,
       header: <div className="min-w-32">{value.shortTitle || value.title}</div>,
       cell: (info) => <div className="min-w-32">{info.getValue()}</div>
