@@ -200,7 +200,7 @@ function GoogleAdsDetails() {
       return {
         ...l1,
         subRows:
-          filterSubRows.length > 0
+          filterSubRows?.length > 0
             ? filterSubRows.map((l2) => {
                 let filterAds = adsData?.data?.results?.[0]?.data?.filter((f2) =>
                   f2.resource_name.includes(l2.ad_group_id)

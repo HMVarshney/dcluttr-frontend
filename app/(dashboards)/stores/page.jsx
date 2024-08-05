@@ -9,11 +9,14 @@ import { Plus } from "phosphor-react";
 import AllBrands from "./_components/AllBrands";
 import { useSelector } from "react-redux";
 import { Input } from "@/components/ui/input";
+import useDebounce from "@/lib/hooks/common";
 
 function Page() {
   const [searchedName, setSearchedName] = useState("");
   const { isLoadingBrandsList, brandsList } = useSelector((state) => state.brand);
   const { organizationDetails, status } = useSelector((state) => state.organization);
+
+  const debouncedSearchedName = useDebounce(searchedName);
 
   const isLoading = status === "loading" || isLoadingBrandsList;
   const currentOrgBrands = useMemo(() => {
@@ -22,9 +25,11 @@ function Page() {
   }, [brandsList, organizationDetails]);
 
   const filteredBrands = useMemo(() => {
-    if (!searchedName) return currentOrgBrands;
-    return currentOrgBrands.filter((brand) => brand.brandName.toLowerCase().includes(searchedName.toLowerCase()));
-  }, [currentOrgBrands, searchedName]);
+    if (!debouncedSearchedName) return currentOrgBrands;
+    return currentOrgBrands.filter((brand) =>
+      brand.brandName.toLowerCase().includes(debouncedSearchedName.toLowerCase())
+    );
+  }, [currentOrgBrands, debouncedSearchedName]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
