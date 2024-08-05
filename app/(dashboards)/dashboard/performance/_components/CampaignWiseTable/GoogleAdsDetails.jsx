@@ -195,14 +195,16 @@ function GoogleAdsDetails() {
   );
 
   const allData = useMemo(() => {
-    return campaignData?.map((l1) => {
-      let filterSubRows = adSetsData?.filter((f1) => f1.campaign_resource_name === l1.id);
+    return campaignData?.results?.[0]?.data?.map((l1) => {
+      let filterSubRows = adSetsData?.data?.results?.[0]?.data?.filter((f1) => f1.campaign_resource_name === l1.id);
       return {
         ...l1,
         subRows:
           filterSubRows.length > 0
             ? filterSubRows.map((l2) => {
-                let filterAds = adsData?.filter((f2) => f2.resource_name.includes(l2.ad_group_id));
+                let filterAds = adsData?.data?.results?.[0]?.data?.filter((f2) =>
+                  f2.resource_name.includes(l2.ad_group_id)
+                );
                 return {
                   ...l2,
                   subRows: filterAds?.length > 0 ? filterAds : [{}]
