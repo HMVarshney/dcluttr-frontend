@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { CalendarDays, Calendar as CalendarIcon } from "lucide-react";
-
+import { CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import moment from "moment";
+import { Mulish } from "next/font/google";
+
+const mulish = Mulish({ subsets: ["latin"] });
 
 const timePeriods = [
   { label: "Today", value: "today" },
@@ -30,7 +32,7 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn("grid gap-2 font", className, mulish.className)}>
       <Popover open={isOpen} onOpenChange={(e) => setOpen(e)}>
         <PopoverTrigger asChild>
           <Button
@@ -38,7 +40,7 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
             variant={"outline"}
             className={cn("w-[240px] justify-start text-left font-normal", !dateRange && "text-muted-foreground")}
           >
-            <CalendarDays className="mr-2 h-5 w-5" />
+            <CalendarDays className="mr-2 min-h-4 min-w-4" />
             {dateRange?.from ? (
               dateRange.to ? (
                 <>
@@ -52,8 +54,8 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 flex items-stretch overflow-hidden" align="start">
-          <div className="w-40 bg-slate-50 p-4">
+        <PopoverContent className="w-auto p-0 flex items-stretch overflow-hidden mr-20" align="start">
+          <div className="w-40 bg-[#FAFAFA] border-e p-4">
             {timePeriods?.map((ele) => (
               <Button
                 onClick={() => {
@@ -63,7 +65,7 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
                 size="sm"
                 variant={"outline"}
                 key={ele.label}
-                className="w-full justify-start text-left text-sm border-none bg-transparent"
+                className="w-full justify-start text-left text-sm border-none bg-transparent font-normal"
               >
                 {ele.label}
               </Button>
@@ -71,10 +73,10 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
           </div>
           <div className="px-6 flex flex-col pt-20">
             <div className="flex items-center gap-3 ">
-              <Button variant={"outline"} className="w-full justify-start text-left">
+              <Button variant={"outline"} className="w-full justify-start text-left font-medium border-[#DFE0E5]">
                 {moment(dateRange?.from).format("MMM DD, YYYY")}
               </Button>
-              <Button variant={"outline"} className="w-full justify-start text-left">
+              <Button variant={"outline"} className="w-full justify-start text-left font-medium border-[#DFE0E5]">
                 {moment(dateRange?.to).format("MMM DD, YYYY")}
               </Button>
             </div>
@@ -84,7 +86,7 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
               defaultMonth={dateRange?.from}
               selected={dateRange}
               onSelect={(range) => {
-                if (range) {
+                if (range.to && range.from) {
                   setDateRange({
                     from: moment(range.from).format("YYYY-MM-DD"),
                     to: moment(range.to).format("YYYY-MM-DD"),
