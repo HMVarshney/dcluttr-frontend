@@ -35,10 +35,10 @@ export default function BiddingStrategyTable({ isGoogle }) {
 
   const annotation = isGoogle
     ? biddingStrategyGoogleData.parsed?.columns || {}
-    : biddingStrategyMetaData?.results?.[0]?.annotation;
+    : biddingStrategyMetaData.parsed?.columns || {};
   const data = isGoogle
     ? biddingStrategyGoogleData.parsed?.results || []
-    : biddingStrategyMetaData?.results?.[0]?.data?.slice(0, 8);
+    : biddingStrategyMetaData.parsed?.results || [];
 
   useEffect(() => {
     if (isGoogle) {

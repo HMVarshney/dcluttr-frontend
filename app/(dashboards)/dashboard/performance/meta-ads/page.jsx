@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import MetaAdsDetails from "../_components/CampaignWiseTable/MetaAdsDetails";
 import AdPlacementTable from "../_components/AdPlacementTable";
 import { useDispatch } from "react-redux";
-import { getAdSetsMeta, getAdsMeta, getAdsPlacementMeta, getCampaignDataMeta } from "@/lib/store/features/metaAdsSlice";
+import { getAdSetsMeta, getAdsMeta, getCampaignDataMeta } from "@/lib/store/features/metaAdsSlice";
 
 export default function Page() {
   const dispatch = useDispatch();
@@ -20,7 +20,6 @@ export default function Page() {
     dispatch(getAdsMeta());
     dispatch(getAdSetsMeta());
     dispatch(getCampaignDataMeta());
-    dispatch(getAdsPlacementMeta());
   }, [dispatch]);
 
   return (
