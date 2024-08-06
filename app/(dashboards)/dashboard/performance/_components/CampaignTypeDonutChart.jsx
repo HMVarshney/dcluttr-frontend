@@ -30,7 +30,7 @@ const CampaignTypeDonutChart = () => {
 
   const data = useMemo(() => {
     if (!allData.parsed) return [];
-    return allData.parsed.results.map((item) => {
+    return allData.parsed?.results?.map((item) => {
       if (selected.find((i) => i.campaign_type === item.campaign_type && i.active)) {
         return {
           name: item.campaign_type,
@@ -94,7 +94,7 @@ const CampaignTypeDonutChart = () => {
           </PieChart>
         </ResponsiveContainer>
         <div className="py-4 px-5 text-xs font-semibold border-t border-[#F1F1F1] flex items-center gap-4 overflow-x-auto">
-          {selected?.map((entry, index) => (
+          {selected?.map((entry) => (
             <div
               key={entry.campaign_type}
               className="py-2.5 px-4 rounded-full border flex items-center gap-2 bg-white cursor-pointer"

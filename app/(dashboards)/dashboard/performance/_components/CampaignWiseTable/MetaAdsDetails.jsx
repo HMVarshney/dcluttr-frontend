@@ -10,11 +10,14 @@ import { cn } from "@/lib/utils";
 import CampaignTable from "./CampaignTable";
 import IndeterminateCheckbox from "@/components/IndeterminateCheckbox";
 import { useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MetaAdsDetails() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
-  const { data } = useSelector((state) => state.metaAds.campaignData);
-  const { data: adsData } = useSelector((state) => state.metaAds.adsData);
+  const {
+    campaignData: { data: campaignData, loading: campaignLoading, error: campaignError },
+    adsData
+  } = useSelector((state) => state.metaAds);
 
   const columns = useMemo(
     () => [
@@ -23,11 +26,9 @@ export default function MetaAdsDetails() {
         header: ({ table, column }) => (
           <div className="flex items-center gap-4">
             <IndeterminateCheckbox
-              {...{
-                checked: table.getIsAllRowsSelected(),
-                indeterminate: table.getIsSomeRowsSelected(),
-                onChange: table.getToggleAllRowsSelectedHandler()
-              }}
+              checked={table.getIsAllRowsSelected()}
+              indeterminate={table.getIsSomeRowsSelected()}
+              onChange={table.getToggleAllRowsSelectedHandler()}
             />
             <div className="flex items-center justify-center text-sm w-20">Status</div>
             <div
@@ -39,14 +40,12 @@ export default function MetaAdsDetails() {
             </div>
           </div>
         ),
-        cell: ({ row, getValue }) => (
+        cell: ({ row }) => (
           <div className="flex items-center gap-4">
             <IndeterminateCheckbox
-              {...{
-                checked: row.getIsSelected(),
-                indeterminate: row.getIsSomeSelected(),
-                onChange: row.getToggleSelectedHandler()
-              }}
+              checked={row.getIsSelected()}
+              indeterminate={row.getIsSomeSelected()}
+              onChange={row.getToggleSelectedHandler()}
             />
             <div className="flex items-center justify-center w-20">
               <Switch
@@ -58,18 +57,14 @@ export default function MetaAdsDetails() {
             </div>
             <div
               className={cn("w-72 flex items-center gap-2", { "pl-4": row.depth === 1 }, { "pl-8": row.depth === 2 })}
-              {...{
-                onClick: row.getToggleExpandedHandler(),
-                style: { cursor: "pointer" }
-              }}
+              onClick={row.getToggleExpandedHandler()}
+              style={{ cursor: "pointer" }}
             >
               {row.getCanExpand() ? row.getIsExpanded() ? <CaretDown /> : <CaretRight /> : null}
-              {/* <AsteriskSimple size={10} />} */}
               <span className="line-clamp-1 text-primary font-semibold ">{row.getValue("name")}</span>
             </div>
           </div>
         )
-        // footer: props => props.column.id,
       },
       {
         accessorKey: "purchase_value_sum",
@@ -155,13 +150,19 @@ export default function MetaAdsDetails() {
       </div>
       <div className="px-6 pb-8 w-full">
         <div className="rounded-md overflow-hidden border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
-          <CampaignTable
-            data={data?.results?.[0]?.data?.map((l1) => ({
-              ...l1,
-              subRows: adsData?.results?.[0]?.data?.filter((l3) => l3.campaign_id === l1.campaign_id)
-            }))}
-            columns={columns}
-          />
+          {campaignLoading ? (
+            <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
+          ) : campaignError ? (
+            <div className="text-destructive p-4 shadow-sm">{campaignError}</div>
+          ) : (
+            <CampaignTable
+              data={campaignData.parsed?.results?.map((l1) => ({
+                ...l1,
+                subRows: adsData.parsed?.results?.filter((l3) => l3.campaign_id === l1.campaign_id)
+              }))}
+              columns={columns}
+            />
+          )}
         </div>
       </div>
     </div>
