@@ -1,0 +1,39 @@
+{
+  "sections": [
+    {
+      "id": "",
+      "name": "Section 1",
+      "icon": "icon_link",
+      "description": "",
+      "isDefault": false,
+      "dashboardCards": [
+        {
+          "visualization": "table",
+          "title": "",
+          "description": "",
+          "coords": {
+            "height": null,
+            "width": null,
+            "x": 0,
+            "y": 0
+          },
+          "query": {
+            "order": {
+              "${order_by_key}": "${order_by_value}"
+            },
+            "measures": ["meta_ad_stream.purchase_value_sum"],
+            "dimensions": ["meta_ad_stream.campaign_id"],
+            "timeDimensions": [
+              {
+                "dimension": "meta_ad_stream.date",
+                "granularity": "day"
+              }
+            ]
+          },
+          "columnOrder": ["meta_ad_stream.ad_spend_sum", "meta_ad_stream.purchase_sum", "meta_ad_stream.campaign_id"],
+          "isActive": true
+        }
+      ]
+    }
+  ]
+}
