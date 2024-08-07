@@ -19,7 +19,7 @@ export default function SideBar() {
         <List />
 
         <Link href={"/welcome"}>
-          <Button variant="outline" className="p-2.5 text-[#031B15]">
+          <Button variant="outline" className="p-2 h-[38px] text-[#031B15]">
             <Plus className="text-primary " size={20} />
           </Button>
         </Link>
