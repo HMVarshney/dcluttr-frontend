@@ -156,56 +156,64 @@ const data1 = {
 export default function Page() {
   const [cardList, setCardList] = useState([
     {
-      title: "Card 1",
+      title: "Meta Ads Sales",
+      icon: "/band-logo/meta.png",
       id: 1,
       type: "Type3Chart",
       data: data,
       select: true
     },
     {
-      title: "Card 2",
+      title: "Google Ads Sales",
+      icon: "/band-logo/google.png",
       id: 2,
       type: "Type2Chart",
       data: data1,
       select: true
     },
     {
-      title: "Card 3",
+      title: "Shopify Ads Sales",
+      icon: "/band-logo/shopify.png",
       id: 3,
       type: "Type1Chart",
       data: data,
       select: true
     },
     {
-      title: "Card 4",
+      title: "Flipkart Sales",
+      icon: "/band-logo/shopify.png",
       id: 4,
       type: "Type1Chart",
       data: data1,
       select: true
     },
     {
-      title: "Card 5",
+      title: "Meta Ads Sales",
+      icon: "/band-logo/meta.png",
       id: 5,
       type: "Type2Chart",
       data: data,
       select: true
     },
     {
-      title: "Card 6",
+      title: "Google Ads Sales",
+      icon: "/band-logo/google.png",
       id: 6,
       type: "Type1Chart",
       data: data1,
       select: true
     },
     {
-      title: "Card 7",
+      title: "Meta Ads Sales",
+      icon: "/band-logo/meta.png",
       id: 7,
       type: "Type1Chart",
       data: data,
       select: true
     },
     {
-      title: "Card 8",
+      title: "Google Ads Sales",
+      icon: "/band-logo/google.png",
       id: 8,
       type: "Type2Chart",
       data: data1,
@@ -277,23 +285,11 @@ export default function Page() {
                           }
                         >
                           {card.type === "Type3Chart" ? (
-                            <Type3Chart
-                              data={card.data}
-                              details={{ title: card.title }}
-                              dragHandleProps={provided.dragHandleProps}
-                            />
+                            <Type3Chart data={card.data} details={card} dragHandleProps={provided.dragHandleProps} />
                           ) : card.type === "Type2Chart" ? (
-                            <Type2Chart
-                              data={card.data}
-                              details={{ title: card.title }}
-                              dragHandleProps={provided.dragHandleProps}
-                            />
+                            <Type2Chart data={card.data} details={card} dragHandleProps={provided.dragHandleProps} />
                           ) : (
-                            <Type1Chart
-                              data={card.data}
-                              details={{ title: card.title }}
-                              dragHandleProps={provided.dragHandleProps}
-                            />
+                            <Type1Chart data={card.data} details={card} dragHandleProps={provided.dragHandleProps} />
                           )}
                         </div>
                       );
