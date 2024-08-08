@@ -18,7 +18,7 @@ export default function BrandDetails({ goNext }) {
     formState: { errors },
     control
   } = useForm({
-    mode: "onBlur"
+    mode: "onChange"
   });
 
   const { loading, error } = useSelector((state) => state.brand);
