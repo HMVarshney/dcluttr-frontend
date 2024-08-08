@@ -1,3 +1,5 @@
+"use client";
+
 import { House, Package, PresentationChart, ImageSquare } from "phosphor-react";
 import OrgSideBar from "../_components/OrgSidebar";
 
@@ -47,9 +49,6 @@ const sideBarList = [
     icon: ImageSquare
   }
 ];
-export const metadata = {
-  title: "Overview"
-};
 export default function DashboardLayout({ children }) {
   return (
     <>
