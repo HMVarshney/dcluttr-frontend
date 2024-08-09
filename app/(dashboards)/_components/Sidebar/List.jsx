@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Hint from "@/components/Hint";
-import { cn } from "@/lib/utils";
+import { cn, getConstructorTextColor, getRandomColor } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { setBrand } from "@/lib/store/features/brandSlice";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,7 +17,9 @@ export default function List() {
 
   const currentOrgBrands = useMemo(() => {
     if (!organizationDetails) return [];
-    return brandsList.filter((brand) => brand.organizationId === organizationDetails.id);
+    return brandsList
+      .filter((brand) => brand.organizationId === organizationDetails.id)
+      ?.map((brand) => ({ ...brand, randomColor: getRandomColor() }));
   }, [brandsList, organizationDetails]);
 
   if (isLoading) {
@@ -32,25 +34,28 @@ export default function List() {
   }
 
   return (
-      <ul className="space-y-4">
-          {currentOrgBrands.map((band, i) => (
-              <div className="aspect-square relative" key={i}>
-                  <Hint label={band?.brandName} side="right">
-                      <Avatar
-                          className={cn(
-                              "border rounded-lg cursor-pointer transition",
-                              selectedBrand === band?.id && "border-2 border-primary/50"
-                          )}
-                          onClick={() => dispatch(setBrand(band?.id))}
-                      >
-                          <AvatarImage src={band?.brandLogo} alt={band?.brandName} />
-                          <AvatarFallback className="text-xl rounded-lg bg-[#B1BA88]">
-                              {band?.brandName?.[0]?.toUpperCase()}
-                          </AvatarFallback>
-                      </Avatar>
-                  </Hint>
-              </div>
-          ))}
-      </ul>
+    <ul className="space-y-4">
+      {currentOrgBrands.map((band, i) => (
+        <div className="aspect-square relative" key={i}>
+          <Hint label={band?.brandName} side="right">
+            <Avatar
+              className={cn(
+                "border rounded-lg cursor-pointer transition",
+                selectedBrand === band?.id && "border-2 border-primary/50"
+              )}
+              onClick={() => dispatch(setBrand(band?.id))}
+            >
+              <AvatarImage src={band?.brandLogo} alt={band?.brandName} />
+              <AvatarFallback
+                className="text-xl rounded"
+                style={{ backgroundColor: band?.randomColor, color: getConstructorTextColor(band?.randomColor) }}
+              >
+                {band?.brandName?.[0]?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </Hint>
+        </div>
+      ))}
+    </ul>
   );
 }

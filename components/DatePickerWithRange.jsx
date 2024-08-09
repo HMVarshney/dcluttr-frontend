@@ -17,15 +17,12 @@ const timePeriods = [
   { label: "Last 7 days", value: "last 7 days" },
   { label: "Last 30 days", value: "last 30 days" },
   { label: "Last 90 days", value: "last 90 days" },
-  { label: "Last 365 days", value: "last 365 days" },
   { label: "Last month", value: "last months" },
-  { label: "Last 12 months", value: "last 12 months" },
-  { label: "Last year", value: "last year" },
-  { label: "Week to date", value: "this week" },
-  { label: "Month to date", value: "this month" },
-  { label: "Quarter to date", value: "this quarter" },
-  { label: "Year to date", value: "this year" },
-  { label: "Quarters", value: "this quarter" }
+  { label: "This week", value: "this week" },
+  { label: "This month", value: "last month" },
+  { label: "This quarter", value: "this quarter" },
+  { label: "This year", value: "this year" },
+  { label: "Custom", value: "custom" }
 ];
 
 export default function DatePickerWithRange({ className, dateRange, setDateRange }) {
@@ -55,7 +52,7 @@ export default function DatePickerWithRange({ className, dateRange, setDateRange
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0 flex items-stretch overflow-hidden mr-20" align="start">
-          <div className="w-40 bg-[#FAFAFA] border-e p-4">
+          <div className="w-40 bg-[#FAFAFA] border-e p-4 flex flex-col gap-1.5">
             {timePeriods?.map((ele) => (
               <Button
                 onClick={() => {

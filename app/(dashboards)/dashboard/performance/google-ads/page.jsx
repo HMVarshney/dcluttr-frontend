@@ -40,6 +40,9 @@ const query = {
   ]
 };
 
+export const metadata = {
+  title: "Overview"
+};
 export default function page() {
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">

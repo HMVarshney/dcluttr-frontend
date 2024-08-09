@@ -21,7 +21,7 @@ export default function Home() {
                     <hr className="w-4 border-black/20" />
                     <StepBox isDisabled={step !== 2} label="Verify" isDone={step > 2} />
                     <hr className="w-4 border-black/20" />
-                    <StepBox isDisabled={step !== 3} label="TBD" isDone={step > 3} />
+                    <StepBox isDisabled={step !== 3} label="Create an org" isDone={step > 3} />
                 </RadioGroup>
 
                 <div className="mr-4 ml-auto text-sm">Already have an account?</div>
