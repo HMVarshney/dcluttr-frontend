@@ -63,6 +63,7 @@ export function OTPVerification({ email, setStep }) {
   const {
     handleSubmit,
     formState: { errors },
+    setError,
     control,
     watch
   } = useForm({
@@ -80,13 +81,14 @@ export function OTPVerification({ email, setStep }) {
         otp: e.otp
       })
       .then((res) => {
-        if (res.data?.accessToken) {
-          setCookie("accessToken", res.data?.accessToken);
+        if (res.data?.status === "success") {
+          setCookie("accessToken", res.data?.data?.accessToken);
           setStep(3);
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err?.response);
+        setError("otp", { type: "manual", message: err?.response?.data?.message });
       })
       .finally(() => {
         setLoading(false);

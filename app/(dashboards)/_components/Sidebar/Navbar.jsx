@@ -41,7 +41,7 @@ export default function Navbar({ isOpen }) {
               <SelectItem key={i} value={option.id}>
                 <div className="flex items-center gap-3">
                   <Avatar className={cn("border rounded-[5.5px] cursor-pointer transition h-6 w-6")}>
-                    <AvatarImage src={option.organizationLogo} alt={option.name} />
+                    <AvatarImage src={option.organizationLogo} alt={option.name} className="object-contain" />
                     <AvatarFallback className="text-xs rounded-[5.5px]">{option.name?.[0]}</AvatarFallback>
                   </Avatar>
                   <span className="line-clamp-1">{option.name}</span>
