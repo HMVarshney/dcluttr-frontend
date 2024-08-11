@@ -66,6 +66,33 @@ export function InputEmail({ label, placeholder, required, register, name, error
   );
 }
 
+export function InputWebsite({ label, placeholder, required, register, name, errors, className }) {
+  return (
+    <div className={cn("grid w-full items-center gap-2", className)}>
+      <Label
+        htmlFor={name}
+        className={`text-black text-sm ${required && "after:content-['*'] after:ml-0.5 after:text-destructive"}`}
+      >
+        {label}
+      </Label>
+      <Input
+        {...register(name, {
+          required,
+          pattern: {
+            value: /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi,
+            message: "Invalid website url format"
+          }
+        })}
+        id={name}
+        type="text"
+        placeholder={placeholder}
+        errors={!!errors?.message}
+      />
+      <InputErrorMessage message={errors?.message} />
+    </div>
+  );
+}
+
 export function InputNumber({ label, placeholder, required, register, name, errors, className }) {
   return (
     <div className={cn("grid w-full items-center gap-2", className)}>
