@@ -14,7 +14,7 @@ export function InputErrorMessage({ message }) {
   return <p className={`text-xs text-destructive ml-1 ${message ? "" : "py-1"}`}>{message}</p>;
 }
 
-export function InputText({ label, placeholder, required, register, name, errors, className }) {
+export function InputText({ label, placeholder, required, register, name, errors, className, disabled = false }) {
   return (
     <div className={cn("grid w-full items-center gap-2", className)}>
       <Label
@@ -24,6 +24,7 @@ export function InputText({ label, placeholder, required, register, name, errors
         {label}
       </Label>
       <Input
+        disabled={disabled}
         {...register(name, { required })}
         id={name}
         type="text"
