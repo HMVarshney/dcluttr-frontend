@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"; // Import necessary hooks
 import { setSideBarClose } from "@/lib/store/features/userSlice";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CaretDoubleRight } from "phosphor-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { fetchOrganizationDetails } from "@/lib/store/features/organizationSlice";
-import NewButton from "./NewButton";
+import { fetchOrganizationDetails, setCreateOrgOpen } from "@/lib/store/features/organizationSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Plus } from "lucide-react";
+import CreateOrgPopUp from "./CreateOrgPopUp";
 
 export default function Navbar({ isOpen }) {
   const dispatch = useDispatch();
@@ -41,14 +41,20 @@ export default function Navbar({ isOpen }) {
               <SelectItem key={i} value={option.id}>
                 <div className="flex items-center gap-3">
                   <Avatar className={cn("border rounded-[5.5px] cursor-pointer transition h-6 w-6")}>
-                    <AvatarImage src={option.organizationLogo} alt={option.name} />
+                    <AvatarImage src={option.organizationLogo} alt={option.name} className="object-contain" />
                     <AvatarFallback className="text-xs rounded-[5.5px]">{option.name?.[0]}</AvatarFallback>
                   </Avatar>
                   <span className="line-clamp-1">{option.name}</span>
                 </div>
               </SelectItem>
             ))}
-            <NewButton />
+            <div
+              className="flex items-center gap-3 p-3 cursor-pointer"
+              onClick={() => dispatch(setCreateOrgOpen(true))}
+            >
+              <Plus className="text-primary " size={16} />
+              <span className="line-clamp-1 text-sm">Create new</span>
+            </div>
           </SelectContent>
         </Select>
       )}
@@ -59,6 +65,7 @@ export default function Navbar({ isOpen }) {
       >
         <CaretDoubleRight size={16} weight="bold" color="#027056" />
       </Button>
+      <CreateOrgPopUp />
     </div>
   );
 }

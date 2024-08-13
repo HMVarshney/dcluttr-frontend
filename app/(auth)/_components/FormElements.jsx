@@ -14,7 +14,7 @@ export function InputErrorMessage({ message }) {
   return <p className={`text-xs text-destructive ml-1 ${message ? "" : "py-1"}`}>{message}</p>;
 }
 
-export function InputText({ label, placeholder, required, register, name, errors, className }) {
+export function InputText({ label, placeholder, required, register, name, errors, className, disabled = false }) {
   return (
     <div className={cn("grid w-full items-center gap-2", className)}>
       <Label
@@ -24,6 +24,7 @@ export function InputText({ label, placeholder, required, register, name, errors
         {label}
       </Label>
       <Input
+        disabled={disabled}
         {...register(name, { required })}
         id={name}
         type="text"
@@ -58,6 +59,33 @@ export function InputEmail({ label, placeholder, required, register, name, error
         })}
         id={name}
         type="email"
+        placeholder={placeholder}
+        errors={!!errors?.message}
+      />
+      <InputErrorMessage message={errors?.message} />
+    </div>
+  );
+}
+
+export function InputWebsite({ label, placeholder, required, register, name, errors, className }) {
+  return (
+    <div className={cn("grid w-full items-center gap-2", className)}>
+      <Label
+        htmlFor={name}
+        className={`text-black text-sm ${required && "after:content-['*'] after:ml-0.5 after:text-destructive"}`}
+      >
+        {label}
+      </Label>
+      <Input
+        {...register(name, {
+          required,
+          pattern: {
+            value: /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi,
+            message: "Invalid website url format"
+          }
+        })}
+        id={name}
+        type="text"
         placeholder={placeholder}
         errors={!!errors?.message}
       />

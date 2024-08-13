@@ -10,7 +10,7 @@ import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function InvitePeopleButton({ children }) {
+export default function InvitePeopleButton({ children, preEmail = "", preRoleId = 0 }) {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.invitations);
   const organizationDetails = useSelector((state) => state.organization.organizationDetails);
@@ -18,9 +18,9 @@ export default function InvitePeopleButton({ children }) {
 
   const orgId = organizationDetails?.id;
   const [isOpen, setOpen] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(preEmail);
   const [error, setError] = useState("");
-  const [roleId, setRoleId] = useState(0);
+  const [roleId, setRoleId] = useState(preRoleId);
   const [brandIds, setBrandIds] = useState([]);
   const onSubmit = () => {
     const re = /^\S+@\S+\.\S+$/;
@@ -92,7 +92,7 @@ export default function InvitePeopleButton({ children }) {
                   setError("");
                   setRoleId(id);
                   if (id === 1) {
-                    setBrandIds(organizationDetails?.brands);
+                    setBrandIds(organizationDetails?.brands?.map((ele) => ele?.id));
                   } else {
                     setBrandIds([]);
                   }

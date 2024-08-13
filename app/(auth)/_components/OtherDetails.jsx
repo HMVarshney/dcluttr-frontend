@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormSubmitButtonWithIcon, InputSelect, InputText } from "./FormElements";
+import { FormSubmitButtonWithIcon, InputSelect, InputText, InputWebsite } from "./FormElements";
 import Link from "next/link";
 import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
 import { ArrowLeft } from "lucide-react";
@@ -62,7 +62,7 @@ export default function OtherDetails({ isBF = false, onDone = () => {} }) {
             </p>
           </>
         )}
-        <div className="flex mt-10 items-center" onClick={() => ref.current.click()}>
+        <div className="flex mt-10 items-center cursor-pointer" onClick={() => ref.current.click()}>
           <Image
             src={file ? URL.createObjectURL(file) : "/image_placeholder.svg"}
             width={56}
@@ -74,11 +74,17 @@ export default function OtherDetails({ isBF = false, onDone = () => {} }) {
             <div className="text-sm text-[#031B15] font-semibold">Image</div>
             <div className="text-xs text-primary font-semibold">Add Image</div>
           </div>
-          <input ref={ref} onChange={(e) => setFile(e.target.files[0])} type="file" className="hidden" />
+          <input
+            ref={ref}
+            onChange={(e) => setFile(e.target.files[0])}
+            type="file"
+            accept="image/png, image/jpeg, image/jpg"
+            className="hidden"
+          />
         </div>
         <InputText
-          label="What’s your organization name?"
-          placeholder="Enter organization name"
+          label="What is your organisation’s name?"
+          placeholder="Enter organisation’s name"
           register={register}
           required="Please enter this input field"
           name="name"
@@ -101,7 +107,7 @@ export default function OtherDetails({ isBF = false, onDone = () => {} }) {
           ]}
         />
 
-        <InputText
+        <InputWebsite
           label="What’s your company website?"
           placeholder="Enter website URL"
           register={register}
