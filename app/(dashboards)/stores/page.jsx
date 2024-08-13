@@ -19,6 +19,7 @@ function Page() {
   const debouncedSearchedName = useDebounce(searchedName);
 
   const isLoading = status === "loading" || isLoadingBrandsList;
+
   const currentOrgBrands = useMemo(() => {
     if (!organizationDetails) return [];
     return brandsList.filter((brand) => brand.organizationId === organizationDetails.id);
