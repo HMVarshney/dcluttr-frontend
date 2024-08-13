@@ -1,40 +1,16 @@
+import React, { useCallback, useMemo, useState } from "react";
+import Image from "next/image";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import React, { useCallback, useState } from "react";
+import { sourceConnectURLs, sourceTypes } from "@/lib/constants/sourceConnect";
 import ConnectGoogle from "./ConnectGoogle";
-import { toast } from "sonner";
-import { sourceConnectURLs } from "@/lib/constants/sourceConnect";
 import ConnectFacebook from "./ConnectFacebook";
 
-const sources = [
-  {
-    title: "Meta Ads",
-    // disc: "View Connection details",
-    btnText: "Connect",
-    status: "NOT_CONNECTED",
-    icon: "/icons/meta_icon.svg",
-    source: "FACEBOOK"
-  },
-  {
-    title: "Google Ads",
-    btnText: "Connect",
-    status: "NOT_CONNECTED",
-    icon: "/icons/google_ads_icon.svg",
-    source: "GOOGLE"
-  },
-  {
-    title: "Klaviyo",
-    disc: "Coming Soon",
-    btnText: null,
-    status: "COMING",
-    icon: "/icons/klaviyo_icon.svg",
-    source: "KLAVIYO"
-  }
-];
-
-function ConnectYourData({ goNext, brandId, orgId }) {
+function ConnectYourData({ goNext, brand }) {
   const [openModalType, toggleModal] = useState("");
+
+  const orgId = brand.organizationId;
 
   const handleModalClose = () => toggleModal("");
 
@@ -53,6 +29,46 @@ function ConnectYourData({ goNext, brandId, orgId }) {
       clearInterval(checkPopup);
     }, 1500);
   }, []);
+
+  const disconnectSource = useCallback(() => {}, []);
+
+  const atleastOneSourceConnected =
+    brand.brandSourcesInfo?.isFacebookActive ||
+    brand.brandSourcesInfo?.isGoogleActive ||
+    brand.brandSourcesInfo?.isShopifyActive;
+
+  const sources = useMemo(() => {
+    const { isFacebookActive, isGoogleActive, isShopifyActive } = brand.brandSourcesInfo;
+    return [
+      {
+        source: sourceTypes.FACEBOOK,
+        title: "Meta Ads",
+        desc: isFacebookActive && "View connection details",
+        btnText: isFacebookActive ? "Disconnect" : "Connect",
+        status: isFacebookActive ? "CONNECTED" : "NOT_CONNECTED",
+        icon: "/icons/meta_icon.svg",
+        onClick: isFacebookActive ? disconnectSource : connectSource
+      },
+      {
+        source: sourceTypes.GOOGLE,
+        title: "Google Ads",
+        desc: isGoogleActive && "View connection details",
+        btnText: isGoogleActive ? "Disconnect" : "Connect",
+        status: isGoogleActive ? "CONNECTED" : "NOT_CONNECTED",
+        icon: "/icons/google_ads_icon.svg",
+        onClick: isGoogleActive ? disconnectSource : connectSource
+      },
+      {
+        source: sourceTypes.SHOPIFY,
+        title: "Shopify",
+        desc: isShopifyActive && "View connection details",
+        btnText: isShopifyActive ? "Disconnect" : "Connect",
+        status: isShopifyActive ? "CONNECTED" : "NOT_CONNECTED",
+        icon: "/icons/shopify.svg",
+        onClick: isShopifyActive ? disconnectSource : connectSource
+      }
+    ];
+  }, [brand, connectSource, disconnectSource]);
 
   return (
     <>
@@ -73,7 +89,7 @@ function ConnectYourData({ goNext, brandId, orgId }) {
                 <div
                   className={cn("text-sm text-[#031B1599]", { "text-primary underline": item.status === "CONNECTED" })}
                 >
-                  {item.disc}
+                  {item.desc}
                 </div>
               </div>
               {item.status !== "COMING" && (
@@ -81,7 +97,7 @@ function ConnectYourData({ goNext, brandId, orgId }) {
                   variant={item.status === "CONNECTED" ? "default" : "outline"}
                   className="ml-auto"
                   size="sm"
-                  onClick={() => connectSource(item.source)}
+                  onClick={() => item.onClick(item.source)}
                 >
                   {item.btnText}
                 </Button>
@@ -89,18 +105,25 @@ function ConnectYourData({ goNext, brandId, orgId }) {
             </div>
           ))}
         </div>
+        {atleastOneSourceConnected && (
+          <div className="w-full mt-10">
+            <Button className="w-full" onClick={goNext}>
+              Continue
+            </Button>
+          </div>
+        )}
       </div>
 
       <ConnectGoogle
         openModal={openModalType === "GOOGLE"}
         onClose={handleModalClose}
-        brandId={brandId}
+        brandId={brand.id}
         orgId={orgId}
       />
       <ConnectFacebook
         openModal={openModalType === "FACEBOOK"}
         onClose={handleModalClose}
-        brandId={brandId}
+        brandId={brand.id}
         orgId={orgId}
       />
     </>
