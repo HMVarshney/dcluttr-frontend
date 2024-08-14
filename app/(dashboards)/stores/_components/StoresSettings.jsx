@@ -2,7 +2,7 @@
 
 import { InputText } from "@/app/(auth)/_components/FormElements";
 import { Button } from "@/components/ui/button";
-import { resetState, updateOrganization } from "@/lib/store/features/organizationSlice";
+import { updateOrganization } from "@/lib/store/features/organizationSlice";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -21,9 +21,9 @@ export default function StoresSettings({ organizationDetails }) {
   } = useForm({
     mode: "onChange"
   });
+
   const onSubmit = (e) => {
     const data = new FormData();
-
     data.append("file", file);
     data.append("name", e?.name);
     data.append("website", e?.website);
@@ -37,7 +37,7 @@ export default function StoresSettings({ organizationDetails }) {
   useEffect(() => {
     setValue("name", organizationDetails?.name);
     setValue("website", organizationDetails?.website);
-  }, [organizationDetails?.id]);
+  }, [organizationDetails.id, organizationDetails?.name, organizationDetails?.website, setValue]);
 
   return (
     <div className="px-6">

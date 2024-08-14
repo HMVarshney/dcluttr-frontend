@@ -56,9 +56,11 @@ export default function AllBrands({ brandList, isLoadingBrandsList, orgId }) {
                 <div className="text-[#919191] text-sm underline">{brand.brandWebsite}</div>
               </div>
               {getActionButton(brand, orgId)}
-              <Button variant="icon">
-                <Gear size={24} />
-              </Button>
+              <Link href={`/store-settings?brandId=${brand.id}`}>
+                <Button variant="icon">
+                  <Gear size={24} />
+                </Button>
+              </Link>
             </div>
           ))
         )}

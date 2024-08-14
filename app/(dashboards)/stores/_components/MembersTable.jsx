@@ -8,9 +8,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Trash } from "phosphor-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -103,9 +101,9 @@ export default function MembersTable({ usersList, currentUserId }) {
         role: ele?.role?.name,
         roleId: ele?.role?.id
       })),
-    [usersList]
+    [currentUserId, usersList]
   );
-  console.log(data);
+
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
 
