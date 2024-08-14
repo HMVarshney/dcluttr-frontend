@@ -1,4 +1,5 @@
 "use client";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useEffect } from "react";
 import StoresSettings from "../_components/StoresSettings";
