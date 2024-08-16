@@ -4,7 +4,7 @@ import List from "./List";
 import Profile from "./Profile";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus } from "phosphor-react";
+import { Plus, SignOut } from "phosphor-react";
 import { Button } from "@/components/ui/button";
 
 export default function SideBar() {
@@ -24,6 +24,9 @@ export default function SideBar() {
           </Button>
         </Link>
         <div className="h-full" />
+        <Link href={"/stores"}>
+          <SignOut className="text-icon cursor-pointer w-7 h-7 mx-auto" size={20} />
+        </Link>
         <Profile />
       </aside>
     </div>

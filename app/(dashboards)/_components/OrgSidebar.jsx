@@ -110,7 +110,7 @@ export default function OrgSideBar({ sideBarList }) {
                     "max-w-0 opacity-0 ml-0": isOpen
                   })}
                 >
-                  Org settings
+                  Store settings
                 </span>
               </Link>
             </Button>

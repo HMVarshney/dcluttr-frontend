@@ -89,7 +89,7 @@ export default function LogInForm() {
 
         <div className=" mb-3 text-sm text-center font-semibold w-full">Don't have an account?</div>
         <Link href="/sign-up">
-          <Button className="w-full" variant="outline">
+          <Button className="w-full font-medium" variant="outline">
             Sign Up
           </Button>
         </Link>

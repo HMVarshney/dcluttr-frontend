@@ -10,6 +10,8 @@ import AllBrands from "./_components/AllBrands";
 import { useSelector } from "react-redux";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/lib/hooks/common";
+import Link from "next/link";
+import SearchBox from "@/components/SearchBox";
 
 function Page() {
   const [searchedName, setSearchedName] = useState("");
@@ -44,18 +46,16 @@ function Page() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-            <div className="text-[#919191] text-xs">Last updated: 12:56 PM</div>
+            <div className="text-[#919191] text-xs">Find all the stores in your organisation</div>
           </div>
-          <Input
-            className="w-[200px]"
-            value={searchedName}
-            onChange={(e) => setSearchedName(e.target.value)}
-            placeholder="🔍 Search for brand"
-          />
-          <Button variant="outline" className="px-2.5">
-            <Plus className="w-4 h-4 mr-2" />
-            <div className="font-medium text-sm">Add a new store</div>
-          </Button>
+          <SearchBox value={searchedName} onValueChange={setSearchedName} />
+
+          <Link href={"/welcome"}>
+            <Button variant="outline" className="px-2.5">
+              <Plus className="w-4 h-4 mr-2" />
+              <div className="font-medium text-sm">Add a new store</div>
+            </Button>
+          </Link>
         </div>
       </div>
       {currentOrgBrands?.length > 0 || isLoading ? (

@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
 import Link from "next/link";
 import { Gear } from "phosphor-react";
 import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getConstructorTextColor } from "@/lib/utils";
 
 function getActionButton(brand, orgId) {
   if (
@@ -44,13 +45,20 @@ export default function AllBrands({ brandList, isLoadingBrandsList, orgId }) {
         ) : (
           brandList.map((brand) => (
             <div key={brand.id} className="flex items-center justify-center gap-2 py-6 px-4 bg-white rounded-lg shadow">
-              <Image
-                src={brand.brandLogo || "/image_placeholder.svg"}
-                width={400}
-                height={400}
-                className="rounded-lg border w-36 h-20 object-cover"
-                alt={brand.brandName}
-              />
+              <Link href={`/store-settings?brandId=${brand.id}`}>
+                <Avatar className="border rounded-lg cursor-pointer transition w-36 h-20 ">
+                  <AvatarImage src={brand.brandLogo} alt={brand?.brandName} />
+                  <AvatarFallback
+                    className="text-3xl rounded"
+                    style={{
+                      backgroundColor: brand?.randomColor,
+                      color: getConstructorTextColor(brand?.randomColor ?? "")
+                    }}
+                  >
+                    {brand?.brandName?.[0]?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
               <div className="mr-auto ml-4">
                 <div className="text-base font-semibold">{brand.brandName}</div>
                 <div className="text-[#919191] text-sm underline">{brand.brandWebsite}</div>

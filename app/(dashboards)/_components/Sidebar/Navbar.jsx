@@ -26,7 +26,7 @@ export default function Navbar({ isOpen }) {
   return (
     <div
       className={cn("w-full py-4 flex gap-4 transition-all", {
-        "max-w-[78px] w-[78px] -ml-2 gap-2": isOpen
+        "max-w-[60px] w-[60px] -ml-2 gap-2": isOpen
       })}
     >
       {allOrganizationStatus === "loading" ? (
