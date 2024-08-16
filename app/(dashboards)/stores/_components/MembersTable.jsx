@@ -16,6 +16,7 @@ import InvitePeopleButton from "./InvitePeopleButton";
 import ConfirmModal from "@/components/ConfirmModal";
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { Edit3, ArrowDown } from "lucide-react";
+import BrandsAccessList from "./BrandsAccessList";
 
 export const columns = [
   {
@@ -49,6 +50,20 @@ export const columns = [
     cell: ({ row }) => <div className="capitalize">{capitalizeFirstLetter(row.getValue("role"))}</div>
   },
   {
+    accessorKey: "role",
+    header: "Access",
+    cell: ({ row }) => (
+      <BrandsAccessList brands={row.original.brands}>
+        <div className="capitalize">{row.getValue("role") === "ADMIN" ? "All store" : "Limited stores"}</div>
+      </BrandsAccessList>
+    )
+  },
+  {
+    accessorKey: "userStatus",
+    header: "Status",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("userStatus")}</div>
+  },
+  {
     id: "actions",
     header: () => <div className="px-4">Actions</div>,
     cell: ({ row }) => {
@@ -56,34 +71,26 @@ export const columns = [
         <div className="flex items-center ">
           <ConfirmModal
             disabled={row.original.currentUserId === row.original.id}
-            header={`Delete ${row.original.fullName}`}
-            description={`Are you sure you want to delete ${row.original.fullName}?`}
+            header={`Revoke access`}
+            description={`Are you sure you want to revoke ${row.original.fullName}’s access?`}
             onConfirm={() => alert("deleted")}
           >
             <Button variant="icon">
-              <Trash size={20} className="text-destructive" weight="bold" />
+              <Trash size={20} className="text-destructive" weight="regular" />
             </Button>
           </ConfirmModal>
-          <InvitePeopleButton preEmail={row.original.email} preRoleId={row.original.roleId}>
+          <InvitePeopleButton
+            preEmail={row.original.email}
+            preRoleId={row.original.roleId}
+            preBrandIds={row.original.brands?.map((ele) => ele.id)}
+          >
             <Button variant="icon" disabled={row.original.currentUserId === row.original.id}>
-              <Edit3 size={20} className="text-primary" weight="bold" />
+              <Edit3 size={20} className="text-primary" weight="regular" />
             </Button>
           </InvitePeopleButton>
         </div>
       );
     }
-  },
-  {
-    accessorKey: "role",
-    header: "Access",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("role") === "ADMIN" ? "All store" : "Limited stores"}</div>
-    )
-  },
-  {
-    accessorKey: "userStatus",
-    header: "Status",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("userStatus")}</div>
   }
 ];
 
@@ -99,10 +106,12 @@ export default function MembersTable({ usersList, currentUserId }) {
         emailVerified: ele?.user?.emailVerified,
         userStatus: ele?.user?.userStatus,
         role: ele?.role?.name,
-        roleId: ele?.role?.id
+        roleId: ele?.role?.id,
+        brands: ele?.user?.brands
       })),
     [currentUserId, usersList]
   );
+  console.log(usersList);
 
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});

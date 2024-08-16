@@ -34,7 +34,7 @@ export default function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/stores">All stores</BreadcrumbLink>
+                  <BreadcrumbLink href="/stores">Organisation</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>

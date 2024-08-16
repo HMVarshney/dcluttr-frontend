@@ -2,7 +2,7 @@
 
 import { setSettingsOpen, updateUser } from "@/lib/store/features/userSlice";
 import { addDelay, cn, deleteCookie } from "@/lib/utils";
-import { FileText, GearSix, Plug, Storefront, Truck, UserCircle, X } from "phosphor-react";
+import { FileText, GearSix, Lock, LockKey, Plug, Storefront, Truck, UserCircle, X } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import { InputNumber, InputText } from "@/app/(auth)/_components/FormElements";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,6 +15,7 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import MembersTable from "../../stores/_components/MembersTable";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const sideBarList = [
   {
@@ -88,7 +89,7 @@ export default function ProfileSettings() {
       </div>
       <div className="flex items-start justify-between px-8 gap-6">
         <div className="my-8 rounded-xl bg-white w-[212px] border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
-          <div className="px-6 py-4 text-sm font-medium w-full bg-[#FAFAFA] flex gap-2">
+          <div className="px-6 rounded-t-xl py-4 text-sm font-medium w-full bg-[#FAFAFA] flex gap-2">
             <Avatar className={cn("border rounded-full cursor-pointer transition h-11 w-11")}>
               <AvatarImage src={userDetails?.image} alt={userDetails?.fullName} />
               <AvatarFallback className="text-base rounded text-black">
@@ -187,9 +188,18 @@ export default function ProfileSettings() {
                     required={false}
                     name="mobileNumber"
                     errors={errors["mobileNumber"]}
-                    className="mt-6"
+                    className="my-6"
                     disabled={true}
                   />
+                  <div className="flex items-center">
+                    <LockKey className="text-xl" />
+                    <span className="text-sm font-semibold ml-2">Password</span>
+                    <Link href="/forgot-password" className="ml-auto">
+                      <Button variant="outline" className="ml-auto">
+                        Reset Password
+                      </Button>
+                    </Link>
+                  </div>
                   <Button
                     type="submit"
                     className="mt-8"

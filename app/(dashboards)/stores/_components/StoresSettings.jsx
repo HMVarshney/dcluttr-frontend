@@ -1,12 +1,14 @@
 "use client";
 
-import { InputText } from "@/app/(auth)/_components/FormElements";
+import { InputText, InputWebsite } from "@/app/(auth)/_components/FormElements";
 import { Button } from "@/components/ui/button";
 import { updateOrganization } from "@/lib/store/features/organizationSlice";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 export default function StoresSettings({ organizationDetails }) {
   const ref = useRef();
@@ -29,9 +31,15 @@ export default function StoresSettings({ organizationDetails }) {
     data.append("website", e?.website);
     data.append("id", organizationDetails?.id);
     data.append("organizationType", organizationDetails?.organizationType ?? "AGENCY"); //TODO
-    dispatch(updateOrganization(data))
+    dispatch(updateOrganization({ organizationData: data, id: organizationDetails?.id }))
       .unwrap()
-      .then(() => {});
+      .then(() => {
+        toast("Updated successfully", {
+          duration: 5000,
+          // description: data?.message,
+          variant: "success"
+        });
+      });
   };
 
   useEffect(() => {
@@ -69,10 +77,10 @@ export default function StoresSettings({ organizationDetails }) {
           className=""
         />
         <p className="text-xs -mt-3 mb-8 text-[#031B15CC]">
-          Use a name that describes the group or team or agency. It appears in notification, invoices, and other
-          team-specific views.
+          Use a name that describes the team or agency. It appears in notification, invoices, and other team-specific
+          views.
         </p>
-        <InputText
+        <InputWebsite
           label="Company website"
           placeholder="Company website"
           register={register}
@@ -81,15 +89,15 @@ export default function StoresSettings({ organizationDetails }) {
           errors={errors["website"]}
           className=""
         />
-        <p className="text-xs -mt-3 text-[#031B15CC]">
-          This will be used to learn more about your team, products, or services
+        <p className={cn("text-xs -mt-3 text-[#031B15CC]", { "mt-2": errors["website"] })}>
+          This will be used to learn more about your team, products, or services.
         </p>
         <Button
           type="submit"
           className="mt-8"
           disabled={watch("name") === organizationDetails?.name && watch("website") === organizationDetails?.website}
         >
-          Save Changes
+          Save changes
         </Button>
       </form>
     </div>

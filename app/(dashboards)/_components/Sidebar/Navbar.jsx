@@ -53,7 +53,7 @@ export default function Navbar({ isOpen }) {
               onClick={() => dispatch(setCreateOrgOpen(true))}
             >
               <Plus className="text-primary " size={16} />
-              <span className="line-clamp-1 text-sm">Create new</span>
+              <span className="line-clamp-1 text-sm">Create a new org</span>
             </div>
           </SelectContent>
         </Select>
