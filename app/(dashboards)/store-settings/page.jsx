@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,11 @@ import InvitePeopleButton from "../stores/_components/InvitePeopleButton";
 import { Edit3 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import ConnectYourData from "@/app/(onboarding)/_components/ConnectYourData";
+import { useDispatch } from "react-redux";
+import { fetchBrandById } from "@/lib/store/features/brandSlice";
+import { useSearchParams } from "next/navigation";
+import SourceConnectGrid from "@/components/shared/SourceConnect/SourceConnectGrid";
 
 const columns = [
   {
@@ -119,8 +124,25 @@ function MembersTable({ usersList }) {
 }
 
 function StoreSettings() {
+  const dispath = useDispatch();
+
+  const searchParams = useSearchParams();
+
   const { usersList } = useSelector((state) => state.organization);
   const { userDetails } = useSelector((state) => state.user);
+
+  const brandId = searchParams.get('brandId');
+
+  const {
+    brandDetails: { brandDetails: brandDetailsIdMap }
+  } = useSelector((state) => state.brand);
+  const brandDetails = brandDetailsIdMap[brandId];
+
+  useEffect(() => {
+    if(brandId){
+      dispath(fetchBrandById(brandId));
+    }
+  }, [dispath, brandId]);
 
   const [file, setFile] = useState(null);
 
@@ -168,6 +190,11 @@ function StoreSettings() {
         <div className="mt-6">
           <MembersTable usersList={usersList} />
         </div>
+      </div>
+      <div className="mt-10">
+        {brandDetails &&
+          <SourceConnectGrid brand={brandDetails} />
+        }
       </div>
     </div>
   );
