@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { Input } from "@/components/ui/input";
@@ -13,12 +13,12 @@ import { ArrowDown, Trash } from "phosphor-react";
 import InvitePeopleButton from "../stores/_components/InvitePeopleButton";
 import { Edit3 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import ConnectYourData from "@/app/(onboarding)/_components/ConnectYourData";
+import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { fetchBrandById } from "@/lib/store/features/brandSlice";
 import { useSearchParams } from "next/navigation";
 import SourceConnectGrid from "@/components/shared/SourceConnect/SourceConnectGrid";
+import { getAllUsersOfOrganization } from "@/lib/store/features/organizationSlice";
 
 const columns = [
   {
@@ -78,9 +78,21 @@ const columns = [
   }
 ];
 
-function MembersTable({ usersList }) {
+function MembersTable({ usersList, currentUserId }) {
+  const _usersList = usersList?.map((ele) => ({
+    currentUserId,
+    id: ele?.user?.id,
+    email: ele?.user?.email,
+    image: ele?.user?.image,
+    fullName: ele?.user?.fullName,
+    emailVerified: ele?.user?.emailVerified,
+    userStatus: ele?.user?.userStatus,
+    role: ele?.role?.name,
+    roleId: ele?.role?.id
+  }));
+
   const table = useReactTable({
-    data: usersList,
+    data: _usersList,
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -124,27 +136,40 @@ function MembersTable({ usersList }) {
 }
 
 function StoreSettings() {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
 
   const searchParams = useSearchParams();
 
   const { usersList } = useSelector((state) => state.organization);
   const { userDetails } = useSelector((state) => state.user);
-
-  const brandId = searchParams.get('brandId');
-
   const {
     brandDetails: { brandDetails: brandDetailsIdMap }
   } = useSelector((state) => state.brand);
+
+  const [brandName, setBrandName] = useState("");
+  const [file, setFile] = useState(null);
+
+  const brandId = searchParams.get("brandId");
+
   const brandDetails = brandDetailsIdMap[brandId];
 
   useEffect(() => {
-    if(brandId){
-      dispath(fetchBrandById(brandId));
+    if (brandId) {
+      dispatch(fetchBrandById(brandId));
     }
-  }, [dispath, brandId]);
+  }, [dispatch, brandId]);
 
-  const [file, setFile] = useState(null);
+  useEffect(() => {
+    if (brandDetails?.organizationId) {
+      dispatch(getAllUsersOfOrganization(brandDetails?.organizationId));
+    }
+  }, [dispatch, brandDetails?.organizationId]);
+
+  useEffect(() => {
+    if (brandDetails) {
+      setBrandName(brandDetails.brandName);
+    }
+  }, [dispatch, brandDetails]);
 
   return (
     <div className="px-6">
@@ -174,10 +199,20 @@ function StoreSettings() {
               >
                 Store name
               </Label>
-              <Input className="mt-2" id="brand_name" type="text" placeholder="Enter store name" />
+              <Input
+                className="mt-2"
+                id="brand_name"
+                type="text"
+                placeholder="Enter store name"
+                value={brandName}
+                onChange={(e) => {
+                  console.log("value", e.target.value);
+                  // setBrandName(e.target.value);
+                }}
+              />
             </div>
             <div>
-              <Button type="submit" className="mt-8">
+              <Button type="submit" className="mt-8" disabled={brandName === brandDetails?.brandName}>
                 Save Changes
               </Button>
             </div>
@@ -188,13 +223,15 @@ function StoreSettings() {
         <h3 className="text-xl font-bold mt-4">Members</h3>
         <p className="text-xs mt-1 text-[#4F4D55]">Manage store members</p>
         <div className="mt-6">
-          <MembersTable usersList={usersList} />
+          {userDetails.id && <MembersTable usersList={usersList} currentUserId={userDetails.id} />}
         </div>
       </div>
       <div className="mt-10">
-        {brandDetails &&
-          <SourceConnectGrid brand={brandDetails} />
-        }
+        <h2 className="text-2xl font-bold mt-20">Integrations</h2>
+        <p className="text-xs text-[#4F4D55] mt-1">
+          Easily connect external apps and platforms with your Dcluttr account to add more to your dashboard
+        </p>
+        <div className="mt-6">{brandDetails && <SourceConnectGrid brand={brandDetails} />}</div>
       </div>
     </div>
   );
