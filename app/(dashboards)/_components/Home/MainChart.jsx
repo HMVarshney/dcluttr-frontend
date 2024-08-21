@@ -4,11 +4,10 @@ import React, { Fragment } from "react";
 import { AreaChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import moment from "moment";
 import { Skeleton } from "@/components/ui/skeleton";
-import CustomTooltip from "@/components/CustomTooltip";
 import CustomActiveDot from "@/components/CustomActiveDot";
 import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 
@@ -121,3 +120,39 @@ export function ChartHeader() {
     </>
   );
 }
+
+const CustomTooltip = ({ active, payload, label, coordinate }) => {
+  console.log({ active, payload, label, coordinate });
+
+  if (active && payload && payload.length) {
+    return (
+      <div
+        className="text-sm whitespace-nowrap transition bg-black px-4 py-1 rounded flex flex-col justify-between text-white absolute"
+        style={{
+          top: coordinate.y - 40,
+          left: coordinate.x > 200 ? coordinate.x - 50 : coordinate.x + 30,
+          transform: "translate(-50%, -100%)"
+        }}
+      >
+        {payload.map((ele, i) => (
+          <div key={ele.color} className="flex items-center gap-1">
+            <div className="w-2 h-2 rounded-full mr-1" style={{ backgroundColor: ele.color }} />
+            {label} ₹{`${ele.value}`}
+            {i === 0 && (
+              <>
+                {payload[0].value - payload[1].value > 0 ? (
+                  <ArrowUp className="w-4 rotate-45" />
+                ) : (
+                  <ArrowDown className="w-4 -rotate-45" />
+                )}
+                {payload[0].value - payload[1].value}
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+};
