@@ -35,7 +35,6 @@ export default function LogInForm() {
         router.replace(searchParams.get("redirect") || "/stores");
       })
       .catch(({ data, email }) => {
-        console.log("after login", data, email);
         if (data?.errorCode === "EMAIL_NOT_VERIFIED") {
           router.replace("/sign-up");
           dispatch(setStep(2));

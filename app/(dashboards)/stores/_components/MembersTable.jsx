@@ -117,7 +117,7 @@ export default function MembersTable({ usersList, currentUserId }) {
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data: data,
+    data,
     columns,
     state: {
       sorting,
