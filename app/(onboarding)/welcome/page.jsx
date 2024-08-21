@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import WelcomeToDcluttr from "../_components/WelcomeToDcluttr";
@@ -18,12 +18,13 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import Loading from "@/app/(auth)/loading";
 import { EmptyTickIcon, TickIcon } from "@/components/Icons";
+import withSuspense from "@/lib/hoc/withSuspense";
 
 const steps = [
   {
     title: "Welcome",
     disc: "",
-    btnText: "Let’s go!"
+    btnText: "Let's go!"
   },
   {
     title: "Brand Details",
@@ -131,9 +132,7 @@ function Welcome() {
                   <div className="text-base font-medium">{ele.title}</div>
                   <div className="text-xs font-light text-[#031B15B2]">{ele.disc}</div>
                 </div>
-                <div
-                  className={cn("text-sm font-medium text-[#EC1212] ml-auto mt-2.5", { "text-primary": step > i + 1 })}
-                >
+                <div className={cn("text-sm font-medium text-[#EC1212] ml-auto mt-2.5", { "text-primary": step > i + 1 })}>
                   {step > i + 1 ? ele.btnText : "None Added"}
                 </div>
               </div>
@@ -154,12 +153,4 @@ function Welcome() {
   );
 }
 
-function WelcomePage() {
-  return (
-    <Suspense>
-      <Welcome />
-    </Suspense>
-  );
-}
-
-export default WelcomePage;
+export default withSuspense(Welcome);
