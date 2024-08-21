@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { cubejsClient } from "@/lib/cubeJsApi";
 import { DashboardTableBody, DashboardTableHeader } from "./Elements";
 import { extractTitleFromAnnotation, parseRawLoadResponse } from "@/lib/utils/cubejs.utils";
-import { cn } from "@/lib/utils";
 
 async function fetchCubejsQuery(query) {
   const response = await cubejsClient.load(query);
@@ -42,7 +41,7 @@ function DashboardTable({ query, columnOrder }) {
   }, [query]);
 
   return (
-    <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": false })}>
+    <div>
       <DashboardTableHeader />
       <DashboardTableBody loading={loading} error={error} data={{ results, columns: columnDefs }} />
     </div>
