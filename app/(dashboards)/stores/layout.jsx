@@ -10,8 +10,8 @@ const sideBarList = [
     icon: Storefront
   },
   {
-    name: "Settings",
-    href: "/stores/settings",
+    name: "Org Settings",
+    href: "/stores/org-settings",
     icon: GearSix
   }
 ];

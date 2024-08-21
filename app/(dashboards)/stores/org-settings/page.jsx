@@ -1,4 +1,5 @@
 "use client";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useEffect } from "react";
 import StoresSettings from "../_components/StoresSettings";
@@ -33,7 +34,7 @@ export default function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/stores">All stores</BreadcrumbLink>
+                  <BreadcrumbLink href="/stores">Organisation</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>

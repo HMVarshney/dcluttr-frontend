@@ -5,12 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { sendInvitation } from "@/lib/store/features/invitationSlice";
 import { cn, getConstructorTextColor, getRandomColor } from "@/lib/utils";
-import { Check } from "phosphor-react";
+import { Check, Circle } from "phosphor-react";
 import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function InvitePeopleButton({ children, preEmail = "", preRoleId = 0 }) {
+export default function InvitePeopleButton({ children, preEmail = "", preRoleId = 0, preBrandIds = [] }) {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.invitations);
   const organizationDetails = useSelector((state) => state.organization.organizationDetails);
@@ -21,7 +21,7 @@ export default function InvitePeopleButton({ children, preEmail = "", preRoleId 
   const [email, setEmail] = useState(preEmail);
   const [error, setError] = useState("");
   const [roleId, setRoleId] = useState(preRoleId);
-  const [brandIds, setBrandIds] = useState([]);
+  const [brandIds, setBrandIds] = useState(preBrandIds);
   const onSubmit = () => {
     const re = /^\S+@\S+\.\S+$/;
     if (!re.test(email)) {
@@ -100,9 +100,10 @@ export default function InvitePeopleButton({ children, preEmail = "", preRoleId 
               >
                 <div className="text-sm font-semibold flex">
                   {role}
-                  <Check
+                  <Circle
+                    weight={id === roleId ? "fill" : "regular"}
                     size={20}
-                    className={cn("ml-auto opacity-0 transition-all", {
+                    className={cn("ml-auto opacity-75 transition-all", {
                       "opacity-100": id === roleId
                     })}
                   />
@@ -148,9 +149,10 @@ export default function InvitePeopleButton({ children, preEmail = "", preRoleId 
                 </Avatar>
                 <div className="text-sm font-semibold flex w-full">
                   {ele.brandName}
-                  <Check
+                  <Circle
+                    weight={brandIds?.includes(ele.id) ? "fill" : "regular"}
                     size={20}
-                    className={cn("ml-auto opacity-0 transition-all", {
+                    className={cn("ml-auto opacity-75 transition-all", {
                       "opacity-100": brandIds?.includes(ele.id)
                     })}
                   />
@@ -172,7 +174,7 @@ export default function InvitePeopleButton({ children, preEmail = "", preRoleId 
             Cancel
           </Button>
           <Button type="submit" className="font-medium" onClick={onSubmit} disabled={loading}>
-            Continue
+            {preEmail ? "Modify access" : "Continue"}
           </Button>
         </DialogFooter>
       </DialogContent>

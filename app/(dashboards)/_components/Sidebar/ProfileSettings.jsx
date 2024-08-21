@@ -2,7 +2,7 @@
 
 import { setSettingsOpen, updateUser } from "@/lib/store/features/userSlice";
 import { addDelay, cn, deleteCookie } from "@/lib/utils";
-import { FileText, GearSix, Plug, Storefront, Truck, UserCircle, X } from "phosphor-react";
+import { FileText, GearSix, Lock, LockKey, Plug, Storefront, Truck, UserCircle, X } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import { InputNumber, InputText } from "@/app/(auth)/_components/FormElements";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +14,8 @@ import BrandsTable from "./BrandsTable";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import MembersTable from "../../stores/_components/MembersTable";
+import { toast } from "sonner";
+import Link from "next/link";
 
 const sideBarList = [
   {
@@ -57,7 +59,13 @@ export default function ProfileSettings() {
 
     dispatch(updateUser(formData))
       .unwrap()
-      .then(() => {})
+      .then(() => {
+        toast("Updated successfully", {
+          duration: 5000,
+          // description: data?.message,
+          variant: "success"
+        });
+      })
       .catch((error) => setError("mobileNumber", { message: error.message }));
   };
 
@@ -81,8 +89,8 @@ export default function ProfileSettings() {
       </div>
       <div className="flex items-start justify-between px-8 gap-6">
         <div className="my-8 rounded-xl bg-white w-[212px] border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
-          <div className="px-6 py-4 text-sm font-medium w-full bg-[#FAFAFA] flex gap-2">
-            <Avatar className={cn("border rounded-lg cursor-pointer transition h-11 w-11")}>
+          <div className="px-6 rounded-t-xl py-4 text-sm font-medium w-full bg-[#FAFAFA] flex gap-2">
+            <Avatar className={cn("border rounded-full cursor-pointer transition h-11 w-11")}>
               <AvatarImage src={userDetails?.image} alt={userDetails?.fullName} />
               <AvatarFallback className="text-base rounded text-black">
                 {userDetails?.fullName?.[0]?.toUpperCase()}
@@ -90,7 +98,7 @@ export default function ProfileSettings() {
             </Avatar>
             <div className="">
               <span className="text-black text-sm line-clamp-1">{userDetails?.fullName}</span>
-              <span className="text-[#031B1580] text-xs">{userDetails?.website}</span>
+              <span className="text-[#031B1580] text-xs">{userDetails?.email}</span>
             </div>
           </div>
           <div className="px-6 py-4 flex flex-col gap-2">
@@ -144,7 +152,7 @@ export default function ProfileSettings() {
                       width={56}
                       height={56}
                       alt="dcluttr logo"
-                      className="rounded-xl border object-contain h-14 w-14"
+                      className="rounded-full border object-contain h-14 w-14"
                     />
                     <div className="ml-3">
                       <div className="text-sm text-[#031B15] font-semibold">Profile picture</div>
@@ -180,27 +188,39 @@ export default function ProfileSettings() {
                     required={false}
                     name="mobileNumber"
                     errors={errors["mobileNumber"]}
-                    className="mt-6"
+                    className="my-6"
                     disabled={true}
                   />
+                  <div className="flex items-center">
+                    <LockKey className="text-xl" />
+                    <span className="text-sm font-semibold ml-2">Password</span>
+                    <Link href="/forgot-password" className="ml-auto">
+                      <Button variant="outline" className="ml-auto">
+                        Reset Password
+                      </Button>
+                    </Link>
+                  </div>
                   <Button
                     type="submit"
                     className="mt-8"
-                    disabled={watch("name") === userDetails?.name && watch("website") === userDetails?.email}
+                    disabled={
+                      watch("fullName") === userDetails?.fullName && watch("mobileNumber") === userDetails?.mobileNumber
+                    }
                   >
-                    Save Changes
+                    Save changes
                   </Button>
                 </form>
-              </div>
-              <div className="mt-6 rounded-xl p-5 bg-white border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
-                <h3 className="text-xl font-bold">Access</h3>
-                <p className="text-xs mt-1 text-[#4F4D55]">View all the stores and organisations that you can access</p>
-                <BrandsTable brandsList={userDetails?.brands} />
               </div>
             </>
           )}
 
-          {active === "Access" && <MembersTable usersList={usersList} currentUserId={userDetails.id} />}
+          {active === "Access" && (
+            <div className="mt-6 rounded-xl p-5 bg-white border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
+              <h3 className="text-xl font-bold">Access</h3>
+              <p className="text-xs mt-1 text-[#4F4D55]">View all the stores and organisations that you can access</p>
+              <BrandsTable brandsList={userDetails?.brands} />
+            </div>
+          )}
         </div>
       </div>
     </div>

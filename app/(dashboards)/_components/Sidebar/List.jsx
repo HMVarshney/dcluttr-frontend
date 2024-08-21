@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Hint from "@/components/Hint";
-import { cn, getConstructorTextColor, getRandomColor } from "@/lib/utils";
+import { cn, getConstructorTextColor } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { setBrand } from "@/lib/store/features/brandSlice";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,45 +17,43 @@ export default function List() {
 
   const currentOrgBrands = useMemo(() => {
     if (!organizationDetails) return [];
-    return brandsList
-      .filter((brand) => brand.organizationId === organizationDetails.id)
-      ?.map((brand) => ({ ...brand, randomColor: getRandomColor() }));
+    return brandsList.filter((brand) => brand.organizationId === organizationDetails.id);
   }, [brandsList, organizationDetails]);
 
   if (isLoading) {
     return (
-      <ul className="space-y-4">
+      <div className="flex flex-col gap-3">
         <Skeleton className="aspect-square" />
         <Skeleton className="aspect-square" />
         <Skeleton className="aspect-square" />
         <Skeleton className="aspect-square" />
-      </ul>
+      </div>
     );
   }
 
   return (
-    <ul className="space-y-4">
-      {currentOrgBrands.map((band, i) => (
+    <div className="flex flex-col gap-3">
+      {currentOrgBrands.map((brand, i) => (
         <div className="aspect-square relative" key={i}>
-          <Hint label={band?.brandName} side="right">
+          <Hint label={brand?.brandName} side="right">
             <Avatar
               className={cn(
                 "border rounded-lg cursor-pointer transition",
-                selectedBrand === band?.id && "border-2 border-primary/50"
+                selectedBrand === brand?.id && "border-2 border-primary/50"
               )}
-              onClick={() => dispatch(setBrand(band?.id))}
+              onClick={() => dispatch(setBrand(brand?.id))}
             >
-              <AvatarImage src={band?.brandLogo} alt={band?.brandName} />
+              <AvatarImage src={brand?.brandLogo} alt={brand?.brandName} />
               <AvatarFallback
                 className="text-xl rounded"
-                style={{ backgroundColor: band?.randomColor, color: getConstructorTextColor(band?.randomColor) }}
+                style={{ backgroundColor: brand?.randomColor, color: getConstructorTextColor(brand?.randomColor) }}
               >
-                {band?.brandName?.[0]?.toUpperCase()}
+                {brand?.brandName?.[0]?.toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </Hint>
         </div>
       ))}
-    </ul>
+    </div>
   );
 }
