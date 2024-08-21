@@ -420,6 +420,8 @@ export const Item = forwardRef(({ i, length, children, withOpacity, isDragging, 
   );
 });
 
+Item.displayName = "Item";
+
 export const SortableItem = (props) => {
   const { isDragging, attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: props.id });
 
@@ -430,3 +432,5 @@ export const SortableItem = (props) => {
 
   return <Item ref={setNodeRef} style={style} withOpacity={isDragging} {...props} {...attributes} {...listeners}></Item>;
 };
+
+SortableItem.displayName = "SortableItem";
