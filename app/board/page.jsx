@@ -5,107 +5,78 @@ import "gridstack/dist/gridstack.min.css";
 import { GridStack } from "gridstack";
 import DashboardTable from "../(dashboards)/dashboard/performance/_components/DashboardTable";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
+import Type1Chart from "../(dashboards)/_components/Home/Type1Chart";
+import { dashboardJSON } from "./dashboards";
+import Type2Chart from "../(dashboards)/_components/Home/Type2Chart";
+import Type3Chart from "../(dashboards)/_components/Home/Type3Chart";
 
-const dashboardJSON = {
-  sections: [
+const data = {
+  title: "Spends",
+  series: [
     {
-      id: "",
-      name: "Section 1",
-      icon: "icon_link",
-      description: "",
-      isDefault: false,
-      dashboardCards: [
-        {
-          visualization: "table",
-          title: "Campaign-wise distribution",
-          description: "Find all the analytics for store",
-          coords: {
-            h: 4,
-            w: 12,
-            x: 0,
-            y: 0
-          },
-          query: {
-            measures: [
-              "google_campaign_stream.purchase_value_sum",
-              "google_campaign_stream.ad_spend_sum",
-              "google_campaign_stream.purchase_sum",
-              "google_campaign_stream.impressions_sum",
-              "google_campaign_stream.clicks_sum",
-              "google_campaign_stream.vtc_sum",
-              "google_campaign_stream.ctr",
-              "google_campaign_stream.cpc",
-              "google_campaign_stream.cpm",
-              "google_campaign_stream.cpm",
-              "google_campaign_stream.roas",
-              "google_campaign_stream.aov",
-              "google_campaign_stream.cpa"
-            ],
-            dimensions: [
-              "google_campaign.id",
-              "google_campaign.name",
-              "google_campaign.resource_name",
-              "google_campaign.campaign_link"
-            ],
-            order: {
-              "${order_by_key}": "${order_by_value}"
-            },
-            timeDimensions: [
-              {
-                dimension: "google_campaign_stream.date",
-                granularity: "week"
-              }
-            ]
-          },
-          columnOrder: ["meta_ad_stream.ad_spend_sum", "meta_ad_stream.purchase_sum", "meta_ad_stream.campaign_id"],
-          isActive: true
-        },
-        {
-          visualization: "table",
-          title: "Title",
-          description: "Description",
-          coords: {
-            h: 4,
-            w: 12,
-            x: 0,
-            y: 4
-          },
-          query: {
-            measures: [
-              "google_campaign_stream.purchase_value_sum",
-              "google_campaign_stream.ad_spend_sum",
-              "google_campaign_stream.purchase_sum",
-              "google_campaign_stream.impressions_sum",
-              "google_campaign_stream.clicks_sum",
-              "google_campaign_stream.vtc_sum",
-              "google_campaign_stream.ctr",
-              "google_campaign_stream.cpc",
-              "google_campaign_stream.cpm",
-              "google_campaign_stream.cpm",
-              "google_campaign_stream.roas",
-              "google_campaign_stream.aov",
-              "google_campaign_stream.cpa"
-            ],
-            dimensions: [
-              "google_campaign.id",
-              "google_campaign.name",
-              "google_campaign.resource_name",
-              "google_campaign.campaign_link"
-            ],
-            order: {
-              "${order_by_key}": "${order_by_value}"
-            },
-            timeDimensions: [
-              {
-                dimension: "google_campaign_stream.date",
-                granularity: "week"
-              }
-            ]
-          },
-          columnOrder: ["meta_ad_stream.ad_spend_sum", "meta_ad_stream.purchase_sum", "meta_ad_stream.campaign_id"],
-          isActive: true
-        }
-      ]
+      name: "Spends",
+      dataKey: "s",
+      id: 3,
+      color: "#9A66ED",
+      type: "line"
+    },
+    {
+      name: "Revenue",
+      dataKey: "r",
+      id: 4,
+      color: "#2EB76F",
+      type: "area"
+    }
+  ],
+  data: [
+    {
+      name: "A",
+      s: 8,
+      r: 1,
+      amt: 24,
+      x: "jan"
+    },
+    {
+      name: "B",
+      s: 5,
+      r: 10,
+      amt: 22,
+      x: "feb"
+    },
+    {
+      name: "C",
+      s: 12,
+      r: 10,
+      amt: 22,
+      x: "mar"
+    },
+    {
+      name: "D",
+      s: 10,
+      r: 17,
+      amt: 20,
+      x: "apr"
+    },
+    {
+      name: "E",
+      s: 14,
+      r: 25,
+      amt: 21,
+      x: "may"
+    },
+    {
+      name: "F",
+      s: 10,
+      r: 19,
+      amt: 25,
+      x: "jun"
+    },
+    {
+      name: "G",
+      s: 20,
+      r: 25,
+      amt: 21,
+      x: "jul"
     }
   ]
 };
@@ -126,8 +97,8 @@ const Board = () => {
       grid.batchUpdate(true);
       dashboardJSON.sections[0].dashboardCards.map((card) => {
         if (card.isActive) {
+          const { title, description, coords } = card;
           if (card.visualization === "table") {
-            const { title, description, coords } = card;
             grid.addWidget(
               renderComponentToHtml(
                 <DashboardTable
@@ -144,6 +115,45 @@ const Board = () => {
                 noMove: true,
                 noResize: true,
                 locked: true
+              }
+            );
+          } else if (card.visualization === "type1") {
+            grid.addWidget(
+              renderComponentToHtml(<Type1Chart data={data} details={{ title: "Title", icon: "/band-logo/google.png" }} />),
+              {
+                w: coords.w,
+                h: coords.h,
+                x: coords.x,
+                y: coords.y,
+                noMove: false,
+                noResize: false,
+                locked: false
+              }
+            );
+          } else if (card.visualization === "type2") {
+            grid.addWidget(
+              renderComponentToHtml(<Type2Chart data={data} details={{ title: "Title 2", icon: "/band-logo/google.png" }} />),
+              {
+                w: coords.w,
+                h: coords.h,
+                x: coords.x,
+                y: coords.y,
+                noMove: false,
+                noResize: false,
+                locked: false
+              }
+            );
+          } else if (card.visualization === "type3") {
+            grid.addWidget(
+              renderComponentToHtml(<Type3Chart data={data} details={{ title: "Title 2", icon: "/band-logo/google.png" }} />),
+              {
+                w: coords.w,
+                h: coords.h,
+                x: coords.x,
+                y: coords.y,
+                noMove: false,
+                noResize: false,
+                locked: false
               }
             );
           }
