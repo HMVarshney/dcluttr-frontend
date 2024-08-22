@@ -33,29 +33,24 @@ export default function CreateSectionButton({ children, onSave = () => {} }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className=" bg-white border-none max-w-[652px] p-0">
         <DialogHeader>
-          <DialogTitle className="border-b p-4">Section name</DialogTitle>
+          <DialogTitle className="border-b p-4">Create section</DialogTitle>
         </DialogHeader>
 
         <div className="grid gap-4 px-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="Section name" className="text-base font-bold">
+            <Label htmlFor="Section name" className="text-base font-semibold">
               Section name
             </Label>
-            <Input
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              id="Section name"
-              placeholder="Type title here"
-            />
+            <Input onChange={(e) => setName(e.target.value)} value={name} id="Section name" placeholder="Type title here" />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="logo" className="text-base font-bold">
+            <Label htmlFor="logo" className="text-base font-semibold">
               Search for metric
             </Label>
             <Input value={metric} onChange={(e) => setMetric(e.target.value)} placeholder="🔍 Search for metric" />
           </div>
-          <div className="flex flex-col gap-2 px-4 pb-4 border-b">
-            <Label htmlFor="logo" className="text-base font-bold">
+          <div className="flex flex-col gap-2 pb-4 border-b">
+            <Label htmlFor="logo" className="text-base font-semibold">
               Custom Metrics Metrics
             </Label>
             <div className="flex flex-wrap gap-4 py-2">
@@ -86,8 +81,8 @@ export default function CreateSectionButton({ children, onSave = () => {} }) {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-2 px-4">
-            <Label htmlFor="logo" className="text-base font-bold">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="logo" className="text-base font-semibold">
               Web Analytics Metrics
             </Label>
             <div className="flex flex-wrap gap-4 py-2">
