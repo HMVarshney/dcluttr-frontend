@@ -10,7 +10,7 @@ async function fetchCubejsQuery(query) {
   return { raw: response.loadResponse, parsed: parseRawLoadResponse(response.loadResponse) };
 }
 
-function DashboardTable({ query, columnOrder }) {
+function DashboardTable({ title, description, query, columnOrder }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -42,7 +42,7 @@ function DashboardTable({ query, columnOrder }) {
 
   return (
     <div>
-      <DashboardTableHeader />
+      <DashboardTableHeader title={title} description={description} />
       <DashboardTableBody loading={loading} error={error} data={{ results, columns: columnDefs }} />
     </div>
   );

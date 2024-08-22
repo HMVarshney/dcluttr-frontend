@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { SquareHalf } from "phosphor-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function DashboardTableHeader() {
+export function DashboardTableHeader({ title, description }) {
   return (
     <div className="flex items-center justify-center gap-2 p-6">
       <div className="mr-auto">
-        <div className="text-xl font-bold">Campaign-wise distribution</div>
-        <div className="text-[#4F4D55] text-xs">Find all the analytics for store</div>
+        <div className="text-xl font-bold">{title}</div>
+        <div className="text-[#4F4D55] text-xs">{description}</div>
       </div>
       <div>
         <ExportButton onExport={() => exportCampaignWiseTable(allData, campaignData.parsed?.columns || {})} />
