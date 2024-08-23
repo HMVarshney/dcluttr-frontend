@@ -10,21 +10,20 @@ async function fetchCubejsQuery(query) {
   return { raw: response.loadResponse, parsed: parseRawLoadResponse(response.loadResponse) };
 }
 
+function constructColumnDefs(columns) {
+  return Object.entries(columns).map(([key, value]) => ({
+    id: key,
+    accessorFn: (row) => row[key],
+    header: <div className="min-w-32">{extractTitleFromAnnotation(value)}</div>,
+    cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+  }));
+}
+
 function DashboardTable({ title, description, query, columnOrder }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [results, setResults] = useState([]);
-  const [columns, setColumns] = useState({});
-
-  const columnDefs = useMemo(() => {
-    return Object.entries(columns).map(([key, value]) => ({
-      id: key,
-      accessorFn: (row) => row[key],
-      header: <div className="min-w-32">{extractTitleFromAnnotation(value)}</div>,
-      cell: (info) => <div className="min-w-32">{info.getValue()}</div>
-    }));
-  }, [columns]);
+  const [columns, setColumns] = useState([]);
 
   useEffect(() => {
     (async function () {
@@ -32,7 +31,7 @@ function DashboardTable({ title, description, query, columnOrder }) {
       try {
         const { parsed } = await fetchCubejsQuery(query);
         setResults(parsed.results);
-        setColumns(parsed.columns);
+        setColumns(constructColumnDefs(parsed.columns));
         setLoading(false);
       } catch (err) {
         setError(err);
@@ -41,9 +40,9 @@ function DashboardTable({ title, description, query, columnOrder }) {
   }, [query]);
 
   return (
-    <div>
+    <div className="h-full">
       <DashboardTableHeader title={title} description={description} />
-      <DashboardTableBody loading={loading} error={error} data={{ results, columns: columnDefs }} />
+      <DashboardTableBody loading={loading} error={error} data={{ results, columns }} />
     </div>
   );
 }

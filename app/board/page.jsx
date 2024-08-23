@@ -3,12 +3,14 @@
 import { useEffect, useRef } from "react";
 import "gridstack/dist/gridstack.min.css";
 import { GridStack } from "gridstack";
-import DashboardTable from "../(dashboards)/dashboard/performance/_components/DashboardTable";
+import DashboardTable from "../../components/shared/DynamicDashboard/DashboardTable";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import Type1Chart from "../(dashboards)/_components/Home/Type1Chart";
 import { dashboardJSON } from "./dashboards";
 import Type2Chart from "../(dashboards)/_components/Home/Type2Chart";
 import Type3Chart from "../(dashboards)/_components/Home/Type3Chart";
+import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
+import DonutChart from "@/components/shared/DynamicDashboard/Charts/PieChart";
 
 const data = {
   title: "Spends",
@@ -87,74 +89,45 @@ const placeholderValues = {
 };
 
 let grid;
-const Board = () => {
+function Board() {
   const ref = useRef(null);
 
   useEffect(() => {
     if (!grid) grid = GridStack.init({}, ref.current);
 
-    if (dashboardJSON.sections.length && dashboardJSON.sections[0].dashboardCards.length) {
+    if (dashboardJSON.sections.length && dashboardJSON.sections[0].cards.length) {
       grid.batchUpdate(true);
-      dashboardJSON.sections[0].dashboardCards.map((card) => {
-        if (card.isActive) {
-          const { title, description, coords } = card;
-          if (card.visualization === "table") {
+      dashboardJSON.sections[0].cards.map((card) => {
+        if (card.active) {
+          const { title, description, logo, gridStackProperties, visualizationType } = card;
+          const query = JSON.parse(card.query);
+          const gridStackOptions = {
+            w: gridStackProperties.w,
+            h: gridStackProperties.h,
+            x: gridStackProperties.x,
+            y: gridStackProperties.y,
+            noMove: gridStackProperties.noMove,
+            noResize: gridStackProperties.noResize,
+            locked: gridStackProperties.locked
+          };
+
+          if (visualizationType === visualizationTypes.TABLE) {
             grid.addWidget(
               renderComponentToHtml(
-                <DashboardTable
-                  title={title}
-                  description={description}
-                  query={replacePlaceholders(card.query, placeholderValues)}
-                />
+                <DashboardTable title={title} description={description} query={replacePlaceholders(query, placeholderValues)} />
               ),
-              {
-                w: coords.w,
-                h: coords.h,
-                x: coords.x,
-                y: coords.y,
-                noMove: true,
-                noResize: true,
-                locked: true
-              }
+              gridStackOptions
             );
-          } else if (card.visualization === "type1") {
+          } else if (visualizationType === "type1") {
+            grid.addWidget(renderComponentToHtml(<Type1Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
+          } else if (visualizationType === "type2") {
+            grid.addWidget(renderComponentToHtml(<Type2Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
+          } else if (visualizationType === "type3") {
+            grid.addWidget(renderComponentToHtml(<Type3Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
+          } else if (visualizationType === visualizationTypes.PIECHART) {
             grid.addWidget(
-              renderComponentToHtml(<Type1Chart data={data} details={{ title: "Title", icon: "/band-logo/google.png" }} />),
-              {
-                w: coords.w,
-                h: coords.h,
-                x: coords.x,
-                y: coords.y,
-                noMove: false,
-                noResize: false,
-                locked: false
-              }
-            );
-          } else if (card.visualization === "type2") {
-            grid.addWidget(
-              renderComponentToHtml(<Type2Chart data={data} details={{ title: "Title 2", icon: "/band-logo/google.png" }} />),
-              {
-                w: coords.w,
-                h: coords.h,
-                x: coords.x,
-                y: coords.y,
-                noMove: false,
-                noResize: false,
-                locked: false
-              }
-            );
-          } else if (card.visualization === "type3") {
-            grid.addWidget(
-              renderComponentToHtml(<Type3Chart data={data} details={{ title: "Title 2", icon: "/band-logo/google.png" }} />),
-              {
-                w: coords.w,
-                h: coords.h,
-                x: coords.x,
-                y: coords.y,
-                noMove: false,
-                noResize: false,
-                locked: false
-              }
+              renderComponentToHtml(<DonutChart title={title} description={description} query={query} />),
+              gridStackOptions
             );
           }
         }
@@ -164,7 +137,7 @@ const Board = () => {
   }, []);
 
   return <div ref={ref}></div>;
-};
+}
 
 function TestBoard() {
   return <Board />;

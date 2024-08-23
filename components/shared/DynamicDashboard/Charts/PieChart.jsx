@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { useDispatch, useSelector } from "react-redux";
-import { getAdsTypeGoogle } from "@/lib/store/features/googleAdsSlice";
+import { cubejsClient } from "@/lib/cubeJsApi";
+import { parseRawLoadResponse } from "@/lib/utils/cubejs.utils";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const COLORS = [
   { color: "#B1BA88", campaign_type: "PERFORMANCE_MAX", active: true },
@@ -11,6 +11,11 @@ const COLORS = [
   { color: "#E87C67", campaign_type: "VIDEO", active: true },
   { color: "#EDA2A2", campaign_type: "DISCOVERY", active: true }
 ];
+
+async function fetchCubejsQuery(query) {
+  const response = await cubejsClient.load(query);
+  return { raw: response.loadResponse, parsed: parseRawLoadResponse(response.loadResponse) };
+}
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -24,55 +29,37 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-const CampaignTypeDonutChart = () => {
-  const { data: allData } = useSelector((state) => state.googleAds.adsType);
+const DonutChart = ({ title, description, query }) => {
+  const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(COLORS);
 
   const data = useMemo(() => {
-    if (!allData.parsed) return [];
-    return allData.parsed?.results?.map((item) => {
-      if (selected.find((i) => i.campaign_type === item.campaign_type && i.active)) {
+    return results.map((item) => {
+      if (selected.find((i) => i.campaign_type === item.name && i.active)) {
         return {
-          name: item.campaign_type,
-          value: parseInt(item.clicks_sum)
+          name: item.name,
+          value: parseInt(item.value)
         };
       }
     });
-  }, [allData, selected]);
+  }, [results, selected]);
 
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAdsTypeGoogle());
-  }, [dispatch]);
+    (async function () {
+      try {
+        const { parsed } = await fetchCubejsQuery(query);
+        setResults(parsed.results.map((r) => ({ name: r.name, value: r.clicks_sum })));
+        setColumns(parsed.columns);
+      } catch (err) {
+        console.error("Error in piechart:", err);
+      }
+    })();
+  }, [query]);
 
   return (
     <div className="w-full">
-      <div className="text-xl font-bold mb-4">Campaign Type</div>
+      <div className="text-xl font-bold mb-4">{title}</div>
       <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white w-full h-[calc(100%-44px)] overflow-hidden group flex flex-col justify-between items-stretch">
-        <div className="flex gap-2.5 items-center p-4 border-b border-[#F1F1F1]">
-          <div className="text-base font-bold">Campaign Type</div>
-          <div className="flex-1"></div>
-          {/* <Select>
-            <SelectTrigger className="w-[140px] ">
-              <SelectValue placeholder="Revenue 1" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="R-1">Revenue 1</SelectItem>
-              <SelectItem value="R-2">Revenue 2</SelectItem>
-              <SelectItem value="R-3">Revenue 3</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[120px]">
-              <SelectValue placeholder="Orders 1" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="R-1">Orders 1</SelectItem>
-              <SelectItem value="R-2">Orders 2</SelectItem>
-              <SelectItem value="R-3">Orders 3</SelectItem>
-            </SelectContent>
-          </Select> */}
-        </div>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie data={data} cx="50%" cy="50%" innerRadius={70} outerRadius={110} fill="#8884d8" paddingAngle={0} dataKey="value">
@@ -81,7 +68,6 @@ const CampaignTypeDonutChart = () => {
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
-            {/* <Legend /> */}
           </PieChart>
         </ResponsiveContainer>
         <div className="py-4 px-5 text-xs font-semibold border-t border-[#F1F1F1] flex items-center gap-4 overflow-x-auto">
@@ -108,4 +94,4 @@ const CampaignTypeDonutChart = () => {
   );
 };
 
-export default CampaignTypeDonutChart;
+export default DonutChart;
