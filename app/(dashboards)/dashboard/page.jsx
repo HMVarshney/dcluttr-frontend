@@ -162,7 +162,7 @@ export default function Page() {
       title: "Meta Ads Sales",
       icon: "/band-logo/meta.png",
       id: 1,
-      type: "Type3Chart",
+      type: "Type1Chart",
       data: data,
       select: true
     },
@@ -243,9 +243,8 @@ export default function Page() {
 
     if (active.id !== over?.id) {
       setCardList((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
-
+        const oldIndex = items.map((i) => i.id).indexOf(active.id);
+        const newIndex = items.map((i) => i.id).indexOf(over.id);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
