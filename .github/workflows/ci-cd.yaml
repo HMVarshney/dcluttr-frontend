@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - main
       - cicd
       - features/*
       - bugs/*
