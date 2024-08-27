@@ -28,12 +28,10 @@ function exportAdPlacementTable(data, annotation) {
 
 export default function AdPlacementTable({ isGoogle = false }) {
   const isOpen = useSelector((state) => state.user.sideBarClose);
-  const { adsPlacementMetaLoading, adsPlacementMetaError, adsPlacementMetaData } = useSelector(
-    (state) => state.metaAds
-  );
+  const { adsPlacementMetaLoading, adsPlacementMetaError, adsPlacementMetaData } = useSelector((state) => state.metaAds);
 
-  const annotation = adsPlacementMetaData?.results?.[0]?.annotation;
-  const data = adsPlacementMetaData?.results?.[0]?.data?.slice(0, 8);
+  const annotation = adsPlacementMetaData.parsed?.columns || {};
+  const data = adsPlacementMetaData.parsed?.results || [];
 
   return (
     <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen })}>
