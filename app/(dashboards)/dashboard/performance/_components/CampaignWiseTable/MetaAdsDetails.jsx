@@ -156,9 +156,9 @@ export default function MetaAdsDetails() {
       <div className="px-6 pb-8 w-full">
         <div className="rounded-md overflow-hidden border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
           <CampaignTable
-            data={data?.results?.[0]?.data?.map((l1) => ({
+            data={data.parsed?.results?.map((l1) => ({
               ...l1,
-              subRows: adsData?.results?.[0]?.data?.filter((l3) => l3.campaign_id === l1.campaign_id)
+              subRows: adsData.parsed?.results?.filter((l3) => l3.campaign_id === l1.campaign_id)
             }))}
             columns={columns}
           />
