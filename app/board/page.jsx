@@ -10,8 +10,8 @@ import { dashboardJSON } from "./dashboards";
 import Type2Chart from "../(dashboards)/_components/Home/Type2Chart";
 import Type3Chart from "../(dashboards)/_components/Home/Type3Chart";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
-import DonutChart from "@/components/shared/DynamicDashboard/Charts/PieChart";
-import DashboardChart from "@/components/shared/DynamicDashboard/Charts";
+import DonutChart from "@/components/shared/DynamicDashboard/DashboardChart/Charts/PieChart";
+import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 
 const placeholderValues = {
   order_by_key: "google_campaign_stream.purchase_value_sum",
