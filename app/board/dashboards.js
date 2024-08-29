@@ -27,7 +27,7 @@ export const dashboardJSON = {
             '{"measures":["google_campaign_stream.purchase_value_sum","google_campaign_stream.ad_spend_sum","google_campaign_stream.purchase_sum","google_campaign_stream.impressions_sum","google_campaign_stream.clicks_sum","google_campaign_stream.vtc_sum","google_campaign_stream.ctr","google_campaign_stream.cpc","google_campaign_stream.cpm","google_campaign_stream.roas","google_campaign_stream.aov","google_campaign_stream.cpa"],"dimensions":["google_campaign.id","google_campaign.name","google_campaign.resource_name","google_campaign.campaign_link"],"order":{"google_campaign_stream.purchase_value_sum":"desc"},"timeDimensions":[{"dimension":"google_campaign_stream.date","granularity":"week"}]}',
           columnOrder: ["region", "sales"],
           selectedMetric: ["sales"],
-          active: true
+          active: false
         },
         {
           visualizationType: "table",
@@ -100,9 +100,30 @@ export const dashboardJSON = {
           description: "Find all the analytics for store",
           gridStackProperties: {
             x: 0,
-            y: 5,
+            y: 3,
             w: 4,
-            h: 3,
+            h: 2,
+            locked: true,
+            noResize: true,
+            noMove: true
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: ["date", "sales"],
+          selectedMetric: ["sales"],
+          active: true
+        },
+        {
+          visualizationType: "gauge",
+          title: "Campaign Type",
+          id: "102",
+          logo: "/icons/google.svg",
+          description: "Find all the analytics for store",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 2,
             locked: true,
             noResize: true,
             noMove: true

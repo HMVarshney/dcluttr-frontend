@@ -7,16 +7,16 @@ import CustomActiveDot from "@/components/CustomActiveDot";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChartHeader } from "./Elements";
 
-function AreaChart1({ isLoading = false, data, details }) {
+function AreaChart1({ isLoading = false, gaugeData, chartData, details }) {
   return (
-    <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white w-full h-full overflow-hidden group">
-      <ChartHeader details={details} />
+    <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white w-full h-80 group">
+      <ChartHeader gaugeData={gaugeData} details={details} />
       {isLoading ? (
         <Skeleton className="w-[calc(100%-32px)] h-[128px] my-4 rounded-md mx-auto" />
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={data.results.slice(-10)}
+            data={chartData.results}
             margin={{
               top: 10,
               right: 16,
@@ -29,7 +29,7 @@ function AreaChart1({ isLoading = false, data, details }) {
             <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 10, fontWeight: 400 }} />
             <Tooltip content={<CustomTooltip />} />
 
-            {data.columns.map((ele) => (
+            {chartData.columns.map((ele) => (
               <Fragment key={ele.name}>
                 <Area
                   type="monotone"

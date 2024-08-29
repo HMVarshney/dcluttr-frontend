@@ -48,7 +48,7 @@ function Board() {
               ),
               gridStackOptions
             );
-          } else if (visualizationType === "type1") {
+          } else if (visualizationType === "type1" || visualizationType === visualizationTypes.GAUGE) {
             grid.addWidget(
               renderComponentToHtml(
                 <DashboardChart title={title} description={description} icon={logo} query={query} chartType={visualizationType} />

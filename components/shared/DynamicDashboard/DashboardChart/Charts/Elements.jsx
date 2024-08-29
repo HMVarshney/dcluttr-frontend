@@ -1,12 +1,11 @@
 "use client";
 
 import { ArrowUp, CircleHelp, Grip } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Share } from "phosphor-react";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import Image from "next/image";
 
-export function ChartHeader({ details }) {
+export function ChartHeader({ details, gaugeData }) {
   return (
     <>
       <div className="flex items-center p-3 border-b border-[#F1F1F1]">
@@ -23,7 +22,7 @@ export function ChartHeader({ details }) {
         </div>
       </div>
       <div className="flex items-center justify-between px-3 pt-2.5">
-        <div className=" text-2xl font-bold text-black">₹2,45,982</div>
+        <div className=" text-2xl font-bold text-black">{Object.values(gaugeData?.results?.[0] || {})?.[0]}</div>
         <div className="">
           <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
             <ArrowUp className="w-4" />

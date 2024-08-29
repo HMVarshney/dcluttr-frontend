@@ -3,6 +3,8 @@ import { extractTitleFromAnnotation } from "../../../../lib/utils/cubejs.utils";
 import AreaChart1 from "./Charts/AreaChart1";
 import { useCubeQueryWrapper } from "@/lib/hooks/cubejs";
 import { cubejsClient } from "@/lib/cubeJsApi";
+import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
+import GaugeChart from "./Charts/GaugeChart";
 
 function constructColumnDefs(columns) {
   return Object.entries(columns).map(([key, value]) => ({
@@ -16,27 +18,39 @@ function constructColumnDefs(columns) {
 
 function DashboardChart({ title, description, icon, query, chartType }) {
   const {
-    result: { parsed },
-    isLoading
-  } = useCubeQueryWrapper(query, { castNumerics: true, cubeApi: cubejsClient });
+    result: { parsed: parsedGaugeData },
+    isLoading: isLoadingGauge
+  } = useCubeQueryWrapper(query[0], { castNumerics: true, cubeApi: cubejsClient });
+
+  const {
+    result: { parsed: parsedChartData },
+    isLoading: isLoadingChart
+  } = useCubeQueryWrapper(query[1], { castNumerics: true, cubeApi: cubejsClient });
 
   const { results, columns } = useMemo(() => {
     return {
-      results: parsed.results.map((res) => ({
+      results: parsedChartData.results.map((res) => ({
         ...res,
         name: res.created_at
       })),
-      columns: constructColumnDefs(parsed.columns)
+      columns: constructColumnDefs(parsedChartData.columns)
     };
-  }, [parsed.results, parsed.columns]);
+  }, [parsedChartData.results, parsedChartData.columns]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoadingChart || isLoadingGauge) return <div>Loading...</div>;
 
-  if (!results.length) return null;
+  if (chartType === visualizationTypes.GAUGE) {
+    return <GaugeChart />;
+  }
 
   return (
-    <div className="h-full px-6">
-      <AreaChart1 isLoading={isLoading} data={{ results, columns }} details={{ title, icon, description }} />
+    <div>
+      <AreaChart1
+        isLoading={isLoadingChart || isLoadingGauge}
+        gaugeData={parsedGaugeData}
+        chartData={{ results, columns }}
+        details={{ title, icon, description }}
+      />
     </div>
   );
 }
