@@ -11,77 +11,7 @@ import Type2Chart from "../(dashboards)/_components/Home/Type2Chart";
 import Type3Chart from "../(dashboards)/_components/Home/Type3Chart";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 import DonutChart from "@/components/shared/DynamicDashboard/Charts/PieChart";
-
-const data = {
-  title: "Spends",
-  series: [
-    {
-      name: "Spends",
-      dataKey: "s",
-      id: 3,
-      color: "#9A66ED",
-      type: "line"
-    },
-    {
-      name: "Revenue",
-      dataKey: "r",
-      id: 4,
-      color: "#2EB76F",
-      type: "area"
-    }
-  ],
-  data: [
-    {
-      name: "A",
-      s: 8,
-      r: 1,
-      amt: 24,
-      x: "jan"
-    },
-    {
-      name: "B",
-      s: 5,
-      r: 10,
-      amt: 22,
-      x: "feb"
-    },
-    {
-      name: "C",
-      s: 12,
-      r: 10,
-      amt: 22,
-      x: "mar"
-    },
-    {
-      name: "D",
-      s: 10,
-      r: 17,
-      amt: 20,
-      x: "apr"
-    },
-    {
-      name: "E",
-      s: 14,
-      r: 25,
-      amt: 21,
-      x: "may"
-    },
-    {
-      name: "F",
-      s: 10,
-      r: 19,
-      amt: 25,
-      x: "jun"
-    },
-    {
-      name: "G",
-      s: 20,
-      r: 25,
-      amt: 21,
-      x: "jul"
-    }
-  ]
-};
+import DashboardChart from "@/components/shared/DynamicDashboard/Charts";
 
 const placeholderValues = {
   order_by_key: "google_campaign_stream.purchase_value_sum",
@@ -119,17 +49,23 @@ function Board() {
               gridStackOptions
             );
           } else if (visualizationType === "type1") {
-            grid.addWidget(renderComponentToHtml(<Type1Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
-          } else if (visualizationType === "type2") {
-            grid.addWidget(renderComponentToHtml(<Type2Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
-          } else if (visualizationType === "type3") {
-            grid.addWidget(renderComponentToHtml(<Type3Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
-          } else if (visualizationType === visualizationTypes.PIECHART) {
             grid.addWidget(
-              renderComponentToHtml(<DonutChart title={title} description={description} query={query} />),
+              renderComponentToHtml(
+                <DashboardChart title={title} description={description} icon={logo} query={query} chartType={visualizationType} />
+              ),
               gridStackOptions
             );
           }
+          // else if (visualizationType === "type2") {
+          //   grid.addWidget(renderComponentToHtml(<Type2Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
+          // } else if (visualizationType === "type3") {
+          //   grid.addWidget(renderComponentToHtml(<Type3Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
+          // } else if (visualizationType === visualizationTypes.PIECHART) {
+          //   grid.addWidget(
+          //     renderComponentToHtml(<DonutChart title={title} description={description} query={query} />),
+          //     gridStackOptions
+          //   );
+          // }
         }
       });
       grid.batchUpdate(false);
