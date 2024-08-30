@@ -5,6 +5,7 @@ import { useCubeQueryWrapper } from "@/lib/hooks/cubejs";
 import { cubejsClient } from "@/lib/cubeJsApi";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 import GaugeChart from "./Charts/GaugeChart";
+import moment from "moment";
 
 function constructColumnDefs(columns) {
   return Object.entries(columns).map(([key, value]) => ({
@@ -23,30 +24,51 @@ function DashboardChart({ title, description, icon, query, chartType }) {
   } = useCubeQueryWrapper(query[0], { castNumerics: true, cubeApi: cubejsClient });
 
   const {
-    result: { parsed: parsedChartData },
-    isLoading: isLoadingChart
+    result: { parsed: parsedChartData1 },
+    isLoading: isLoadingChart1
   } = useCubeQueryWrapper(query[1], { castNumerics: true, cubeApi: cubejsClient });
+
+  // const {
+  //   result: { parsed: parsedChartData2 },
+  //   isLoading: isLoadingChart2
+  // } = useCubeQueryWrapper(query[2], { castNumerics: true, cubeApi: cubejsClient });
+
+  // const { results, columns } = useMemo(() => {
+  //   return {
+  //     results: [
+  //       ...parsedChartData1.results.map((res) => ({
+  //         ...res,
+  //         name: moment(res.created_at).format("DD/MM/YYYY")
+  //       })),
+  //       ...parsedChartData2.results.map((res) => ({
+  //         ...res,
+  //         name: moment(res.created_at).format("DD/MM/YYYY")
+  //       }))
+  //     ],
+  //     columns: constructColumnDefs({ ...parsedChartData1.columns, ...parsedChartData2.columns })
+  //   };
+  // }, [parsedChartData1.results, parsedChartData1.columns, parsedChartData2.results, parsedChartData2.columns]);
 
   const { results, columns } = useMemo(() => {
     return {
-      results: parsedChartData.results.map((res) => ({
+      results: parsedChartData1.results.map((res) => ({
         ...res,
-        name: res.created_at
+        name: moment(res.created_at).format("DD/MM/YYYY")
       })),
-      columns: constructColumnDefs(parsedChartData.columns)
+      columns: constructColumnDefs(parsedChartData1.columns)
     };
-  }, [parsedChartData.results, parsedChartData.columns]);
+  }, [parsedChartData1.results, parsedChartData1.columns]);
 
-  if (isLoadingChart || isLoadingGauge) return <div>Loading...</div>;
+  if (isLoadingChart1 || isLoadingGauge) return <div>Loading...</div>;
 
   if (chartType === visualizationTypes.GAUGE) {
     return <GaugeChart />;
   }
 
   return (
-    <div>
+    <div className="h-full">
       <AreaChart1
-        isLoading={isLoadingChart || isLoadingGauge}
+        isLoading={isLoadingChart1 || isLoadingGauge}
         gaugeData={parsedGaugeData}
         chartData={{ results, columns }}
         details={{ title, icon, description }}

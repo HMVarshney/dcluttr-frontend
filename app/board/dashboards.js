@@ -99,8 +99,8 @@ export const dashboardJSON = {
           logo: "/icons/google.svg",
           description: "Find all the analytics for store",
           gridStackProperties: {
-            x: 0,
-            y: 3,
+            x: 4,
+            y: 0,
             w: 4,
             h: 2,
             locked: true,
@@ -111,10 +111,10 @@ export const dashboardJSON = {
             '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
-          active: true
+          active: false
         },
         {
-          visualizationType: "gauge",
+          visualizationType: "type1",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/google.svg",
@@ -129,10 +129,52 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}',
+            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week","dateRange":["2024-07-01","2024-07-30"]}],"order":[["hybrid_performance_stream.created_at","asc"]]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week","dateRange":["2024-08-01","2024-08-31"]}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true
+        },
+        {
+          visualizationType: "gauge",
+          title: "Campaign Type",
+          id: "102",
+          logo: "/icons/google.svg",
+          description: "Find all the analytics for store",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 1,
+            locked: true,
+            noResize: true,
+            noMove: true
+          },
+          query:
+            '{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}',
+          columnOrder: ["date", "sales"],
+          selectedMetric: ["sales"],
+          active: false
+        },
+        {
+          visualizationType: "gauge",
+          title: "Campaign Type",
+          id: "102",
+          logo: "/icons/google.svg",
+          description: "Find all the analytics for store",
+          gridStackProperties: {
+            x: 0,
+            y: 1,
+            w: 4,
+            h: 1,
+            locked: true,
+            noResize: true,
+            noMove: true
+          },
+          query:
+            '{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}',
+          columnOrder: ["date", "sales"],
+          selectedMetric: ["sales"],
+          active: false
         }
       ]
     }
