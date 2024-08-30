@@ -1,16 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import "gridstack/dist/gridstack.min.css";
 import { GridStack } from "gridstack";
+import "gridstack/dist/gridstack.min.css";
 import DashboardTable from "../../components/shared/DynamicDashboard/DashboardTable";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
-import Type1Chart from "../(dashboards)/_components/Home/Type1Chart";
 import { dashboardJSON } from "./dashboards";
-import Type2Chart from "../(dashboards)/_components/Home/Type2Chart";
-import Type3Chart from "../(dashboards)/_components/Home/Type3Chart";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
-import DonutChart from "@/components/shared/DynamicDashboard/DashboardChart/Charts/PieChart";
 import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 
 const placeholderValues = {
