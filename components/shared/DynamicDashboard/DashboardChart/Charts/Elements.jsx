@@ -2,8 +2,8 @@
 
 import { ArrowUp, CircleHelp, Grip } from "lucide-react";
 import { Share } from "phosphor-react";
-import ExportFileFormat from "@/components/ExportFileFormat";
 import Image from "next/image";
+import ExportFileFormat from "@/components/ExportFileFormat";
 
 export function ChartHeader({ details, gaugeData }) {
   return (
@@ -23,13 +23,13 @@ export function ChartHeader({ details, gaugeData }) {
       </div>
       <div className="flex items-center justify-between px-3 pt-2.5">
         <div className=" text-2xl font-bold text-black">₹{gaugeData[1] ?? gaugeData[0]}</div>
-        {gaugeData.length > 1 && !!gaugeData[1] && (
+        {gaugeData[1] !== null && (
           <div>
             <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
               <ArrowUp className="w-4" />
               {((gaugeData[1] - gaugeData[0]) / (gaugeData[0] || 1)) * 100}%
             </div>
-            <div className="text-[10px] text-gray-400 text-right">vs {gaugeData[0]} last month</div>
+            <div className="text-[10px] text-gray-400 text-right">vs ₹{gaugeData[0]} last month</div>
           </div>
         )}
       </div>

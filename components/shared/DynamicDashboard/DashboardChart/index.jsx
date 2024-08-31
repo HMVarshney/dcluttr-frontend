@@ -1,9 +1,9 @@
 import { useMemo } from "react";
+import { useCubeQuery } from "@cubejs-client/react";
 import AreaChart1 from "./Charts/AreaChart1";
 import { cubejsClient } from "@/lib/cubeJsApi";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 import GaugeChart from "./Charts/GaugeChart";
-import { useCubeQuery } from "@cubejs-client/react";
 
 function DashboardChart({ title, description, icon, query, chartType }) {
   const { resultSet: resultSetGauge, isLoading: isLoadingGauge } = useCubeQuery(query[0], {

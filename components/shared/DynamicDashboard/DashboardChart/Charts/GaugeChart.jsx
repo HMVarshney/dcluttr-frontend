@@ -31,14 +31,14 @@ export function SubChart({ icon, data }) {
   return (
     <div className="flex items-center gap-2 px-3 py-3.5 border-t border-[#F1F1F1]">
       <Image src={icon} alt={icon} width={24} height={24} className="w-6 h-6 object-contain" />
-      <div className=" text-2xl font-bold text-black">{data[1] ?? data[0]}</div>
+      <div className=" text-2xl font-bold text-black">₹{data[1] ?? data[0]}</div>
       {data[1] !== null && (
         <div className="ml-auto">
           <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
             <ArrowUp className="w-4" />
             {((data[1] - data[0]) / (data[0] || 1)) * 100}%
           </div>
-          <div className="text-[10px] text-gray-400 text-right">vs {data[0]} last month</div>
+          <div className="text-[10px] text-gray-400 text-right">vs ₹{data[0]} last month</div>
         </div>
       )}
     </div>

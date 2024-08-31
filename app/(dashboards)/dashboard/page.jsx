@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSelector } from "react-redux";
 import { GridStack } from "gridstack";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import MainChart from "../_components/Home/MainChart";
@@ -11,7 +12,7 @@ import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart"
 import { dashboardJSON } from "@/app/board/dashboards";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
-import { useSelector } from "react-redux";
+
 import "gridstack/dist/gridstack.min.css";
 
 const data1 = {
