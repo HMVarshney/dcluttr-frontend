@@ -24,7 +24,7 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","dateRange":["${date_range_from}","${date_range_to}"]}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true
@@ -45,7 +45,7 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true
@@ -66,7 +66,7 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true
@@ -79,7 +79,7 @@ export const dashboardJSON = {
           description: "Find all the analytics for store",
           gridStackProperties: {
             x: 0,
-            y: 2,
+            y: 3,
             w: 4,
             h: 2,
             locked: true,
@@ -87,7 +87,7 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true
@@ -100,7 +100,7 @@ export const dashboardJSON = {
           description: "Find all the analytics for store",
           gridStackProperties: {
             x: 4,
-            y: 2,
+            y: 3,
             w: 4,
             h: 2,
             locked: true,
@@ -108,7 +108,7 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"week"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true
@@ -121,7 +121,7 @@ export const dashboardJSON = {
           description: "Find all the analytics for store",
           gridStackProperties: {
             x: 8,
-            y: 2,
+            y: 3,
             w: 4,
             h: 2,
             locked: true,
@@ -129,7 +129,7 @@ export const dashboardJSON = {
             noMove: true
           },
           query:
-            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","dateRange":["${date_range_from}","${date_range_to}"]}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
           columnOrder: ["date", "sales"],
           selectedMetric: ["sales"],
           active: true

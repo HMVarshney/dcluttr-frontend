@@ -14,6 +14,7 @@ import { setDateRange, setEndDateRange, setIsCompareOn } from "@/lib/store/featu
 import { Switch } from "./ui/switch";
 
 const mulish = Mulish({ subsets: ["latin"] });
+
 const START_TIME_RANGES = [
   { label: "Today", value: "today" },
   { label: "Yesterday", value: "yesterday" },
@@ -27,7 +28,6 @@ const START_TIME_RANGES = [
   { label: "This year", value: "this year" },
   { label: "Custom", value: "custom" }
 ];
-
 const END_TIME_RANGES = [
   { label: "None", value: "today" },
   { label: "Previous period", value: "Previous period" },
@@ -83,10 +83,10 @@ export default function DatePickerWithRange({ className }) {
               </Button>
             ))}
           </div>
-          <div className="">
+          <div>
             <div className="flex">
               <div className="px-6 flex flex-col pt-20">
-                <div className="flex items-center gap-3 ">
+                <div className="flex items-center gap-3">
                   <Button variant={"outline"} className="w-full justify-start text-left font-medium border-[#DFE0E5]">
                     {moment(dateRange?.from).format("MMM DD, YYYY")}
                   </Button>
@@ -100,7 +100,6 @@ export default function DatePickerWithRange({ className }) {
                   defaultMonth={dateRange?.from}
                   selected={dateRange}
                   onSelect={(range) => {
-                    // if (range.to && range.from) {
                     dispatch(
                       setDateRange({
                         from: moment(range.from).format("YYYY-MM-DD"),
@@ -109,7 +108,6 @@ export default function DatePickerWithRange({ className }) {
                         label: null
                       })
                     );
-                    // }
                   }}
                   numberOfMonths={1}
                   className="px-0 pt-6"
@@ -120,7 +118,7 @@ export default function DatePickerWithRange({ className }) {
                   "max-w-0 px-0 opacity-0": !isCompareOn
                 })}
               >
-                <div className="flex items-center gap-3 ">
+                <div className="flex items-center gap-3">
                   <Button variant={"outline"} className="w-full justify-start text-left font-medium border-[#DFE0E5]">
                     {moment(endDateRange?.from).format("MMM DD, YYYY")}
                   </Button>
@@ -134,7 +132,6 @@ export default function DatePickerWithRange({ className }) {
                   defaultMonth={endDateRange?.from}
                   selected={endDateRange}
                   onSelect={(range) => {
-                    // if (range.to && range.from) {
                     dispatch(
                       setEndDateRange({
                         from: moment(range.from).format("YYYY-MM-DD"),
@@ -143,7 +140,6 @@ export default function DatePickerWithRange({ className }) {
                         label: null
                       })
                     );
-                    // }
                   }}
                   numberOfMonths={1}
                   className="px-0 pt-6"

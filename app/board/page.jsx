@@ -10,8 +10,8 @@ import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 
 const placeholderValues = {
-  order_by_key: "google_campaign_stream.purchase_value_sum",
-  order_by_value: "desc"
+  compare_date_range_query: [["2024-07-14", "2024-08-14"]],
+  time_dimension_granularity: "day"
 };
 
 let grid;
@@ -47,7 +47,13 @@ function Board() {
           } else if (visualizationType === "type1" || visualizationType === visualizationTypes.GAUGE) {
             grid.addWidget(
               renderComponentToHtml(
-                <DashboardChart title={title} description={description} icon={logo} query={query} chartType={visualizationType} />
+                <DashboardChart
+                  title={title}
+                  description={description}
+                  icon={logo}
+                  query={replacePlaceholders(query, placeholderValues)}
+                  chartType={visualizationType}
+                />
               ),
               gridStackOptions
             );

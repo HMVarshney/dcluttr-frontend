@@ -9,11 +9,10 @@ import MainChart from "../_components/Home/MainChart";
 import DashboardTable from "@/components/shared/DynamicDashboard/DashboardTable";
 import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 import { dashboardJSON } from "@/app/board/dashboards";
-
-import "gridstack/dist/gridstack.min.css";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 import { useSelector } from "react-redux";
+import "gridstack/dist/gridstack.min.css";
 
 const data1 = {
   title: "Spends",
@@ -90,14 +89,21 @@ let gridstackInstance;
 function Page() {
   const gridstackRef = useRef(null);
 
-  const { groupBy, dateRange } = useSelector((state) => state.user);
+  const { groupBy, dateRange, endDateRange } = useSelector((state) => state.user);
 
   const placeholderValues = useMemo(() => {
-    return { date_range_from: dateRange.from, date_range_to: dateRange.to, time_dimension_granularity: groupBy.value };
-  }, [dateRange.from, dateRange.to, groupBy.value]);
+    const values = { compare_date_range_query: [], time_dimension_granularity: groupBy.value };
+    if (dateRange.from && dateRange.to) {
+      values.compare_date_range_query.push([dateRange.from, dateRange.to]);
+    }
+    if (endDateRange.from && endDateRange.to) {
+      values.compare_date_range_query.push([endDateRange.from, endDateRange.to]);
+    }
+    return values;
+  }, [dateRange.from, dateRange.to, groupBy.value, endDateRange.from, endDateRange.to]);
 
   useEffect(() => {
-    if (!gridstackInstance) gridstackInstance = GridStack.init({}, gridstackRef.current);
+    if (!gridstackInstance) gridstackInstance = GridStack.init({ margin: "10rem" }, gridstackRef.current);
 
     gridstackInstance.removeAll();
     if (dashboardJSON.sections.length && dashboardJSON.sections[0].cards.length) {

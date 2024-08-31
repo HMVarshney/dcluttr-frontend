@@ -22,14 +22,16 @@ export function ChartHeader({ details, gaugeData }) {
         </div>
       </div>
       <div className="flex items-center justify-between px-3 pt-2.5">
-        <div className=" text-2xl font-bold text-black">{Object.values(gaugeData?.results?.[0] || {})?.[0]}</div>
-        <div className="">
-          <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
-            <ArrowUp className="w-4" />
-            2.4%
+        <div className=" text-2xl font-bold text-black">₹{gaugeData[1] || gaugeData[0]}</div>
+        {gaugeData.length > 1 && !!gaugeData[1] && (
+          <div>
+            <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
+              <ArrowUp className="w-4" />
+              {((gaugeData[1] - gaugeData[0]) / (gaugeData[0] || 1)) * 100}%
+            </div>
+            <div className="text-[10px] text-gray-400 text-right">vs {gaugeData[0]} last month</div>
           </div>
-          <div className="text-[10px] text-gray-400 text-right">vs 2.69 last month</div>
-        </div>
+        )}
       </div>
     </>
   );
