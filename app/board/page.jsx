@@ -2,12 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import { GridStack } from "gridstack";
-import "gridstack/dist/gridstack.min.css";
 import DashboardTable from "../../components/shared/DynamicDashboard/DashboardTable";
+import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { dashboardJSON } from "./dashboards";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
-import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
+
+import "gridstack/dist/gridstack.min.css";
 
 const placeholderValues = {
   compare_date_range_query: [["2024-07-14", "2024-08-14"]],

@@ -151,7 +151,7 @@ function Page() {
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
-      <Header />
+      <Header sections={dashboardJSON.sections} />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
         <div>

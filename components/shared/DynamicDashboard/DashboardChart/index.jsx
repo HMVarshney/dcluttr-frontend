@@ -32,13 +32,13 @@ function DashboardChart({ title, description, icon, query, chartType }) {
     if (!resultSetGauge) return [0, 0];
 
     const { yValuesArray } = resultSetGauge.pivot()[0];
-    return [yValuesArray?.[0]?.[1] || 0, yValuesArray?.[1]?.[1] || 0];
+    return [yValuesArray?.[0]?.[1] || null, yValuesArray?.[1]?.[1] || null];
   }, [resultSetGauge]);
 
   if (isLoadingChart1 || isLoadingGauge) return <div>Loading...</div>;
 
   if (chartType === visualizationTypes.GAUGE) {
-    return <GaugeChart />;
+    return <GaugeChart isLoading={isLoadingGauge} details={{ title, icon, description }} data={gaugeData} />;
   }
 
   return (

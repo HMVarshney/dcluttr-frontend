@@ -22,7 +22,7 @@ export function ChartHeader({ details, gaugeData }) {
         </div>
       </div>
       <div className="flex items-center justify-between px-3 pt-2.5">
-        <div className=" text-2xl font-bold text-black">₹{gaugeData[1] || gaugeData[0]}</div>
+        <div className=" text-2xl font-bold text-black">₹{gaugeData[1] ?? gaugeData[0]}</div>
         {gaugeData.length > 1 && !!gaugeData[1] && (
           <div>
             <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
