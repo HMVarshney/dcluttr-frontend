@@ -1,19 +1,16 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { ChevronDown, Plus } from "lucide-react";
+import { ProjectorScreenChart } from "phosphor-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import CreateSectionButton from "./CreateSectionButton";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Plus } from "lucide-react";
-import Image from "next/image";
-import { HouseLine, ProjectorScreenChart } from "phosphor-react";
 
-export default function BrandList({ sections }) {
-  const [active, setActive] = useState({
-    title: "Home",
-    icon: <HouseLine className="w-4 h-4 mr-1" />
-  });
+export default function BrandList({ sections, activeSectionId, setActiveSectionId }) {
   const [titles, setTitles] = useState([]);
 
   const handleOnDragEnd = (result) => {
@@ -48,9 +45,9 @@ export default function BrandList({ sections }) {
                         {...provided.dragHandleProps}
                         {...provided.draggableProps}
                         className={cn("flex gap-1 items-center px-4 py-1.5 bg-white rounded-md cursor-grab", {
-                          "bg-primary text-white": active.title === ele.title
+                          "bg-primary text-white": activeSectionId === ele.id
                         })}
-                        onClick={() => setActive(ele)}
+                        onClick={() => setActiveSectionId(ele.id)}
                       >
                         <Image src={ele.icon} alt="Overview" width={100} height={100} className="w-4 object-contain" />
                         <div className="font-medium text-sm">{ele.title}</div>
@@ -78,7 +75,7 @@ export default function BrandList({ sections }) {
                   key={section.title}
                   className="flex gap-2 p-2.5 cursor-pointer"
                   onClick={() => {
-                    setActive(section);
+                    setActiveSectionId(section.id);
                     const index = titles.findIndex((ele) => ele.title === section.title);
                     const items = titles;
                     const [reorderedItem] = items.splice(index, 1);

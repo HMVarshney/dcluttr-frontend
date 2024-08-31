@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { GridStack } from "gridstack";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -88,6 +88,8 @@ const data1 = {
 
 let gridstackInstance;
 function Page() {
+  const [activeSectionId, setActiveSectionId] = useState(dashboardJSON.sections[0].id);
+
   const gridstackRef = useRef(null);
 
   const { groupBy, dateRange, endDateRange } = useSelector((state) => state.user);
@@ -107,9 +109,12 @@ function Page() {
     if (!gridstackInstance) gridstackInstance = GridStack.init({ margin: "10rem" }, gridstackRef.current);
 
     gridstackInstance.removeAll();
-    if (dashboardJSON.sections.length && dashboardJSON.sections[0].cards.length) {
+    if (dashboardJSON.sections.length) {
+      const activeSectionIndex = dashboardJSON.sections.findIndex((s) => s.id === activeSectionId);
+      if (activeSectionIndex === -1) return;
+
       gridstackInstance.batchUpdate(true);
-      dashboardJSON.sections[0].cards.map((card) => {
+      dashboardJSON.sections[activeSectionIndex].cards.map((card) => {
         if (card.active) {
           const { title, description, logo, gridStackProperties, visualizationType } = card;
           const query = JSON.parse(card.query);
@@ -148,11 +153,11 @@ function Page() {
       });
       gridstackInstance.batchUpdate(false);
     }
-  }, [placeholderValues]);
+  }, [activeSectionId, placeholderValues]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
-      <Header sections={dashboardJSON.sections} />
+      <Header sections={dashboardJSON.sections} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
         <div>

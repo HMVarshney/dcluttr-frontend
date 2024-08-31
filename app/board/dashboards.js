@@ -4,7 +4,7 @@ export const dashboardJSON = {
       id: "17|GOOGLE",
       name: "Google Dashboard",
       brandId: "17",
-      logo: "/icons/amazon.svg",
+      logo: "/icons/google.svg",
       description: "A dashboard displaying various sales metrics.",
       default: false,
       cards: [
@@ -218,6 +218,37 @@ export const dashboardJSON = {
         //   selectedMetric: ["sales"],
         //   active: false
         // }
+      ]
+    },
+    {
+      id: "17|META",
+      name: "Meta Dashboard",
+      brandId: "17",
+      logo: "/icons/meta.svg",
+      description: "A dashboard displaying various sales metrics.",
+      default: false,
+      cards: [
+        {
+          visualizationType: "gauge",
+          title: "Campaign Type",
+          id: "102",
+          logo: "/icons/google.svg",
+          description: "Find all the analytics for store",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 1,
+            locked: true,
+            noResize: true,
+            noMove: true
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          active: true
+        }
       ]
     }
   ]

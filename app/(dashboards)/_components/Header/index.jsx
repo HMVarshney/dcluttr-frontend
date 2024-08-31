@@ -11,7 +11,7 @@ import { GROUP_BY } from "@/lib/utils";
 import { setGroupBy, setDateRange, setMainChart } from "@/lib/store/features/userSlice";
 import { Label } from "@/components/ui/label";
 
-export default function Header({ sections }) {
+export default function Header({ sections, activeSectionId, setActiveSectionId }) {
   const dispatch = useDispatch();
   const { groupBy, dateRange, showMainChart } = useSelector((state) => state.user);
   return (
@@ -62,7 +62,7 @@ export default function Header({ sections }) {
           />
           <DatePickerWithRange dateRange={dateRange} setDateRange={(e) => dispatch(setDateRange(e))} />
         </div>
-        <BrandList sections={sections} />
+        <BrandList sections={sections} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
       </div>
       <TopAdsBanner />
     </>
