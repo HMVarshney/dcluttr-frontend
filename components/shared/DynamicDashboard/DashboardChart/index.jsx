@@ -4,6 +4,7 @@ import AreaChart1 from "./Charts/AreaChart1";
 import cubeJsApi from "@/lib/cubeJsApi";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 import GaugeChart from "./Charts/GaugeChart";
+import DonutChart from "./Charts/PieChart";
 
 function DashboardChart({ title, description, icon, query, chartType }) {
   const cubejsClient = useRef(cubeJsApi());
@@ -41,6 +42,10 @@ function DashboardChart({ title, description, icon, query, chartType }) {
 
   if (chartType === visualizationTypes.GAUGE) {
     return <GaugeChart isLoading={isLoadingGauge} details={{ title, icon, description }} data={gaugeData} />;
+  }
+
+  if (chartType === visualizationTypes.PIECHART) {
+    return <DonutChart details={{ title, description }} chartData={{ results, columns }} />;
   }
 
   return (

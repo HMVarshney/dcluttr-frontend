@@ -5,7 +5,7 @@ import { GridStack } from "gridstack";
 import DashboardTable from "../../components/shared/DynamicDashboard/DashboardTable";
 import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
-import { dashboardTableJSON as dashboardJSON } from "./dashboards";
+import { dashboardJSON } from "./dashboards";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 
 import "gridstack/dist/gridstack.min.css";
@@ -27,7 +27,7 @@ function Board() {
     grid.removeAll();
     if (dashboardJSON.sections.length && dashboardJSON.sections[0].cards.length) {
       grid.batchUpdate(true);
-      dashboardJSON.sections[0].cards.map((card) => {
+      dashboardJSON.sections[1].cards.map((card) => {
         if (card.active) {
           const { title, description, logo, gridStackProperties, visualizationType, columnOrder } = card;
           const query = JSON.parse(card.query);
@@ -53,7 +53,11 @@ function Board() {
               ),
               gridStackOptions
             );
-          } else if (visualizationType === "type1" || visualizationType === visualizationTypes.GAUGE) {
+          } else if (
+            visualizationType === "type1" ||
+            visualizationType === visualizationTypes.GAUGE ||
+            visualizationType === visualizationTypes.PIECHART
+          ) {
             grid.addWidget(
               renderComponentToHtml(
                 <DashboardChart

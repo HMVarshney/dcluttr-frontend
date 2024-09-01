@@ -247,6 +247,27 @@ export const dashboardJSON = {
             '[{"measures":["hybrid_performance_stream.meta_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]}]',
           columnOrder: [],
           selectedMetric: [],
+          active: false
+        },
+        {
+          visualizationType: "piechart",
+          title: "Campaign Type",
+          id: "102",
+          logo: "/icons/google.svg",
+          description: "Find all the analytics for store",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 1,
+            locked: true,
+            noResize: true,
+            noMove: true
+          },
+          query:
+            '[null,{"measures":["google_campaign_type.clicks_sum"],"timeDimensions":[{"dimension":"google_campaign_type.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"]}],"dimensions":["google_campaign_type.campaign_type"]}]',
+          columnOrder: [],
+          selectedMetric: [],
           active: true
         }
       ]
