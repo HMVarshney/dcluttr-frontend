@@ -253,3 +253,57 @@ export const dashboardJSON = {
     }
   ]
 };
+
+export const dashboardTableJSON = {
+  sections: [
+    {
+      id: "17|Google",
+      name: "GOogle Dashboard",
+      brandId: "17",
+      logo: "/icons/meta.svg",
+      description: "A dashboard displaying various sales metrics.",
+      default: false,
+      cards: [
+        {
+          visualizationType: "table",
+          title: "Campaign Wise Distribution",
+          id: "102",
+          logo: "/icons/google.svg",
+          description: "Find all the analytics for store",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 12,
+            h: 3,
+            locked: true,
+            noResize: true,
+            noMove: true
+          },
+          query:
+            '{"measures":["google_campaign_stream.purchase_value_sum","google_campaign_stream.ad_spend_sum","google_campaign_stream.purchase_sum","google_campaign_stream.impressions_sum","google_campaign_stream.clicks_sum","google_campaign_stream.vtc_sum","google_campaign_stream.ctr","google_campaign_stream.cpc","google_campaign_stream.cpm","google_campaign_stream.roas","google_campaign_stream.aov","google_campaign_stream.cpa"],"dimensions":["google_campaign.id","google_campaign.name","google_campaign.resource_name","google_campaign.campaign_link"],"order":{"google_campaign_stream.purchase_value_sum":"desc"},"timeDimensions":[{"dimension":"google_campaign_stream.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"],"granularity":"${time_dimension_granularity}"}]}',
+          columnOrder: [
+            "google_campaign.id",
+            "google_campaign.name",
+            "google_campaign_stream.date.day",
+            "google_campaign.resource_name",
+            "google_campaign.campaign_link",
+            "google_campaign_stream.purchase_value_sum",
+            "google_campaign_stream.ad_spend_sum",
+            "google_campaign_stream.purchase_sum",
+            "google_campaign_stream.impressions_sum",
+            "google_campaign_stream.clicks_sum",
+            "google_campaign_stream.vtc_sum",
+            "google_campaign_stream.ctr",
+            "google_campaign_stream.cpc",
+            "google_campaign_stream.cpm",
+            "google_campaign_stream.roas",
+            "google_campaign_stream.aov",
+            "google_campaign_stream.cpa"
+          ],
+          selectedMetric: [],
+          active: true
+        }
+      ]
+    }
+  ]
+};

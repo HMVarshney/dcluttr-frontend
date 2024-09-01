@@ -5,7 +5,15 @@ import { Button } from "@/components/ui/button";
 import { SquareHalf } from "phosphor-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function DashboardTableHeader({ title, description }) {
+export function DashboardTableHeader({
+  title,
+  description,
+  columns,
+  columnVisibility,
+  columnOrder,
+  setColumnVisibility,
+  setColumnOrdering
+}) {
   return (
     <div className="flex items-center justify-center gap-2 p-6">
       <div className="mr-auto">
@@ -15,7 +23,13 @@ export function DashboardTableHeader({ title, description }) {
       <div>
         <ExportButton onExport={() => exportCampaignWiseTable(allData, campaignData.parsed?.columns || {})} />
       </div>
-      <EditTableAttribution>
+      <EditTableAttribution
+        columns={columns}
+        columnVisibility={columnVisibility}
+        columnOrder={columnOrder}
+        setColumnVisibility={setColumnVisibility}
+        setColumnOrdering={setColumnOrdering}
+      >
         <Button variant="outline" className="px-2.5">
           <SquareHalf className="w-5 h-5" />
         </Button>
@@ -24,7 +38,7 @@ export function DashboardTableHeader({ title, description }) {
   );
 }
 
-export function DashboardTableBody({ loading, error, data }) {
+export function DashboardTableBody({ loading, error, data, columnOrder, columnVisibility }) {
   const { results, columns } = data;
   return (
     <div className="px-6 pb-8 w-full h-full">
@@ -34,7 +48,7 @@ export function DashboardTableBody({ loading, error, data }) {
         ) : error ? (
           <div className="text-destructive p-4 shadow-sm">{error}</div>
         ) : (
-          <DataTable data={results} columns={columns} />
+          <DataTable data={results} columns={columns} columnOrder={columnOrder} columnVisibility={columnVisibility} />
         )}
       </div>
     </div>

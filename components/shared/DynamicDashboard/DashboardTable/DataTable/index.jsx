@@ -1,13 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import {
-  flexRender,
-  getCoreRowModel,
-  getExpandedRowModel,
-  getSortedRowModel,
-  useReactTable
-} from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getExpandedRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +20,7 @@ const getCommonPinningStyles = (data) => {
   };
 };
 
-function DataTable({ data = [], columns = [] }) {
+function DataTable({ data = [], columns = [], columnOrder, columnVisibility }) {
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
   const [expanded, setExpanded] = useState({});
@@ -35,12 +29,11 @@ function DataTable({ data = [], columns = [] }) {
     data,
     columns,
     state: {
+      columnOrder,
+      columnVisibility,
       sorting,
       rowSelection,
-      expanded,
-      columnPinning: {
-        left: ["id", "name"]
-      }
+      expanded
     },
     onExpandedChange: setExpanded,
     getSubRows: (row) => row.subRows,
@@ -58,7 +51,7 @@ function DataTable({ data = [], columns = [] }) {
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               return (
-                <TableHead key={header.id} style={{ ...getCommonPinningStyles(header) }}>
+                <TableHead key={header.id} style={getCommonPinningStyles(header)}>
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               );
@@ -79,7 +72,7 @@ function DataTable({ data = [], columns = [] }) {
                 )}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} style={{ ...getCommonPinningStyles(cell) }}>
+                  <TableCell key={cell.id} style={getCommonPinningStyles(cell)}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

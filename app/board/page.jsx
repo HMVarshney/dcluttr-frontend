@@ -5,14 +5,16 @@ import { GridStack } from "gridstack";
 import DashboardTable from "../../components/shared/DynamicDashboard/DashboardTable";
 import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
-import { dashboardJSON } from "./dashboards";
+import { dashboardTableJSON as dashboardJSON } from "./dashboards";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 
 import "gridstack/dist/gridstack.min.css";
 
 const placeholderValues = {
   compare_date_range_query: [["2024-07-14", "2024-08-14"]],
-  time_dimension_granularity: "day"
+  time_dimension_granularity: "day",
+  time_dimension_date_range_from: "2024-08-01",
+  time_dimension_date_range_to: "2024-08-31"
 };
 
 let grid;
@@ -22,11 +24,12 @@ function Board() {
   useEffect(() => {
     if (!grid) grid = GridStack.init({}, ref.current);
 
+    grid.removeAll();
     if (dashboardJSON.sections.length && dashboardJSON.sections[0].cards.length) {
       grid.batchUpdate(true);
       dashboardJSON.sections[0].cards.map((card) => {
         if (card.active) {
-          const { title, description, logo, gridStackProperties, visualizationType } = card;
+          const { title, description, logo, gridStackProperties, visualizationType, columnOrder } = card;
           const query = JSON.parse(card.query);
           const gridStackOptions = {
             w: gridStackProperties.w,
@@ -41,7 +44,12 @@ function Board() {
           if (visualizationType === visualizationTypes.TABLE) {
             grid.addWidget(
               renderComponentToHtml(
-                <DashboardTable title={title} description={description} query={replacePlaceholders(query, placeholderValues)} />
+                <DashboardTable
+                  title={title}
+                  description={description}
+                  query={replacePlaceholders(query, placeholderValues)}
+                  columnOrder={columnOrder}
+                />
               ),
               gridStackOptions
             );

@@ -1,17 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { GridStack } from "gridstack";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import MainChart from "../_components/Home/MainChart";
-import DashboardTable from "@/components/shared/DynamicDashboard/DashboardTable";
-import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
 import { dashboardJSON } from "@/app/board/dashboards";
-import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
-import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
+import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 
 import "gridstack/dist/gridstack.min.css";
 
@@ -86,7 +82,12 @@ const data1 = {
   ]
 };
 
-let gridstackInstance;
+function getActiveDashboardSection(dashboardJSON, activeSectionId) {
+  const activeSectionIndex = dashboardJSON.sections.findIndex((s) => s.id === activeSectionId);
+  if (activeSectionIndex === -1) return;
+  return dashboardJSON.sections[activeSectionIndex];
+}
+
 function Page() {
   const [activeSectionId, setActiveSectionId] = useState(dashboardJSON.sections[0].id);
 
@@ -105,55 +106,9 @@ function Page() {
     return values;
   }, [dateRange.from, dateRange.to, groupBy.value, endDateRange.from, endDateRange.to]);
 
-  useEffect(() => {
-    if (!gridstackInstance) gridstackInstance = GridStack.init({ margin: "10rem" }, gridstackRef.current);
+  const activeDashboardSection = useMemo(() => getActiveDashboardSection(dashboardJSON, activeSectionId), [activeSectionId]);
 
-    gridstackInstance.removeAll();
-    if (dashboardJSON.sections.length) {
-      const activeSectionIndex = dashboardJSON.sections.findIndex((s) => s.id === activeSectionId);
-      if (activeSectionIndex === -1) return;
-
-      gridstackInstance.batchUpdate(true);
-      dashboardJSON.sections[activeSectionIndex].cards.map((card) => {
-        if (card.active) {
-          const { title, description, logo, gridStackProperties, visualizationType } = card;
-          const query = JSON.parse(card.query);
-          const gridStackOptions = {
-            w: gridStackProperties.w,
-            h: gridStackProperties.h,
-            x: gridStackProperties.x,
-            y: gridStackProperties.y,
-            noMove: gridStackProperties.noMove,
-            noResize: gridStackProperties.noResize,
-            locked: gridStackProperties.locked
-          };
-
-          if (visualizationType === visualizationTypes.TABLE) {
-            gridstackInstance.addWidget(
-              renderComponentToHtml(
-                <DashboardTable title={title} description={description} query={replacePlaceholders(query, placeholderValues)} />
-              ),
-              gridStackOptions
-            );
-          } else if (visualizationType === "type1" || visualizationType === visualizationTypes.GAUGE) {
-            gridstackInstance.addWidget(
-              renderComponentToHtml(
-                <DashboardChart
-                  title={title}
-                  description={description}
-                  icon={logo}
-                  query={replacePlaceholders(query, placeholderValues)}
-                  chartType={visualizationType}
-                />
-              ),
-              gridStackOptions
-            );
-          }
-        }
-      });
-      gridstackInstance.batchUpdate(false);
-    }
-  }, [activeSectionId, placeholderValues]);
+  useDynamicDashboard(gridstackRef, activeDashboardSection, placeholderValues);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
