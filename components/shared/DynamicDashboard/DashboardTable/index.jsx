@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { DashboardTableBody, DashboardTableHeader } from "./Elements";
 import { extractTitleFromAnnotation } from "@/lib/utils/cubejs.utils";
 import { useCubeQueryWrapper } from "@/lib/hooks/cubejs";
-import { cubejsClient } from "@/lib/cubeJsApi";
+import cubeJsApi from "@/lib/cubeJsApi";
 
 function constructColumnDefs(columns) {
   return Object.entries(columns).map(([key, value]) => ({
@@ -16,11 +16,13 @@ function constructColumnDefs(columns) {
 }
 
 function DashboardTable({ title, description, query, columnOrder }) {
+  const cubejsClient = useRef(cubeJsApi());
+
   const {
     result: { parsed },
     isLoading,
     error
-  } = useCubeQueryWrapper(query, { castNumerics: true, cubeApi: cubejsClient });
+  } = useCubeQueryWrapper(query, { castNumerics: true, cubeApi: cubejsClient.current });
 
   const { results, columns } = useMemo(() => {
     return {

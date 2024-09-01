@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { cubejsClient } from "@/lib/cubeJsApi";
 import { parseRawLoadResponse } from "@/lib/utils/cubejs.utils";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import cubeJsApi from "@/lib/cubeJsApi";
 
 const COLORS = [
   { color: "#B1BA88", campaign_type: "PERFORMANCE_MAX", active: true },
@@ -13,6 +13,7 @@ const COLORS = [
 ];
 
 async function fetchCubejsQuery(query) {
+  const cubejsClient = cubeJsApi();
   const response = await cubejsClient.load(query);
   return { raw: response.loadResponse, parsed: parseRawLoadResponse(response.loadResponse) };
 }
