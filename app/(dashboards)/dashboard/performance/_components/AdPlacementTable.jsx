@@ -25,16 +25,10 @@ function exportAdPlacementTable(data, annotation) {
 export default function AdPlacementTable({ isGoogle = false }) {
   const dispath = useDispatch();
   const isOpen = useSelector((state) => state.user.sideBarClose);
-  const { adsPlacementMetaLoading, adsPlacementMetaError, adsPlacementMetaData } = useSelector(
-    (state) => state.metaAds
-  );
+  const { adsPlacementMetaLoading, adsPlacementMetaError, adsPlacementMetaData } = useSelector((state) => state.metaAds);
 
   const annotation = adsPlacementMetaData.parsed?.columns || {};
   const data = adsPlacementMetaData.parsed?.results || [];
-
-  useEffect(() => {
-    dispath(getAdsPlacementMeta());
-  }, [dispath]);
 
   return (
     <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen })}>

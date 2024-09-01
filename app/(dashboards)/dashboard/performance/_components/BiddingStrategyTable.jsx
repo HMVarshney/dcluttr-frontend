@@ -26,19 +26,13 @@ function exportBiddingStrategyTable(data, annotation) {
 export default function BiddingStrategyTable({ isGoogle }) {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.user.sideBarClose);
-  const { biddingStrategyMetaLoading, biddingStrategyMetaError, biddingStrategyMetaData } = useSelector(
-    (state) => state.metaAds
-  );
+  const { biddingStrategyMetaLoading, biddingStrategyMetaError, biddingStrategyMetaData } = useSelector((state) => state.metaAds);
   const { biddingStrategyGoogleLoading, biddingStrategyGoogleError, biddingStrategyGoogleData } = useSelector(
     (state) => state.googleAds
   );
 
-  const annotation = isGoogle
-    ? biddingStrategyGoogleData.parsed?.columns || {}
-    : biddingStrategyMetaData.parsed?.columns || {};
-  const data = isGoogle
-    ? biddingStrategyGoogleData.parsed?.results || []
-    : biddingStrategyMetaData.parsed?.results || [];
+  const annotation = isGoogle ? biddingStrategyGoogleData.parsed?.columns || {} : biddingStrategyMetaData.parsed?.columns || {};
+  const data = isGoogle ? biddingStrategyGoogleData.parsed?.results || [] : biddingStrategyMetaData?.parsed?.results || [];
 
   useEffect(() => {
     if (isGoogle) {
@@ -69,9 +63,7 @@ export default function BiddingStrategyTable({ isGoogle }) {
           {(isGoogle ? biddingStrategyGoogleLoading : biddingStrategyMetaLoading) ? (
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
           ) : (isGoogle ? biddingStrategyGoogleError : biddingStrategyMetaError) ? (
-            <div className="text-destructive p-4 shadow-sm">
-              {biddingStrategyMetaError ?? biddingStrategyGoogleError}
-            </div>
+            <div className="text-destructive p-4 shadow-sm">{biddingStrategyMetaError ?? biddingStrategyGoogleError}</div>
           ) : (
             <Tables annotation={annotation} data={data} />
           )}
