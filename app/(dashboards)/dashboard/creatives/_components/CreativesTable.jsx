@@ -72,15 +72,17 @@ export default function CreativesTable({ data, isLoading, annotation }) {
         <ExportFileFormat />
       </div>
       <div className="px-6 pb-8 w-full overflow-x-auto">
-        <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg max-w-full overflow-x-auto relative">
-          {isLoading ? (
+        {isLoading ? (
+          <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg max-w-full overflow-x-auto relative">
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-          ) : isTableView ? (
+          </div>
+        ) : isTableView ? (
+          <div className="border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg max-w-full overflow-x-auto relative">
             <Tables annotation={annotation} data={data} />
-          ) : (
-            <CreativesCard annotation={annotation} data={data} />
-          )}
-        </div>
+          </div>
+        ) : (
+          <CreativesCard annotation={annotation} data={data} />
+        )}
       </div>
     </div>
   );
@@ -205,51 +207,51 @@ export function Tables({ annotation = {}, data = [] }) {
 
 export function CreativesCard({ data }) {
   return (
-    <div className="flex gap-4">
-      {data?.map((ele) => (
+    <div className="grid grid-cols-3 grid-flow-row gap-6">
+      {data?.map((ele, i) => (
         <div
           key={ele.id}
           data={ele}
-          className="w-[308px] min-w-[308px] border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-lg bg-white p-4"
+          className="w-full border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)] rounded-xl bg-white p-4"
         >
           <Image
-            src={"/image_placeholder.svg"}
+            src={`/temp/creative_p${i % 3}.png`}
             alt={ele.name}
             width={308}
             height={200}
-            className="w-full p-4 object-contain rounded-md bg-slate-100"
+            className="w-full object-contain rounded-xl bg-slate-100"
           />
           <div className="grid grid-cols-2 gap-3 my-2">
-            <div className="bg-primary/15 border-s-2 border-primary rounded-sm px-3 py-4 flex justify-between">
-              <div className="text-base font-semibold">ROAS</div>
-              <div className="text-base font-medium">1.52</div>
+            <div className="bg-primary/15 border-s-2 border-primary rounded-sm px-3 py-3.5 flex justify-between">
+              <div className="text-sm font-semibold">ROAS</div>
+              <div className="text-sm font-medium">1.52</div>
             </div>
-            <div className="bg-primary/15 border-s-2 border-primary rounded-sm px-3 py-4 flex justify-between">
-              <div className="text-base font-semibold">ROAS</div>
-              <div className="text-base font-medium">4.34</div>
+            <div className="bg-primary/15 border-s-2 border-primary rounded-sm px-3 py-3.5 flex justify-between">
+              <div className="text-sm font-semibold">ROAS</div>
+              <div className="text-sm font-medium">4.34</div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 my-2">
-            <div className="bg-[#1122110A] border-s-2 border-[#11221121] rounded-sm px-3 py-4 flex justify-between">
-              <div className="text-base font-semibold">CV</div>
-              <div className="text-base font-medium">1.52</div>
+            <div className="bg-[#1122110A] border-s-2 border-[#11221121] rounded-sm px-3 py-3.5 flex justify-between">
+              <div className="text-sm font-semibold">CV</div>
+              <div className="text-sm font-medium">1.52</div>
             </div>
-            <div className="bg-[#1122110A] border-s-2 border-[#11221121] rounded-sm px-3 py-4 flex justify-between">
-              <div className="text-base font-semibold">CV</div>
-              <div className="text-base font-medium">4.34</div>
+            <div className="bg-[#1122110A] border-s-2 border-[#11221121] rounded-sm px-3 py-3.5 flex justify-between">
+              <div className="text-sm font-semibold">CV</div>
+              <div className="text-sm font-medium">4.34</div>
             </div>
           </div>
           <div className="flex justify-between items-center mt-4">
-            <div className="text-base font-semibold w-1/3">Name</div>
-            <div className="p-2 w-2/3 bg-[#1122110A] rounded-sm text-base font-medium">Catalogue_All</div>
+            <div className="text-sm font-semibold w-1/3">Name</div>
+            <div className="p-2 w-2/3 bg-[#1122110A] rounded-sm text-sm font-medium">Catalogue_All</div>
           </div>
           <div className="flex justify-between items-center mt-3">
-            <div className="text-base font-semibold w-1/3">Campaign</div>
-            <div className="p-2 w-2/3 bg-[#1122110A] rounded-sm text-base font-medium">SC-TOF-Sales</div>
+            <div className="text-sm font-semibold w-1/3">Campaign</div>
+            <div className="p-2 w-2/3 bg-[#1122110A] rounded-sm text-sm font-medium">SC-TOF-Sales</div>
           </div>
           <div className="flex justify-between items-center mt-3">
-            <div className="text-base font-semibold w-1/3">Ad set</div>
-            <div className="p-2 w-2/3 bg-[#1122110A] rounded-sm text-base font-medium">SC_interest Cosmeticbrands</div>
+            <div className="text-sm font-semibold w-1/3">Ad set</div>
+            <div className="p-2 w-2/3 bg-[#1122110A] rounded-sm text-sm font-medium">SC_interest Cosmeticbrands</div>
           </div>
         </div>
       ))}
