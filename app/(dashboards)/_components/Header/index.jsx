@@ -1,30 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import moment from "moment";
-import {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
+import { useDispatch, useSelector } from "react-redux";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import Switcher from "@/components/Switcher";
 import DatePickerWithRange from "@/components/DatePickerWithRange";
-// import { Button } from "@/components/ui/button";
-// import { RefreshCcw, HomeIcon, PcCase, Plus, TvMinimal } from "lucide-react";
-// import Notifications from "@/components/Notifications";
 import BrandList from "./BrandList";
 import TopAdsBanner from "@/components/TopAdsBanner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GROUP_BY } from "@/lib/utils";
-import { useDispatch, useSelector } from "react-redux";
 import { setGroupBy, setDateRange, setMainChart } from "@/lib/store/features/userSlice";
 import { Label } from "@/components/ui/label";
 
-export default function Header() {
+export default function Header({ sections, activeSectionId, setActiveSectionId }) {
   const dispatch = useDispatch();
   const { groupBy, dateRange, showMainChart } = useSelector((state) => state.user);
   return (
@@ -74,12 +61,8 @@ export default function Header() {
             }}
           />
           <DatePickerWithRange dateRange={dateRange} setDateRange={(e) => dispatch(setDateRange(e))} />
-          {/* <Button variant="ghost" className="px-2.5">
-                        <RefreshCcw className="w-5 h-5" />
-                    </Button>
-                    <Notifications /> */}
         </div>
-        <BrandList />
+        <BrandList sections={sections} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
       </div>
       <TopAdsBanner />
     </>

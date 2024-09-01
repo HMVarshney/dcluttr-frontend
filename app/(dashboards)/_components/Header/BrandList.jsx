@@ -1,38 +1,18 @@
 "use client";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { ChevronDown, Plus } from "lucide-react";
+import { ProjectorScreenChart } from "phosphor-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import CreateSectionButton from "./CreateSectionButton";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, Plus } from "lucide-react";
-import Image from "next/image";
-import { HouseLine, ProjectorScreenChart } from "phosphor-react";
 
-export default function BrandList() {
-  const [active, setActive] = useState({
-    title: "Home",
-    icons: <HouseLine className="w-4 h-4 mr-1" />
-  });
-  const [titles, setTitles] = useState([
-    {
-      title: "Home",
-      icons: <HouseLine className="w-4 h-4 mr-1" />
-    },
-    {
-      title: "Google ads",
-      icons: <Image src="/band-logo/google.png" alt="Overview" width={100} height={100} className="w-4 object-contain" />
-    },
-    {
-      title: "Meta ads",
-      icons: <Image src="/band-logo/meta.png" alt="Overview" width={100} height={100} className="w-4 object-contain" />
-    },
-    {
-      title: "Shopify",
-      icons: <Image src="/band-logo/shopify.png" alt="Overview" width={100} height={100} className="w-4 object-contain" />
-    }
-  ]);
+export default function BrandList({ sections, activeSectionId, setActiveSectionId }) {
+  const [titles, setTitles] = useState([]);
+
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
     const items = titles;
@@ -41,6 +21,11 @@ export default function BrandList() {
 
     setTitles(items);
   };
+
+  useEffect(() => {
+    setTitles(sections.map((s) => ({ id: s.id, title: s.name, icon: s.logo })));
+  }, [sections]);
+
   return (
     <div className="flex justify-start gap-2 py-3 px-6 bg-white border-b">
       <div className="flex items-center justify-start border rounded-xl">
@@ -60,11 +45,11 @@ export default function BrandList() {
                         {...provided.dragHandleProps}
                         {...provided.draggableProps}
                         className={cn("flex gap-1 items-center px-4 py-1.5 bg-white rounded-md cursor-grab", {
-                          "bg-primary text-white": active.title === ele.title
+                          "bg-primary text-white": activeSectionId === ele.id
                         })}
-                        onClick={() => setActive(ele)}
+                        onClick={() => setActiveSectionId(ele.id)}
                       >
-                        {ele.icons}
+                        <Image src={ele.icon} alt="Overview" width={100} height={100} className="w-4 object-contain" />
                         <div className="font-medium text-sm">{ele.title}</div>
                       </div>
                     )}
@@ -90,7 +75,7 @@ export default function BrandList() {
                   key={section.title}
                   className="flex gap-2 p-2.5 cursor-pointer"
                   onClick={() => {
-                    setActive(section);
+                    setActiveSectionId(section.id);
                     const index = titles.findIndex((ele) => ele.title === section.title);
                     const items = titles;
                     const [reorderedItem] = items.splice(index, 1);
@@ -99,7 +84,6 @@ export default function BrandList() {
                   }}
                 >
                   <div className="text-sm">{section.title}</div>
-                  {/* <ChevronRight className="w-4 h-4 ml-auto" /> */}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

@@ -6,10 +6,7 @@ import GoogleAdsDetails from "../_components/CampaignWiseTable/GoogleAdsDetails"
 import BiddingStrategyTable from "../_components/BiddingStrategyTable";
 import CampaignTypeTable from "../_components/CampaignTypeTable";
 
-export const metadata = {
-  title: "Overview"
-};
-export default function page() {
+export default function Page() {
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
       <Header />

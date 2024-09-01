@@ -30,7 +30,7 @@ const CampaignTypeDonutChart = () => {
 
   const data = useMemo(() => {
     if (!allData.parsed) return [];
-    return allData.parsed.results.map((item) => {
+    return allData.parsed?.results?.map((item) => {
       if (selected.find((i) => i.campaign_type === item.campaign_type && i.active)) {
         return {
           name: item.campaign_type,
@@ -75,16 +75,7 @@ const CampaignTypeDonutChart = () => {
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={70}
-              outerRadius={110}
-              fill="#8884d8"
-              paddingAngle={0}
-              dataKey="value"
-            >
+            <Pie data={data} cx="50%" cy="50%" innerRadius={70} outerRadius={110} fill="#8884d8" paddingAngle={0} dataKey="value">
               {selected?.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
@@ -94,7 +85,7 @@ const CampaignTypeDonutChart = () => {
           </PieChart>
         </ResponsiveContainer>
         <div className="py-4 px-5 text-xs font-semibold border-t border-[#F1F1F1] flex items-center gap-4 overflow-x-auto">
-          {selected?.map((entry, index) => (
+          {selected?.map((entry) => (
             <div
               key={entry.campaign_type}
               className="py-2.5 px-4 rounded-full border flex items-center gap-2 bg-white cursor-pointer"
@@ -107,10 +98,7 @@ const CampaignTypeDonutChart = () => {
                 )
               }
             >
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: entry.active ? entry.color : "#747373" }}
-              />
+              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.active ? entry.color : "#747373" }} />
               <div className="text-sm font-semibold">{entry.campaign_type}</div>
             </div>
           ))}
