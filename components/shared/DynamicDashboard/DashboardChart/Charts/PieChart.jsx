@@ -1,6 +1,7 @@
 "use client";
 
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { useMemo, useState } from "react";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const COLORS = ["#B1BA88", "#C3D8CC", "#E87C67", "#EDA2A2"];
 
@@ -17,6 +18,13 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 const DonutChart = ({ details, chartData }) => {
+  const [unselected, setUnselected] = useState({});
+
+  const data = useMemo(() => {
+    if (!Object.keys(unselected).length) return chartData.results;
+    return chartData.results.filter((res) => !unselected[res.x]);
+  }, [chartData.results, unselected]);
+
   return (
     <div className="w-full">
       <div className="text-xl font-bold mb-4">{details.title}</div>
@@ -24,7 +32,7 @@ const DonutChart = ({ details, chartData }) => {
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
-              data={chartData.results}
+              data={data}
               cx="50%"
               cy="50%"
               innerRadius={70}
@@ -34,29 +42,30 @@ const DonutChart = ({ details, chartData }) => {
               nameKey="x"
               dataKey={chartData.columns?.[0]?.key}
             >
-              {chartData.results.map((_, index) => {
+              {data.map((_, index) => {
                 return <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />;
               })}
             </Pie>
-            {/* <Legend /> */}
             <Tooltip content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
         <div className="py-4 px-5 text-xs font-semibold border-t border-[#F1F1F1] flex items-center gap-4 overflow-x-auto">
-          {chartData.results?.map((entry) => (
+          {chartData.results?.map((entry, index) => (
             <div
               key={entry.x}
               className="py-2.5 px-4 rounded-full border flex items-center gap-2 bg-white cursor-pointer"
-              // onClick={() =>
-              //   setSelected(
-              //     selected.map((item) => ({
-              //       ...item,
-              //       active: item.campaign_type === entry.campaign_type ? !item.active : item.active
-              //     }))
-              //   )
-              // }
+              onClick={() => {
+                if (unselected[entry.x]) {
+                  setUnselected((cur) => ({ ...cur, [entry.x]: false }));
+                } else {
+                  setUnselected((cur) => ({ ...cur, [entry.x]: true }));
+                }
+              }}
             >
-              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.active ? entry.color : "#747373" }} />
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: !unselected[entry.x] ? COLORS[index % COLORS.length] : "#747373" }}
+              />
               <div className="text-sm font-semibold">{entry.x}</div>
             </div>
           ))}
