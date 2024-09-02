@@ -75,11 +75,20 @@ export default function BiddingStrategyTable({ isGoogle }) {
 
 export function Tables({ annotation = {}, data = [] }) {
   const columns = useMemo(() => {
-    return Object.entries(annotation ?? {}).map(([key, value]) => ({
-      accessorKey: key,
-      header: <div className="min-w-32">{value.shortTitle || value.title}</div>,
-      cell: (info) => <div className="min-w-32">{info.getValue()}</div>
-    }));
+    return [
+      {
+        accessorKey: "bidding_strategy",
+        header: "Bidding Strategy",
+        cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+      },
+      ...Object.entries(annotation ?? {})
+        ?.filter(([key]) => key !== "bidding_strategy")
+        .map(([key, value]) => ({
+          accessorKey: key,
+          header: <div className="min-w-32">{value.shortTitle || value.title}</div>,
+          cell: (info) => <div className="min-w-32">{info.getValue()}</div>
+        }))
+    ];
   }, [annotation]);
 
   const table = useReactTable({
