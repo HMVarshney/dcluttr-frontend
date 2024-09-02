@@ -6,8 +6,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import MainChart from "../_components/Home/MainChart";
-import { dashboardJSON } from "@/app/board/dashboards";
-import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
+import { useDynamicDashboard, useFetchDashboard } from "@/lib/hooks/dynamicDashboard";
+import { getActiveDashboardSection, getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
+import EditChartsOrder from "../_components/EditChartsOrder";
 
 import "gridstack/dist/gridstack.min.css";
 
@@ -82,18 +83,24 @@ const data1 = {
   ]
 };
 
-function getActiveDashboardSection(dashboardJSON, activeSectionId) {
-  const activeSectionIndex = dashboardJSON.sections.findIndex((s) => s.id === activeSectionId);
-  if (activeSectionIndex === -1) return;
-  return dashboardJSON.sections[activeSectionIndex];
-}
-
 function Page() {
-  const [activeSectionId, setActiveSectionId] = useState(dashboardJSON.sections[0].id);
+  const [activeSectionId, setActiveSectionId] = useState(-1);
 
   const gridstackRef = useRef(null);
 
   const { groupBy, dateRange, endDateRange } = useSelector((state) => state.user);
+
+  const { dashboard, updateSection } = useFetchDashboard(18);
+  const pageDashboards = useMemo(() => {
+    if (!dashboard.length) return [];
+    setActiveSectionId((cur) => (cur === -1 ? dashboard[0].id : cur));
+    return getPageDashboards(dashboard, "overview");
+  }, [dashboard]);
+
+  const activeDashboardSection = useMemo(
+    () => getActiveDashboardSection(pageDashboards, activeSectionId).section,
+    [activeSectionId, pageDashboards]
+  );
 
   const placeholderValues = useMemo(() => {
     const values = { compare_date_range_query: [], time_dimension_granularity: groupBy.value };
@@ -106,21 +113,22 @@ function Page() {
     return values;
   }, [dateRange.from, dateRange.to, groupBy.value, endDateRange.from, endDateRange.to]);
 
-  const activeDashboardSection = useMemo(() => getActiveDashboardSection(dashboardJSON, activeSectionId), [activeSectionId]);
-
   useDynamicDashboard(gridstackRef, activeDashboardSection, placeholderValues);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
-      <Header sections={dashboardJSON.sections} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
+      <Header sections={pageDashboards} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
         <div>
-          <div className="font-bold text-xl">{dashboardJSON.sections[0].name}</div>
-          <div className="text-[#4F4D55] text-sm">{dashboardJSON.sections[0].description}</div>
+          <div className="font-bold text-xl">{activeDashboardSection?.name}</div>
+          <div className="text-[#4F4D55] text-sm">{activeDashboardSection?.description}</div>
         </div>
         <div className="flex gap-2">
-          {/* <EditChartsOrder cardList={cardList} setCardList={setCardList} /> */}
+          <EditChartsOrder
+            cardList={activeDashboardSection?.cards || []}
+            updateDashboard={(updates) => updateSection(activeSectionId, updates)}
+          />
           <ExportFileFormat />
         </div>
       </div>

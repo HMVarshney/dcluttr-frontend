@@ -51,7 +51,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Meta Purchase Value Sum",
           id: "102",
           logo: "/icons/meta.svg",
@@ -72,7 +72,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/meta.svg",
@@ -93,7 +93,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Shopify Total Orders Sum",
           id: "102",
           logo: "/icons/shopify.svg",
@@ -114,7 +114,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/google.svg",
@@ -135,7 +135,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/google.svg",

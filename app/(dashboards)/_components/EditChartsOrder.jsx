@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import React, { useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Pencil } from "lucide-react";
 import { X } from "lucide-react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { DotsSixVertical, PushPinSimple } from "phosphor-react";
+import { DotsSixVertical } from "phosphor-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function EditChartsOrder({ cardList = [], setCardList = () => {} }) {
+export default function EditChartsOrder({ cardList = [], updateDashboard }) {
   const [isOpen, setOpen] = useState(false);
-  const [titles, setTitles] = useState(cardList);
+  const [titles, setTitles] = useState([]);
+
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
     const items = titles;
@@ -20,6 +21,11 @@ export default function EditChartsOrder({ cardList = [], setCardList = () => {} 
 
     setTitles(items);
   };
+
+  useEffect(() => {
+    if (cardList) setTitles(cardList);
+  }, [cardList]);
+
   return (
     <Popover
       open={isOpen}
@@ -65,14 +71,14 @@ export default function EditChartsOrder({ cardList = [], setCardList = () => {} 
                         <DotsSixVertical size={16} color="#031B15" className="mr-4" />
                         <div className="text-base font-semibold"> {title.title}</div>
                         <input
-                          checked={title.select}
+                          checked={title.active}
                           onChange={() => {
                             setTitles(
                               titles.map((item) => {
-                                if (item.title === title.title) {
+                                if (item.id === title.id) {
                                   return {
                                     ...item,
-                                    select: !item.select
+                                    active: !item.active
                                   };
                                 }
                                 return item;
@@ -80,10 +86,7 @@ export default function EditChartsOrder({ cardList = [], setCardList = () => {} 
                             );
                           }}
                           type="checkbox"
-                          className={cn(
-                            "min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto",
-                            " cursor-pointer"
-                          )}
+                          className={cn("min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto", " cursor-pointer")}
                         />
                       </div>
                     )}
@@ -98,10 +101,9 @@ export default function EditChartsOrder({ cardList = [], setCardList = () => {} 
               Cancel
             </Button>
             <Button
-              variant=""
               onClick={() => {
                 setOpen(false);
-                setCardList(titles);
+                updateDashboard({ cards: titles });
               }}
             >
               Save
