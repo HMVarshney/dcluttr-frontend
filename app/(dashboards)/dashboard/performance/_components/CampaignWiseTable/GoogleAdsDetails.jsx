@@ -92,7 +92,13 @@ function GoogleAdsDetails() {
               }}
               style={{ cursor: "pointer" }}
             >
-              {row.getCanExpand() ? row.getIsExpanded() ? <CaretDown /> : <CaretRight /> : null}
+              {row.getCanExpand() ? (
+                row.getIsExpanded() ? (
+                  <CaretDown className="min-w-4" />
+                ) : (
+                  <CaretRight className="min-w-4" />
+                )
+              ) : null}
               <span className="line-clamp-1 text-primary font-semibold ">{row.getValue("name")}</span>
             </div>
             {row.original.campaign_link && (
@@ -172,7 +178,7 @@ function GoogleAdsDetails() {
   const allData = useMemo(() => {
     if (!campaignData.parsed) return [];
     return campaignData.parsed?.results?.map((l1) => {
-      let filterSubRows = adSetsData.parsed?.results?.filter((f1) => f1.campaign_resource_name === l1.id);
+      let filterSubRows = adSetsData.parsed?.results?.filter((f1) => f1.campaign_resource_name.includes(l1.id));
       return {
         ...l1,
         subRows:

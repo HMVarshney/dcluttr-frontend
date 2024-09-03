@@ -2,25 +2,44 @@
 
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CaretDown, CaretRight, SquareHalf } from "phosphor-react";
+import { ArrowSquareOut, CaretDown, CaretRight, SquareHalf } from "phosphor-react";
 import EditTableAttribution from "../EditTableAttribution";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import CampaignTable from "./CampaignTable";
 import IndeterminateCheckbox from "@/components/IndeterminateCheckbox";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAdSetsMeta, getAdsMeta, getCampaignDataMeta } from "@/lib/store/features/metaAdsSlice";
+import { extractTitleFromAnnotation } from "@/lib/utils/cubejs.utils";
+import Link from "next/link";
 
 export default function MetaAdsDetails() {
   const isOpen = useSelector((state) => state.user.sideBarClose);
+
   const {
-    campaignData: { data: campaignData, loading: campaignLoading, error: campaignError },
+    campaignLoading,
+    campaignError,
+    campaignData,
+    selectedCampaignIds,
+    adSetsError,
+    adSetsData,
+    selectedAdSetsIds,
+    adsError,
     adsData
   } = useSelector((state) => state.metaAds);
+  const dispatch = useDispatch();
 
-  const columns = useMemo(
-    () => [
+  useEffect(() => {
+    dispatch(getCampaignDataMeta());
+  }, [dispatch]);
+
+  const columns = useMemo(() => {
+    const annotation = campaignData.parsed?.columns;
+    if (!annotation) return [];
+
+    return [
       {
         accessorKey: "name",
         header: ({ table, column }) => (
@@ -35,7 +54,7 @@ export default function MetaAdsDetails() {
               className="w-72 flex items-center justify-start text-sm"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              Campaign
+              {extractTitleFromAnnotation(annotation.name)}
               <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
             </div>
           </div>
@@ -48,21 +67,34 @@ export default function MetaAdsDetails() {
               onChange={row.getToggleSelectedHandler()}
             />
             <div className="flex items-center justify-center w-20">
-              <Switch
-                checked={row.original.status === "ACTIVE"}
-                onCheckedChange={() => {
-                  alert("Coming Soon");
-                }}
-              />
+              <Switch />
             </div>
             <div
               className={cn("w-72 flex items-center gap-2", { "pl-4": row.depth === 1 }, { "pl-8": row.depth === 2 })}
-              onClick={row.getToggleExpandedHandler()}
+              onClick={() => {
+                row.getToggleExpandedHandler()();
+                if (row.depth === 0) {
+                  dispatch(getAdSetsMeta([...selectedCampaignIds, row?.original?.campaign_id]));
+                } else if (row.depth === 1) {
+                  dispatch(getAdsMeta([...selectedAdSetsIds, row?.original?.ad_set_id]));
+                }
+              }}
               style={{ cursor: "pointer" }}
             >
-              {row.getCanExpand() ? row.getIsExpanded() ? <CaretDown /> : <CaretRight /> : null}
+              {row.getCanExpand() ? (
+                row.getIsExpanded() ? (
+                  <CaretDown className="min-w-4" />
+                ) : (
+                  <CaretRight className="min-w-4" />
+                )
+              ) : null}
               <span className="line-clamp-1 text-primary font-semibold ">{row.getValue("name")}</span>
             </div>
+            {row.original.link && (
+              <Link href={row.original.link} target="_blank">
+                <ArrowSquareOut size={20} className="text-primary font-semibold cursor-pointer" />
+              </Link>
+            )}
           </div>
         )
       },
@@ -74,7 +106,7 @@ export default function MetaAdsDetails() {
               className="justify-start flex items-center w-56 text-sm"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              Purchase Value Sum
+              {extractTitleFromAnnotation(annotation.purchase_value_sum)}
               <ArrowUpDown className="ml-2 h-4 w-4 cursor-pointer" />
             </div>
           );
@@ -82,58 +114,75 @@ export default function MetaAdsDetails() {
         width: 200
       },
       {
-        header: "Ad Spend Sum",
-        accessorKey: "ad_spend_sum",
-        cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("ad_spend_sum")}</div>
+        header: extractTitleFromAnnotation(annotation.ad_spend_sum),
+        accessorKey: "ad_spend_sum"
       },
       {
-        header: "Purchase Sum",
-        accessorKey: "purchase_sum",
-        cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("purchase_sum")}</div>
+        header: extractTitleFromAnnotation(annotation.purchase_sum),
+        accessorKey: "purchase_sum"
       },
       {
-        header: "Impressions Sum",
+        header: extractTitleFromAnnotation(annotation.impressions_sum),
         accessorKey: "impressions_sum",
         cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("impressions_sum")}</div>
       },
       {
-        header: "Link clicks Sum",
-        accessorKey: "link_clicks_sum",
-        cell: ({ row }) => <div className="min-w-[100px]">{row.getValue("link_clicks_sum")}</div>
+        header: extractTitleFromAnnotation(annotation.clicks_sum),
+        accessorKey: "clicks_sum",
+        cell: ({ row }) => <div className="min-w-[100px]">{row.getValue("clicks_sum")}</div>
       },
       {
-        header: "Vtc Sum",
+        header: extractTitleFromAnnotation(annotation.vtc_sum),
         accessorKey: "vtc_sum",
         cell: ({ row }) => <div className="min-w-[80px]">{row.getValue("vtc_sum")}</div>
       },
       {
-        header: "Ctr",
+        header: extractTitleFromAnnotation(annotation.ctr),
         accessorKey: "ctr",
         cell: ({ row }) => <div className="min-w-[120px]">{row.getValue("ctr")}</div>
       },
       {
-        header: "Cpc",
+        header: extractTitleFromAnnotation(annotation.cpc),
         accessorKey: "cpc"
       },
       {
-        header: "Cpm",
+        header: extractTitleFromAnnotation(annotation.cpm),
         accessorKey: "cpm"
       },
       {
-        header: "Roas",
+        header: extractTitleFromAnnotation(annotation.roas),
         accessorKey: "roas"
       },
       {
-        header: "Aov",
+        header: extractTitleFromAnnotation(annotation.aov),
         accessorKey: "aov"
       },
       {
-        header: "Cpa",
+        header: extractTitleFromAnnotation(annotation.cpa),
         accessorKey: "cpa"
       }
-    ],
-    []
-  );
+    ];
+  }, [campaignData.parsed?.columns, dispatch, selectedAdSetsIds, selectedCampaignIds]);
+
+  const allData = useMemo(() => {
+    if (!campaignData.parsed) return [];
+    return campaignData.parsed?.results?.map((l1) => {
+      let filterSubRows = adSetsData.parsed?.results?.filter((f1) => f1.campaign_id === l1.campaign_id);
+      return {
+        ...l1,
+        subRows:
+          filterSubRows?.length > 0
+            ? filterSubRows.map((l2) => {
+                let filterAds = adsData.parsed?.results?.filter((f2) => f2.ad_set_id === l2.ad_set_id);
+                return {
+                  ...l2,
+                  subRows: filterAds?.length > 0 ? filterAds : [{}]
+                };
+              })
+            : [{}]
+      };
+    });
+  }, [campaignData, adSetsData, adsData]);
 
   return (
     <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen })}>
@@ -152,16 +201,10 @@ export default function MetaAdsDetails() {
         <div className="rounded-md overflow-hidden border border-[#F1F1F1] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.12)]">
           {campaignLoading ? (
             <Skeleton className="w-[calc(100%-32px)] h-[500px] my-4 rounded-md mx-auto" />
-          ) : campaignError ? (
-            <div className="text-destructive p-4 shadow-sm">{campaignError}</div>
+          ) : campaignError || adSetsError || adsError ? (
+            <div className="text-destructive p-4 shadow-sm">{campaignError ?? adSetsError ?? adsError}</div>
           ) : (
-            <CampaignTable
-              data={campaignData.parsed?.results?.map((l1) => ({
-                ...l1,
-                subRows: adsData.parsed?.results?.filter((l3) => l3.campaign_id === l1.campaign_id)
-              }))}
-              columns={columns}
-            />
+            <CampaignTable data={allData} columns={columns} />
           )}
         </div>
       </div>
