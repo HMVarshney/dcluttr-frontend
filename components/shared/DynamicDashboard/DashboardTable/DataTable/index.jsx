@@ -20,7 +20,7 @@ const getCommonPinningStyles = (data) => {
   };
 };
 
-function DataTable({ data = [], columns = [], columnOrder, columnVisibility }) {
+function DataTable({ data = [], columns = [], columnOrder, columnVisibility, getRowCanExpand }) {
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
   const [expanded, setExpanded] = useState({});
@@ -41,7 +41,9 @@ function DataTable({ data = [], columns = [], columnOrder, columnVisibility }) {
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection
+    onRowSelectionChange: setRowSelection,
+    getRowCanExpand,
+    getRowId: (row) => row.id
   });
 
   return (
