@@ -140,7 +140,13 @@ export function Tables({ annotation = {}, data = [] }) {
                 style: { cursor: "pointer" }
               }}
             >
-              <Image src={"/logoIcon.svg"} alt={row.getValue("name")} width={24} height={24} className="rounded-full" />
+              <Image
+                src={`/temp/creative_p${Math.floor(Math.random() * 3)}.png`}
+                alt={row.getValue("name")}
+                width={24}
+                height={24}
+                className="rounded-xl"
+              />
               <span className="line-clamp-1 text-primary font-semibold ">{row.getValue("name")}</span>
             </div>
           </div>

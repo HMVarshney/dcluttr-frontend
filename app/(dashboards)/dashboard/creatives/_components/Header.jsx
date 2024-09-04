@@ -12,7 +12,6 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import Switcher from "@/components/Switcher";
-import DatePickerWithRange from "@/components/DatePickerWithRange";
 // import { Button } from '@/components/ui/button';
 // import Notifications from '@/components/Notifications';
 // import ExportFileFormat from '@/components/ExportFileFormat';
@@ -22,6 +21,8 @@ import TopAdsBanner from "@/components/TopAdsBanner";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setMainChart } from "@/lib/store/features/userSlice";
+import dynamic from "next/dynamic";
+const DatePickerWithRange = dynamic(() => import("@/components/DatePickerWithRange"), { ssr: false });
 
 export default function Header() {
   const dispatch = useDispatch();
