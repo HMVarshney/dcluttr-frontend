@@ -41,6 +41,7 @@ function constructColumnDefs(columns, expandHandler) {
   const columnDefs = columns.reduce((prev, c) => {
     const splitKey = splitKeyAndUseLastPart(c.key);
 
+    // ! Has to be excluded in the columns array
     if (c.splitKey === "id" || c.format === "link") return prev;
 
     prev.push({
@@ -123,9 +124,9 @@ function DashboardTable({ title, description, query, columnOrder, drilldownQueri
         drilldownQuery = replacePlaceholders(JSON.parse(drilldownQuery.query), {
           time_dimension_date_range_from: "2024-08-01",
           time_dimension_date_range_to: "2024-08-30",
-          filter_values: [row.id]
+          filter_values: [row.original.id]
         });
-        fetchDrilldownData(drilldownQuery, row.id);
+        fetchDrilldownData(drilldownQuery, row.original.id);
       }
     },
     [drilldownQueries]

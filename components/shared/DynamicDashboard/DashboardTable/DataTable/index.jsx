@@ -43,7 +43,7 @@ function DataTable({ data = [], columns = [], columnOrder, columnVisibility, get
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setRowSelection,
     getRowCanExpand,
-    getRowId: (row) => row.id
+    getRowId: (originalRow, index) => `${originalRow.id}-${index}`
   });
 
   return (

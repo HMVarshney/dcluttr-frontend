@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import MainChart from "../_components/Home/MainChart";
-import { useDynamicDashboard, useFetchDashboard } from "@/lib/hooks/dynamicDashboard";
-import { getActiveDashboardSection, getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
+import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
+import { getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
 import EditChartsOrder from "../_components/EditChartsOrder";
 
 import "gridstack/dist/gridstack.min.css";
@@ -84,28 +84,21 @@ const data1 = {
 };
 
 function Page() {
-  const [activeSectionId, setActiveSectionId] = useState(-1);
-
   const gridstackRef = useRef(null);
 
   const { groupBy, dateRange, endDateRange } = useSelector((state) => state.user);
 
-  const { dashboard, updateSection } = useFetchDashboard(18);
-  const pageDashboards = useMemo(() => {
-    if (!dashboard.length) return [];
-    setActiveSectionId((cur) => (cur === -1 ? dashboard[0].id : cur));
-    return getPageDashboards(dashboard, "overview");
-  }, [dashboard]);
-
-  const activeDashboardSection = useMemo(
-    () => getActiveDashboardSection(pageDashboards, activeSectionId).section,
-    [activeSectionId, pageDashboards]
-  );
-
   const placeholderValues = useMemo(() => {
-    const values = { compare_date_range_query: [], time_dimension_granularity: groupBy.value };
+    const values = {
+      compare_date_range_query: [],
+      time_dimension_granularity: groupBy.value,
+      time_dimension_date_range_from: "",
+      time_dimension_date_range_to: ""
+    };
     if (dateRange.from && dateRange.to) {
       values.compare_date_range_query.push([dateRange.from, dateRange.to]);
+      values.time_dimension_date_range_from = dateRange.from;
+      values.time_dimension_date_range_to = dateRange.to;
     }
     if (endDateRange.from && endDateRange.to) {
       values.compare_date_range_query.push([endDateRange.from, endDateRange.to]);
@@ -113,7 +106,21 @@ function Page() {
     return values;
   }, [dateRange.from, dateRange.to, groupBy.value, endDateRange.from, endDateRange.to]);
 
-  useDynamicDashboard(gridstackRef, activeDashboardSection, placeholderValues);
+  const {
+    dashboard,
+    activeSection: activeDashboardSection,
+    activeSectionId,
+    setActiveSectionId,
+    cardProps,
+    activateCard
+  } = useDynamicDashboard(18, gridstackRef, placeholderValues);
+
+  const pageDashboards = useMemo(() => {
+    if (!dashboard.length) return [];
+    const thisPageDashboards = getPageDashboards(dashboard, "overview");
+    setActiveSectionId((cur) => cur || thisPageDashboards[0].id);
+    return thisPageDashboards;
+  }, [dashboard, setActiveSectionId]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
@@ -127,7 +134,8 @@ function Page() {
         <div className="flex gap-2">
           <EditChartsOrder
             cardList={activeDashboardSection?.cards || []}
-            updateDashboard={(updates) => updateSection(activeSectionId, updates)}
+            cardProps={cardProps}
+            activateCard={(cardId, activate) => activateCard(cardId, activate, placeholderValues)}
           />
           <ExportFileFormat />
         </div>

@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function EditChartsOrder({ cardList = [], updateDashboard }) {
+export default function EditChartsOrder({ cardList = [], cardProps, activateCard }) {
   const [isOpen, setOpen] = useState(false);
   const [titles, setTitles] = useState([]);
 
@@ -71,20 +71,8 @@ export default function EditChartsOrder({ cardList = [], updateDashboard }) {
                         <DotsSixVertical size={16} color="#031B15" className="mr-4" />
                         <div className="text-base font-semibold"> {title.title}</div>
                         <input
-                          checked={title.active}
-                          onChange={() => {
-                            setTitles(
-                              titles.map((item) => {
-                                if (item.id === title.id) {
-                                  return {
-                                    ...item,
-                                    active: !item.active
-                                  };
-                                }
-                                return item;
-                              })
-                            );
-                          }}
+                          checked={cardProps[title.id]?.active || false}
+                          onChange={() => activateCard(title.id, !cardProps[title.id]?.active)}
                           type="checkbox"
                           className={cn("min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto", " cursor-pointer")}
                         />
@@ -97,16 +85,12 @@ export default function EditChartsOrder({ cardList = [], updateDashboard }) {
             )}
           </Droppable>
           <div className="w-full flex items-center justify-end gap-2.5 p-4 border-t sticky bottom-0 bg-white">
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
             <Button
               onClick={() => {
                 setOpen(false);
-                updateDashboard({ cards: titles });
               }}
             >
-              Save
+              Done
             </Button>
           </div>
         </DragDropContext>
