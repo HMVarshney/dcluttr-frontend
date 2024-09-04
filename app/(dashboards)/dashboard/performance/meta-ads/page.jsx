@@ -6,8 +6,7 @@ import Header from "../_components/Header";
 import CampaignTypeDonutChart from "../_components/CampaignTypeDonutChart";
 import BiddingStrategyTable from "../_components/BiddingStrategyTable";
 import MetaAdsDetails from "../_components/CampaignWiseTable/MetaAdsDetails";
-import AdPlacementTable from "../_components/AdPlacementTable";
-import { getAdSetsMeta, getAdsMeta, getCampaignDataMeta } from "@/lib/store/features/metaAdsSlice";
+import MetaCreativeTable from "../_components/MetaCreativeTable";
 
 export default function Page() {
   return (
@@ -15,7 +14,7 @@ export default function Page() {
       <Header />
       <MetaAdsDetails />
       <BiddingStrategyTable isGoogle={false} />
-      <AdPlacementTable />
+      <MetaCreativeTable />
       <div className="m-6 flex gap-4 w-1/2">
         <CampaignTypeDonutChart />
       </div>
