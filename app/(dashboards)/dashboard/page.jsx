@@ -9,8 +9,10 @@ import MainChart from "../_components/Home/MainChart";
 import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 import { getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
 import EditChartsOrder from "../_components/EditChartsOrder";
+import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
 
 import "gridstack/dist/gridstack.min.css";
+import { useDispatch } from "react-redux";
 
 const data1 = {
   title: "Spends",
@@ -86,6 +88,8 @@ const data1 = {
 function Page() {
   const gridstackRef = useRef(null);
 
+  const dispatch = useDispatch();
+
   const { groupBy, dateRange, endDateRange } = useSelector((state) => state.user);
 
   const placeholderValues = useMemo(() => {
@@ -110,21 +114,27 @@ function Page() {
     dashboard,
     activeSection: activeDashboardSection,
     activeSectionId,
-    setActiveSectionId,
     cardProps,
     activateCard
   } = useDynamicDashboard(18, gridstackRef, placeholderValues);
 
   const pageDashboards = useMemo(() => {
     if (!dashboard.length) return [];
+
     const thisPageDashboards = getPageDashboards(dashboard, "overview");
-    setActiveSectionId((cur) => cur || thisPageDashboards[0].id);
+    if (!activeSectionId) {
+      dispatch(dynamicDashboardActions.setActiveSectionId(thisPageDashboards[0].id));
+    }
     return thisPageDashboards;
-  }, [dashboard, setActiveSectionId]);
+  }, [activeSectionId, dashboard, dispatch]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
-      <Header sections={pageDashboards} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
+      <Header
+        sections={pageDashboards}
+        activeSectionId={activeSectionId}
+        setActiveSectionId={(sectionId) => dispatch(dynamicDashboardActions.setActiveSectionId(sectionId))}
+      />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
         <div>

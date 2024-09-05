@@ -11,29 +11,14 @@ import { cn } from "@/lib/utils";
 
 export default function EditChartsOrder({ cardList = [], cardProps, activateCard }) {
   const [isOpen, setOpen] = useState(false);
-  const [titles, setTitles] = useState([]);
 
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = titles;
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setTitles(items);
-  };
-
-  useEffect(() => {
-    if (cardList) setTitles(cardList);
-  }, [cardList]);
+  const handleOnDragEnd = () => {};
 
   return (
     <Popover
       open={isOpen}
       onOpenChange={(e) => {
         setOpen(e);
-        if (e) {
-          setTitles(cardList?.sort((a, b) => (b?.select === true) - (a?.select === true)));
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -53,33 +38,38 @@ export default function EditChartsOrder({ cardList = [], cardProps, activateCard
           <Droppable droppableId="imageUrls" direction="vertical">
             {(provided) => (
               <div className="flex flex-col" {...provided.droppableProps} ref={provided.innerRef}>
-                {titles.map((title, i) => (
-                  <Draggable key={i} draggableId={`image-${i}`} index={i}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`border-b py-3.5 px-6 w-full flex items-center ${
-                          snapshot.isDragging ? "bg-blue-100 shadow-lg z-50" : ""
-                        }`}
-                        style={{
-                          ...provided.draggableProps.style,
-                          opacity: snapshot.isDragging ? 0.8 : 1
-                        }}
-                      >
-                        <DotsSixVertical size={16} color="#031B15" className="mr-4" />
-                        <div className="text-base font-semibold"> {title.title}</div>
-                        <input
-                          checked={cardProps[title.id]?.active || false}
-                          onChange={() => activateCard(title.id, !cardProps[title.id]?.active)}
-                          type="checkbox"
-                          className={cn("min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto", " cursor-pointer")}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                {[...cardList]
+                  .sort((a, b) => (cardProps[b.id]?.active === true) - (cardProps[a.id]?.active === true))
+                  .map((title, i) => (
+                    <Draggable key={i} draggableId={`image-${i}`} index={i}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`border-b py-3.5 px-6 w-full flex items-center ${
+                            snapshot.isDragging ? "bg-blue-100 shadow-lg z-50" : ""
+                          }`}
+                          style={{
+                            ...provided.draggableProps.style,
+                            opacity: snapshot.isDragging ? 0.8 : 1
+                          }}
+                        >
+                          <DotsSixVertical size={16} color="#031B15" className="mr-4" />
+                          <div className="text-base font-semibold"> {title.title}</div>
+                          <input
+                            checked={cardProps[title.id]?.active || false}
+                            onChange={() => activateCard(title.id, !cardProps[title.id]?.active)}
+                            type="checkbox"
+                            className={cn(
+                              "min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto",
+                              " cursor-pointer"
+                            )}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
                 <div className="w-[340px] bg-[#dbdbdb8c]">{provided.placeholder}</div>
               </div>
             )}

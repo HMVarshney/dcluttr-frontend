@@ -28,6 +28,11 @@ function DataTable({ data = [], columns = [], columnOrder, columnVisibility, get
   const table = useReactTable({
     data,
     columns,
+    initialState: {
+      columnPinning: {
+        left: ["expand-button"]
+      }
+    },
     state: {
       columnOrder,
       columnVisibility,

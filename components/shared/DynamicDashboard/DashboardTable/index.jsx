@@ -1,49 +1,29 @@
-/* eslint-disable react/display-name */
 "use client";
 
-import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useCubeQuery } from "@cubejs-client/react";
-import { ArrowSquareOut, CaretDown, CaretRight } from "phosphor-react";
+import { useSelector, useDispatch } from "react-redux";
 import cubeJsApi from "@/lib/cubeJsApi";
 import { DashboardTableBody, DashboardTableHeader } from "./Elements";
-import { cn, shortenKeyNames, splitKeyAndUseLastPart } from "@/lib/utils";
+import { shortenKeyNames, splitKeyAndUseLastPart } from "@/lib/utils";
 import { replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { recursivelyAddSubRows } from "@/lib/utils/datatable.utils";
-import { Switch } from "@/components/ui/switch";
+import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
+import { DefaultCell, ExpandCell, LinkCell, SwitchCell } from "./Cells";
 
 function getColumnCell(rawColumn) {
   if (rawColumn.meta?.switchEnabled) {
-    return ({ getValue }) => (
-      <div className="flex items-center justify-center w-20">
-        <Switch checked={getValue() === "ACTIVE"} />
-      </div>
-    );
+    return SwitchCell;
   }
   if (rawColumn.meta?.readableId) {
-    return ({ row, getValue }) => (
-      <div className="flex items-center gap-4">
-        <div className="min-w-32">
-          <span className="line-clamp-1 text-primary font-semibold ">{getValue()}</span>
-        </div>
-        {row.original.link && (
-          <Link href={row.original.link} target="_blank">
-            <ArrowSquareOut size={20} className="text-primary font-semibold cursor-pointer" />
-          </Link>
-        )}
-      </div>
-    );
+    return LinkCell;
   }
-  return ({ getValue }) => <div className="min-w-32">{getValue()}</div>;
+  return DefaultCell;
 }
 
 function constructColumnDefs(columns, expandHandler) {
   const columnDefs = columns.reduce((prev, c) => {
     const splitKey = splitKeyAndUseLastPart(c.key);
-
-    // ! Has to be excluded in the columns array
-    if (c.splitKey === "id" || c.format === "link") return prev;
-
     prev.push({
       id: c.key,
       accessorFn: (row) => row[splitKey],
@@ -56,21 +36,7 @@ function constructColumnDefs(columns, expandHandler) {
   if (expandHandler) {
     columnDefs.unshift({
       id: "expand-button",
-      cell: ({ row }) => (
-        <div
-          className={cn({ "pl-4": row.depth === 1 }, { "pl-8": row.depth === 2 })}
-          onClick={() => expandHandler(row)}
-          style={{ cursor: "pointer" }}
-        >
-          {row.getCanExpand() ? (
-            row.getIsExpanded() ? (
-              <CaretDown className="min-w-4" />
-            ) : (
-              <CaretRight className="min-w-4" />
-            )
-          ) : null}
-        </div>
-      )
+      cell: ({ row }) => ExpandCell({ row, expandHandler })
     });
   }
 
@@ -85,21 +51,23 @@ function constructColumnVisibilityMap(columns, columnOrder) {
     return prev;
   }, {});
   columns.forEach((col) => {
-    if (!columnVisibilityMap[col.id]) {
-      columnVisibilityMap[col.id] = false;
+    if (!columnVisibilityMap[col.key]) {
+      columnVisibilityMap[col.key] = false;
     }
   });
   return columnVisibilityMap;
 }
 
-function DashboardTable({ title, description, query, columnOrder, drilldownQueries }) {
+function DashboardTable({ id: cardId, title, description, query, drilldownQueries }) {
+  const dispatch = useDispatch();
+
   const cubejsClient = useRef(cubeJsApi());
+
+  const { cardCustomizableProps } = useSelector((state) => state.dynamicDashboard);
 
   const [results, setResults] = useState([]);
   const [columns, setColumns] = useState([]);
   const [columnDefs, setColumnDefs] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [columnOrdering, setColumnOrdering] = useState([]);
 
   const { isLoading, error, resultSet } = useCubeQuery(query, {
     castNumerics: true,
@@ -107,13 +75,36 @@ function DashboardTable({ title, description, query, columnOrder, drilldownQueri
     skip: !query
   });
 
+  const setColumnOrdering = (newOrdering) => {
+    dispatch(
+      dynamicDashboardActions.setCardCustomizableProps({
+        ...cardCustomizableProps,
+        [cardId]: {
+          ...cardCustomizableProps[cardId],
+          columnOrder: newOrdering
+        }
+      })
+    );
+  };
+
+  const columnVisibility = useMemo(() => {
+    return constructColumnVisibilityMap(columns, cardCustomizableProps[cardId].columnOrder);
+  }, [cardCustomizableProps, cardId, columns]);
+
   const fetchDrilldownData = async (query, rowId) => {
     const drilldownResults = await cubejsClient.current.load(query, { castNumerics: true });
     setResults((cur) => recursivelyAddSubRows(cur, rowId, drilldownResults.tablePivot()));
   };
 
   const changeColumnVisibile = (id, visibility) => {
-    setColumnVisibility((cur) => ({ ...cur, [id]: visibility }));
+    let newColumnOrder;
+    if (visibility) {
+      newColumnOrder = [...cardCustomizableProps[cardId].columnOrder];
+      newColumnOrder.push(id);
+    } else {
+      newColumnOrder = cardCustomizableProps[cardId].columnOrder.filter((c) => c !== id);
+    }
+    setColumnOrdering(newColumnOrder);
   };
 
   const expandHandler = useCallback(
@@ -135,13 +126,14 @@ function DashboardTable({ title, description, query, columnOrder, drilldownQueri
   useEffect(() => {
     if (!resultSet) return;
 
-    const rawColumns = resultSet.tableColumns();
+    const rawColumns = resultSet.tableColumns().filter((c) => {
+      if (splitKeyAndUseLastPart(c.key) === "id" || c.format === "link") return false;
+      return true;
+    });
     setResults(shortenKeyNames(resultSet.tablePivot()));
     setColumns(rawColumns);
     setColumnDefs(constructColumnDefs(rawColumns, drilldownQueries.length ? expandHandler : null));
-    setColumnVisibility(constructColumnVisibilityMap(rawColumns, columnOrder));
-    setColumnOrdering([...(drilldownQueries.length ? ["expand-button"] : []), ...columnOrder]);
-  }, [columnOrder, drilldownQueries.length, expandHandler, resultSet]);
+  }, [drilldownQueries.length, expandHandler, resultSet]);
 
   return (
     <div className="h-full">
@@ -150,7 +142,7 @@ function DashboardTable({ title, description, query, columnOrder, drilldownQueri
         description={description}
         columns={columns}
         columnVisibility={columnVisibility}
-        columnOrder={columnOrdering}
+        columnOrder={cardCustomizableProps[cardId].columnOrder}
         setColumnVisibility={changeColumnVisibile}
         setColumnOrdering={setColumnOrdering}
       />
@@ -158,7 +150,7 @@ function DashboardTable({ title, description, query, columnOrder, drilldownQueri
         loading={isLoading}
         error={error}
         data={{ results, columns: columnDefs }}
-        columnOrder={columnOrdering}
+        columnOrder={cardCustomizableProps[cardId].columnOrder}
         columnVisibility={columnVisibility}
         getRowCanExpand={(row) => row.depth < drilldownQueries.length}
       />
