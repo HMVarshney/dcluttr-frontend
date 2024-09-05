@@ -14,139 +14,102 @@ const data = {
   series: [
     {
       name: "Spends",
-      dataKey: "s",
-      id: 1,
-      color: "#9A66ED",
-      type: "area"
-    },
-    {
-      name: "Revenue",
-      dataKey: "r",
-      id: 2,
-      color: "#2EB76F",
-      type: "area"
-    }
-  ],
-  data: [
-    {
-      name: "A",
-      s: 8,
-      r: 1,
-      amt: 24,
-      x: "jan"
-    },
-    {
-      name: "B",
-      s: 5,
-      r: 10,
-      amt: 22,
-      x: "feb"
-    },
-    {
-      name: "C",
-      s: 12,
-      r: 10,
-      amt: 22,
-      x: "mar"
-    },
-    {
-      name: "D",
-      s: 10,
-      r: 17,
-      amt: 20,
-      x: "apr"
-    },
-    {
-      name: "E",
-      s: 14,
-      r: 25,
-      amt: 21,
-      x: "may"
-    },
-    {
-      name: "F",
-      s: 10,
-      r: 19,
-      amt: 25,
-      x: "jun"
-    },
-    {
-      name: "G",
-      s: 20,
-      r: 25,
-      amt: 21,
-      x: "jul"
-    }
-  ]
-};
-
-const data1 = {
-  title: "Spends",
-  series: [
-    {
-      name: "Spends",
-      dataKey: "s",
+      dataKey: "A",
       id: 3,
-      color: "#9A66ED",
+      color: "#6D4FED",
       type: "line"
     },
     {
       name: "Revenue",
-      dataKey: "r",
+      dataKey: "a",
       id: 4,
-      color: "#2EB76F",
+      color: "#6D4FED",
+      type: "area"
+    },
+    {
+      name: "Spends",
+      dataKey: "B",
+      id: 3,
+      color: "#EA6153",
+      type: "line"
+    },
+    {
+      name: "Revenue",
+      dataKey: "b",
+      id: 4,
+      color: "#EA6153",
+      type: "area"
+    },
+    {
+      name: "Spends",
+      dataKey: "C",
+      id: 3,
+      color: "#F7C245",
+      type: "line"
+    },
+    {
+      name: "Revenue",
+      dataKey: "c",
+      id: 4,
+      color: "#F7C245",
       type: "area"
     }
   ],
   data: [
     {
       name: "A",
-      s: 8,
-      r: 1,
+      A: 2,
+      a: 10,
+      B: 3,
+      b: 12,
+      C: 4,
+      c: 1,
       amt: 24,
-      x: "jan"
+      x: "Jun 02"
     },
     {
       name: "B",
-      s: 5,
-      r: 10,
+      A: 5,
+      a: 15,
+      B: 6,
+      b: 18,
+      C: 7,
+      c: 11,
       amt: 22,
-      x: "feb"
+      x: "Jun 03"
     },
     {
       name: "C",
-      s: 12,
-      r: 10,
+      A: 8,
+      a: 20,
+      B: 9,
+      b: 22,
+      C: 10,
+      c: 14,
       amt: 22,
-      x: "mar"
+      x: "Jun 04"
     },
     {
       name: "D",
-      s: 10,
-      r: 17,
+      A: 6,
+      a: 25,
+      B: 7,
+      b: 24,
+      C: 11,
+      c: 16,
       amt: 20,
-      x: "apr"
+      x: "Jun 05"
     },
     {
       name: "E",
-      s: 14,
-      r: 25,
+      A: 7,
+      a: 21,
+      B: 8,
+      b: 23,
+      C: 12,
+      c: 18,
       amt: 21,
-      x: "may"
-    },
-    {
-      name: "F",
-      s: 10,
-      r: 19,
-      amt: 25,
-      x: "jun"
-    },
-    {
-      name: "G",
-      s: 20,
-      r: 25,
-      amt: 21,
-      x: "jul"
+      x: "Jun 06"
     }
   ]
 };
@@ -167,24 +130,8 @@ export default function Page() {
       <Header />
       <CreativesChart
         data={{
-          ...data1,
-          data: [...data1.data, ...data1.data, ...data1.data],
-          series: [
-            {
-              name: "Total",
-              dataKey: "s",
-              id: 1,
-              color: "#E87C67",
-              type: "line"
-            },
-            {
-              name: "Sales",
-              dataKey: "r",
-              id: 2,
-              color: "#B1BA88",
-              type: "area"
-            }
-          ]
+          ...data,
+          data: [...data.data, ...data.data, ...data.data]
         }}
         isLoading={isLoading}
       />
