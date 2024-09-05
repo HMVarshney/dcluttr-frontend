@@ -12,7 +12,6 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import Switcher from "@/components/Switcher";
-import DatePickerWithRange from "@/components/DatePickerWithRange";
 // import { Button } from '@/components/ui/button';
 // import Notifications from '@/components/Notifications';
 // import ExportFileFormat from '@/components/ExportFileFormat';
@@ -22,6 +21,10 @@ import TopAdsBanner from "@/components/TopAdsBanner";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setMainChart } from "@/lib/store/features/userSlice";
+import dynamic from "next/dynamic";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+const DatePickerWithRange = dynamic(() => import("@/components/DatePickerWithRange"), { ssr: false });
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -60,6 +63,18 @@ export default function Header() {
                     <ExportFileFormat />
                     <Notifications /> */}
           <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />
+        </div>
+      </div>
+      <div className="flex justify-start gap-2 py-3 px-6 bg-white border-b">
+        <div className="flex items-center justify-start border rounded-xl p-1.5">
+          <div
+            className={cn("flex gap-2 items-center px-4 py-1.5 bg-white rounded-md cursor-grab", {
+              "bg-primary text-white": true
+            })}
+          >
+            <Image src="/icons/meta_icon.svg" alt="Meta" width={100} height={100} className="w-4 object-contain" />
+            <div className="font-medium text-sm">Meta ads</div>
+          </div>
         </div>
       </div>
       <TopAdsBanner />
