@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
@@ -10,9 +10,9 @@ import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 import { getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
 import EditChartsOrder from "../_components/EditChartsOrder";
 import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
+import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
 
 import "gridstack/dist/gridstack.min.css";
-import { useDispatch } from "react-redux";
 
 const data1 = {
   title: "Spends",
@@ -111,6 +111,7 @@ function Page() {
   }, [dateRange.from, dateRange.to, groupBy.value, endDateRange.from, endDateRange.to]);
 
   const {
+    gridstackIntance,
     dashboard,
     activeSection: activeDashboardSection,
     activeSectionId,
@@ -123,7 +124,7 @@ function Page() {
 
     const thisPageDashboards = getPageDashboards(dashboard, "overview");
     if (!activeSectionId) {
-      dispatch(dynamicDashboardActions.setActiveSectionId(thisPageDashboards[0].id));
+      dispatch(dynamicDashboardActions.setActiveSection({ id: thisPageDashboards[0].id }));
     }
     return thisPageDashboards;
   }, [activeSectionId, dashboard, dispatch]);
@@ -133,7 +134,7 @@ function Page() {
       <Header
         sections={pageDashboards}
         activeSectionId={activeSectionId}
-        setActiveSectionId={(sectionId) => dispatch(dynamicDashboardActions.setActiveSectionId(sectionId))}
+        setActiveSectionId={(sectionId) => dispatch(dynamicDashboardActions.setActiveSection(sectionId))}
       />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
@@ -175,6 +176,10 @@ function Page() {
       />
 
       <div ref={gridstackRef}></div>
+
+      <div style={{ marginTop: "10rem" }}>
+        <SaveDashboardSection gridstackInstance={gridstackIntance} brandId={18} />
+      </div>
     </ScrollArea>
   );
 }

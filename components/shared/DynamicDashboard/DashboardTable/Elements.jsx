@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DotsSixVertical, SquareHalf, X } from "phosphor-react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import ExportButton from "@/components/ExportButton";
