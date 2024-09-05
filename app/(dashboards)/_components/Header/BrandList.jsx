@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ChevronDown, Plus } from "lucide-react";
-import { ProjectorScreenChart } from "phosphor-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import CreateSectionButton from "./CreateSectionButton";
 import { cn } from "@/lib/utils";
+import CreateSection from "./CreateSection";
+import { Button } from "@/components/ui/button";
 
 export default function BrandList({ sections, activeSectionId, setActiveSectionId }) {
   const [titles, setTitles] = useState([]);
@@ -37,7 +36,7 @@ export default function BrandList({ sections, activeSectionId, setActiveSectionI
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {titles?.slice(0, 7).map((ele, i) => (
+                {titles.map((ele, i) => (
                   <Draggable key={i} draggableId={`image-${i}`} index={i}>
                     {(provided) => (
                       <div
@@ -89,21 +88,11 @@ export default function BrandList({ sections, activeSectionId, setActiveSectionI
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-        <CreateSectionButton
-          onSave={(e) => {
-            setTitles([
-              ...titles,
-              {
-                title: e.name,
-                icons: <ProjectorScreenChart className="w-4 h-4 mr-1" />
-              }
-            ]);
-          }}
-        >
+        <CreateSection>
           <Button variant="icon">
             <Plus className="w-5 h-5" />
           </Button>
-        </CreateSectionButton>
+        </CreateSection>
       </div>
     </div>
   );

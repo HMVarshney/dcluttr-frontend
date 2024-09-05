@@ -134,7 +134,7 @@ function Page() {
       <Header
         sections={pageDashboards}
         activeSectionId={activeSectionId}
-        setActiveSectionId={(sectionId) => dispatch(dynamicDashboardActions.setActiveSection(sectionId))}
+        setActiveSectionId={(sectionId) => dispatch(dynamicDashboardActions.setActiveSection({ id: sectionId }))}
       />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
