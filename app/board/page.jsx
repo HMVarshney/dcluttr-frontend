@@ -29,7 +29,7 @@ function Board() {
       grid.batchUpdate(true);
       dashboardJSON.sections[0].cards.map((card) => {
         if (card.active) {
-          const { title, description, logo, gridStackProperties, visualizationType, columnOrder } = card;
+          const { title, description, logo, gridStackProperties, visualizationType, columnOrder, childDataset } = card;
           const query = JSON.parse(card.query);
           const gridStackOptions = {
             w: gridStackProperties.w,
@@ -49,6 +49,7 @@ function Board() {
                   description={description}
                   query={replacePlaceholders(query, placeholderValues)}
                   columnOrder={columnOrder}
+                  drilldownQueries={childDataset}
                 />
               ),
               gridStackOptions

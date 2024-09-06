@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 export default function Header({ sections, activeSectionId, setActiveSectionId }) {
   const dispatch = useDispatch();
   const { groupBy, dateRange, showMainChart } = useSelector((state) => state.user);
+
   return (
     <>
       <div className="sticky top-0 z-10">
@@ -56,7 +57,6 @@ export default function Header({ sections, activeSectionId, setActiveSectionId }
           <Switcher
             checked={showMainChart}
             onCheckedChange={(e) => {
-              console.log(e);
               dispatch(setMainChart(e));
             }}
           />

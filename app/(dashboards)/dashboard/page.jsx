@@ -1,13 +1,19 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useMemo, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Pencil } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import MainChart from "../_components/Home/MainChart";
-import { dashboardJSON } from "@/app/board/dashboards";
 import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
+import { getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
+import EditChartsOrder from "../_components/EditChartsOrder";
+import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
+import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
+import { UpdateSection } from "../_components/Header/CreateSection";
+import { Button } from "@/components/ui/button";
 
 import "gridstack/dist/gridstack.min.css";
 
@@ -82,23 +88,24 @@ const data1 = {
   ]
 };
 
-function getActiveDashboardSection(dashboardJSON, activeSectionId) {
-  const activeSectionIndex = dashboardJSON.sections.findIndex((s) => s.id === activeSectionId);
-  if (activeSectionIndex === -1) return;
-  return dashboardJSON.sections[activeSectionIndex];
-}
-
 function Page() {
-  const [activeSectionId, setActiveSectionId] = useState(dashboardJSON.sections[0].id);
-
   const gridstackRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   const { groupBy, dateRange, endDateRange } = useSelector((state) => state.user);
 
   const placeholderValues = useMemo(() => {
-    const values = { compare_date_range_query: [], time_dimension_granularity: groupBy.value };
+    const values = {
+      compare_date_range_query: [],
+      time_dimension_granularity: groupBy.value,
+      time_dimension_date_range_from: "",
+      time_dimension_date_range_to: ""
+    };
     if (dateRange.from && dateRange.to) {
       values.compare_date_range_query.push([dateRange.from, dateRange.to]);
+      values.time_dimension_date_range_from = dateRange.from;
+      values.time_dimension_date_range_to = dateRange.to;
     }
     if (endDateRange.from && endDateRange.to) {
       values.compare_date_range_query.push([endDateRange.from, endDateRange.to]);
@@ -106,21 +113,51 @@ function Page() {
     return values;
   }, [dateRange.from, dateRange.to, groupBy.value, endDateRange.from, endDateRange.to]);
 
-  const activeDashboardSection = useMemo(() => getActiveDashboardSection(dashboardJSON, activeSectionId), [activeSectionId]);
+  const {
+    gridstackIntance,
+    dashboard,
+    activeSection: activeDashboardSection,
+    activeSectionId,
+    cardProps,
+    activateCard
+  } = useDynamicDashboard(18, gridstackRef, placeholderValues);
 
-  useDynamicDashboard(gridstackRef, activeDashboardSection, placeholderValues);
+  const pageDashboards = useMemo(() => {
+    if (!dashboard.length) return [];
+
+    const thisPageDashboards = getPageDashboards(dashboard, "overview");
+    dispatch(dynamicDashboardActions.setActiveSection({ id: thisPageDashboards[0].id }));
+    return thisPageDashboards;
+  }, [dashboard, dispatch]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
-      <Header sections={dashboardJSON.sections} activeSectionId={activeSectionId} setActiveSectionId={setActiveSectionId} />
+      <Header
+        sections={pageDashboards}
+        activeSectionId={activeSectionId}
+        setActiveSectionId={(sectionId) => dispatch(dynamicDashboardActions.setActiveSection({ id: sectionId }))}
+      />
 
       <div className="flex items-center justify-between gap-2 my-3 mx-6">
         <div>
-          <div className="font-bold text-xl">{dashboardJSON.sections[0].name}</div>
-          <div className="text-[#4F4D55] text-sm">{dashboardJSON.sections[0].description}</div>
+          <div className="font-bold text-xl">{activeDashboardSection?.name}</div>
+          <div className="text-[#4F4D55] text-sm">{activeDashboardSection?.description}</div>
         </div>
         <div className="flex gap-2">
-          {/* <EditChartsOrder cardList={cardList} setCardList={setCardList} /> */}
+          {activeDashboardSection?.default ? (
+            <EditChartsOrder
+              cardList={activeDashboardSection?.cards || []}
+              cardProps={cardProps}
+              activateCard={(cardId, activate) => activateCard(cardId, activate, placeholderValues)}
+            />
+          ) : (
+            <UpdateSection placeholderValues={placeholderValues}>
+              <Button variant="outline" className=" text-[#031B15]">
+                <Pencil className="w-4 h-4 mr-2" />
+                <div className="font-medium text-sm">Edit</div>
+              </Button>
+            </UpdateSection>
+          )}
           <ExportFileFormat />
         </div>
       </div>
@@ -149,6 +186,10 @@ function Page() {
       />
 
       <div ref={gridstackRef}></div>
+
+      <div style={{ marginTop: "10rem" }}>
+        <SaveDashboardSection gridstackInstance={gridstackIntance} brandId={18} />
+      </div>
     </ScrollArea>
   );
 }

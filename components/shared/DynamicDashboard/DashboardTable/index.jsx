@@ -1,17 +1,46 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useCubeQuery } from "@cubejs-client/react";
+import { useSelector, useDispatch } from "react-redux";
 import cubeJsApi from "@/lib/cubeJsApi";
 import { DashboardTableBody, DashboardTableHeader } from "./Elements";
+import { shortenKeyNames, splitKeyAndUseLastPart } from "@/lib/utils";
+import { replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
+import { recursivelyAddSubRows } from "@/lib/utils/datatable.utils";
+import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
+import { DefaultCell, ExpandCell, LinkCell, SwitchCell } from "./Cells";
 
-function constructColumnDefs(columns) {
-  return columns.map((c) => ({
-    id: c.key,
-    accessorFn: (row) => row[c.key],
-    header: <div className="min-w-32">{c.shortTitle}</div>,
-    cell: (info) => <div className="min-w-32">{info.getValue()}</div>
-  }));
+function getColumnCell(rawColumn) {
+  if (rawColumn.meta?.switchEnabled) {
+    return SwitchCell;
+  }
+  if (rawColumn.meta?.readableId) {
+    return LinkCell;
+  }
+  return DefaultCell;
+}
+
+function constructColumnDefs(columns, expandHandler) {
+  const columnDefs = columns.reduce((prev, c) => {
+    const splitKey = splitKeyAndUseLastPart(c.key);
+    prev.push({
+      id: c.key,
+      accessorFn: (row) => row[splitKey],
+      header: <div className="min-w-32">{c.shortTitle}</div>,
+      cell: getColumnCell(c)
+    });
+    return prev;
+  }, []);
+
+  if (expandHandler) {
+    columnDefs.unshift({
+      id: "expand-button",
+      cell: ({ row }) => ExpandCell({ row, expandHandler })
+    });
+  }
+
+  return columnDefs;
 }
 
 function constructColumnVisibilityMap(columns, columnOrder) {
@@ -22,21 +51,23 @@ function constructColumnVisibilityMap(columns, columnOrder) {
     return prev;
   }, {});
   columns.forEach((col) => {
-    if (!columnVisibilityMap[col.id]) {
-      columnVisibilityMap[col.id] = false;
+    if (!columnVisibilityMap[col.key]) {
+      columnVisibilityMap[col.key] = false;
     }
   });
   return columnVisibilityMap;
 }
 
-function DashboardTable({ title, description, query, columnOrder }) {
+function DashboardTable({ id: cardId, title, description, query, drilldownQueries }) {
+  const dispatch = useDispatch();
+
   const cubejsClient = useRef(cubeJsApi());
+
+  const { cardCustomizableProps } = useSelector((state) => state.dynamicDashboard);
 
   const [results, setResults] = useState([]);
   const [columns, setColumns] = useState([]);
   const [columnDefs, setColumnDefs] = useState([]);
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [columnOrdering, setColumnOrdering] = useState([]);
 
   const { isLoading, error, resultSet } = useCubeQuery(query, {
     castNumerics: true,
@@ -44,20 +75,65 @@ function DashboardTable({ title, description, query, columnOrder }) {
     skip: !query
   });
 
-  const changeColumnVisibile = (id, visibility) => {
-    setColumnVisibility((cur) => ({ ...cur, [id]: visibility }));
+  const setColumnOrdering = (newOrdering) => {
+    dispatch(
+      dynamicDashboardActions.setCardCustomizableProps({
+        ...cardCustomizableProps,
+        [cardId]: {
+          ...cardCustomizableProps[cardId],
+          columnOrder: newOrdering
+        }
+      })
+    );
   };
+
+  const columnVisibility = useMemo(() => {
+    return constructColumnVisibilityMap(columns, cardCustomizableProps[cardId].columnOrder);
+  }, [cardCustomizableProps, cardId, columns]);
+
+  const fetchDrilldownData = async (query, rowId) => {
+    const drilldownResults = await cubejsClient.current.load(query, { castNumerics: true });
+    setResults((cur) => recursivelyAddSubRows(cur, rowId, drilldownResults.tablePivot()));
+  };
+
+  const changeColumnVisibile = (id, visibility) => {
+    let newColumnOrder;
+    if (visibility) {
+      newColumnOrder = [...cardCustomizableProps[cardId].columnOrder];
+      newColumnOrder.push(id);
+    } else {
+      newColumnOrder = cardCustomizableProps[cardId].columnOrder.filter((c) => c !== id);
+    }
+    setColumnOrdering(newColumnOrder);
+  };
+
+  const expandHandler = useCallback(
+    (row) => {
+      row.getToggleExpandedHandler()();
+      let drilldownQuery = drilldownQueries.find((dq) => dq.position === row.depth + 1);
+      if (drilldownQuery) {
+        drilldownQuery = replacePlaceholders(JSON.parse(drilldownQuery.query), {
+          time_dimension_date_range_from: "2024-08-01",
+          time_dimension_date_range_to: "2024-08-30",
+          filter_values: [row.original.id]
+        });
+        fetchDrilldownData(drilldownQuery, row.original.id);
+      }
+    },
+    [drilldownQueries]
+  );
 
   useEffect(() => {
     if (!resultSet) return;
 
-    const rawColumns = resultSet.tableColumns();
-    setResults(resultSet.tablePivot());
+    const rawColumns = resultSet.tableColumns().filter((c) => {
+      if (splitKeyAndUseLastPart(c.key) === "id" || c.format === "link") return false;
+      return true;
+    });
+    setResults(shortenKeyNames(resultSet.tablePivot()));
     setColumns(rawColumns);
-    setColumnDefs(constructColumnDefs(rawColumns));
-    setColumnVisibility(constructColumnVisibilityMap(rawColumns, columnOrder));
-    setColumnOrdering(columnOrder);
-  }, [columnOrder, resultSet]);
+    setColumnDefs(constructColumnDefs(rawColumns, drilldownQueries.length ? expandHandler : null));
+  }, [drilldownQueries.length, expandHandler, resultSet]);
 
   return (
     <div className="h-full">
@@ -66,7 +142,7 @@ function DashboardTable({ title, description, query, columnOrder }) {
         description={description}
         columns={columns}
         columnVisibility={columnVisibility}
-        columnOrder={columnOrdering}
+        columnOrder={cardCustomizableProps[cardId].columnOrder}
         setColumnVisibility={changeColumnVisibile}
         setColumnOrdering={setColumnOrdering}
       />
@@ -74,8 +150,9 @@ function DashboardTable({ title, description, query, columnOrder }) {
         loading={isLoading}
         error={error}
         data={{ results, columns: columnDefs }}
-        columnOrder={columnOrdering}
+        columnOrder={cardCustomizableProps[cardId].columnOrder}
         columnVisibility={columnVisibility}
+        getRowCanExpand={(row) => row.depth < drilldownQueries.length}
       />
     </div>
   );
