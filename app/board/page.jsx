@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import { GridStack } from "gridstack";
 import DashboardTable from "../../components/shared/DynamicDashboard/DashboardTable";
 import DashboardChart from "@/components/shared/DynamicDashboard/DashboardChart";
-import { renderComponentToHtml, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
-import { dashboardTableJSON as dashboardJSON } from "./dashboards";
+import { renderComponentToHtml, renderGridstackElement, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
+import { dashboardJSON2 as dashboardJSON } from "./dashboards";
 import { visualizationTypes } from "@/lib/constants/dynamicDashboard";
 
 import "gridstack/dist/gridstack.min.css";
@@ -21,74 +21,39 @@ let grid;
 function Board() {
   const ref = useRef(null);
 
-  useEffect(() => {
-    if (!grid) grid = GridStack.init({}, ref.current);
+  const gridRef = useRef(null);
 
+  useEffect(() => {
+    if (!gridRef.current) gridRef.current = GridStack.init({}, ref.current);
+
+    const grid = gridRef.current;
     grid.removeAll();
     if (dashboardJSON.sections.length && dashboardJSON.sections[0].cards.length) {
       grid.batchUpdate(true);
       dashboardJSON.sections[0].cards.map((card) => {
         if (card.active) {
-          const { title, description, logo, gridStackProperties, visualizationType, columnOrder, childDataset } = card;
-          const query = JSON.parse(card.query);
-          const gridStackOptions = {
-            w: gridStackProperties.w,
-            h: gridStackProperties.h,
-            x: gridStackProperties.x,
-            y: gridStackProperties.y,
-            noMove: gridStackProperties.noMove,
-            noResize: gridStackProperties.noResize,
-            locked: gridStackProperties.locked
-          };
-
-          if (visualizationType === visualizationTypes.TABLE) {
-            grid.addWidget(
-              renderComponentToHtml(
-                <DashboardTable
-                  title={title}
-                  description={description}
-                  query={replacePlaceholders(query, placeholderValues)}
-                  columnOrder={columnOrder}
-                  drilldownQueries={childDataset}
-                />
-              ),
-              gridStackOptions
-            );
-          } else if (
-            visualizationType === "type1" ||
-            visualizationType === visualizationTypes.GAUGE ||
-            visualizationType === visualizationTypes.PIECHART
-          ) {
-            grid.addWidget(
-              renderComponentToHtml(
-                <DashboardChart
-                  title={title}
-                  description={description}
-                  icon={logo}
-                  query={replacePlaceholders(query, placeholderValues)}
-                  chartType={visualizationType}
-                />
-              ),
-              gridStackOptions
-            );
-          }
-          // else if (visualizationType === "type2") {
-          //   grid.addWidget(renderComponentToHtml(<Type2Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
-          // } else if (visualizationType === "type3") {
-          //   grid.addWidget(renderComponentToHtml(<Type3Chart data={data} details={{ title, icon: logo }} />), gridStackOptions);
-          // } else if (visualizationType === visualizationTypes.PIECHART) {
-          //   grid.addWidget(
-          //     renderComponentToHtml(<DonutChart title={title} description={description} query={query} />),
-          //     gridStackOptions
-          //   );
-          // }
+          renderGridstackElement(grid, card, placeholderValues);
         }
       });
       grid.batchUpdate(false);
     }
   }, []);
 
-  return <div ref={ref}></div>;
+  return (
+    <>
+      <div ref={ref}></div>
+      <div style={{ marginTop: "12rem" }}>
+        <button
+          onClick={() => {
+            const elements = gridRef.current.getGridItems();
+            gridRef.current.removeWidget(elements[0]);
+          }}
+        >
+          Remove card
+        </button>
+      </div>
+    </>
+  );
 }
 
 function TestBoard() {
