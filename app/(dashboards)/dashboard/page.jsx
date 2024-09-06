@@ -2,6 +2,7 @@
 
 import { useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Pencil } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
@@ -11,6 +12,8 @@ import { getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
 import EditChartsOrder from "../_components/EditChartsOrder";
 import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
 import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
+import { UpdateSection } from "../_components/Header/CreateSection";
+import { Button } from "@/components/ui/button";
 
 import "gridstack/dist/gridstack.min.css";
 
@@ -123,11 +126,9 @@ function Page() {
     if (!dashboard.length) return [];
 
     const thisPageDashboards = getPageDashboards(dashboard, "overview");
-    if (!activeSectionId) {
-      dispatch(dynamicDashboardActions.setActiveSection({ id: thisPageDashboards[0].id }));
-    }
+    dispatch(dynamicDashboardActions.setActiveSection({ id: thisPageDashboards[0].id }));
     return thisPageDashboards;
-  }, [activeSectionId, dashboard, dispatch]);
+  }, [dashboard, dispatch]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
@@ -143,11 +144,20 @@ function Page() {
           <div className="text-[#4F4D55] text-sm">{activeDashboardSection?.description}</div>
         </div>
         <div className="flex gap-2">
-          <EditChartsOrder
-            cardList={activeDashboardSection?.cards || []}
-            cardProps={cardProps}
-            activateCard={(cardId, activate) => activateCard(cardId, activate, placeholderValues)}
-          />
+          {activeDashboardSection?.default ? (
+            <EditChartsOrder
+              cardList={activeDashboardSection?.cards || []}
+              cardProps={cardProps}
+              activateCard={(cardId, activate) => activateCard(cardId, activate, placeholderValues)}
+            />
+          ) : (
+            <UpdateSection placeholderValues={placeholderValues}>
+              <Button variant="outline" className=" text-[#031B15]">
+                <Pencil className="w-4 h-4 mr-2" />
+                <div className="font-medium text-sm">Edit</div>
+              </Button>
+            </UpdateSection>
+          )}
           <ExportFileFormat />
         </div>
       </div>

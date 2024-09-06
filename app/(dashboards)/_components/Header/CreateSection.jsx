@@ -9,7 +9,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import cubeJsApi from "@/lib/cubeJsApi";
 import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
-import { fetchDashboard } from "@/lib/store/features/dynamicDashboard";
+import { dynamicDashboardActions, fetchDashboard } from "@/lib/store/features/dynamicDashboard";
+import { useSelector } from "react-redux";
+import { addCardToGrid, createCardObject, removeCardFromGrid } from "@/lib/utils/dynamicDashboard.utils";
+
+async function fetchMetricList() {
+  const response = await cubeJsApi().meta();
+  const metricCube = response.cubes.find((c) => c.name === "hybrid_performance_stream");
+  if (!metricCube) {
+    throw new Error("Metric cube not found");
+  }
+  return metricCube;
+}
+
+async function createDashboardSection(section) {
+  const response = await axiosInterceptorInstance.post("/brand/24/dashboards", section);
+  return response;
+}
+
+async function createDashboardSectionJSON(payload) {
+  const response = await axios.post("/api/createCubeQuery", payload);
+  return response.data;
+}
 
 function CreateSectionButton({
   isOpen,
@@ -84,27 +105,71 @@ function CreateSectionButton({
   );
 }
 
-async function fetchMetricList() {
-  const response = await cubeJsApi().meta();
-  const metricCube = response.cubes.find((c) => c.name === "hybrid_performance_stream");
-  if (!metricCube) {
-    throw new Error("Metric cube not found");
-  }
+export function UpdateSection({ children, placeholderValues }) {
+  const dispatch = useDispatch();
 
-  return metricCube;
+  const cube = useRef(null);
+
+  const { activeSection, cardCustomizableProps, gridstackInstance } = useSelector((state) => state.dynamicDashboard);
+
+  const [isOpen, setOpen] = useState(false);
+  const [metricList, setMetricList] = useState({});
+  const [sectionName, setSectionName] = useState("");
+
+  const handleSelect = (selectedMetric) => {
+    if (cardCustomizableProps[selectedMetric.id]) {
+      dispatch(dynamicDashboardActions.removeCard({ cardId: selectedMetric.id }));
+      removeCardFromGrid(gridstackInstance, selectedMetric.id);
+    } else {
+      const cardObj = createCardObject(selectedMetric.id, cube.current);
+      dispatch(dynamicDashboardActions.addCard({ cardId: selectedMetric.id, properties: cardObj }));
+      addCardToGrid(gridstackInstance, cardObj, placeholderValues);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (isOpen && Object.keys(metricList).length === 0) {
+      (async () => {
+        const metricCube = await fetchMetricList();
+        cube.current = metricCube;
+
+        const metricSourceMap = metricCube.measures.reduce((prev, m) => {
+          const { source } = m.meta;
+          if (!prev[source]) {
+            prev[source] = [];
+          }
+          prev[source].push({ title: m.title, id: m.name });
+          return prev;
+        }, {});
+        setMetricList(metricSourceMap);
+      })();
+    }
+  }, [isOpen, metricList]);
+
+  useEffect(() => {
+    if (activeSection.section) setSectionName(activeSection.section.name);
+  }, [activeSection.section]);
+
+  return (
+    <CreateSectionButton
+      isOpen={isOpen}
+      setOpen={setOpen}
+      metricList={metricList}
+      sectionName={sectionName}
+      setSectionName={setSectionName}
+      selection={cardCustomizableProps}
+      onSelect={handleSelect}
+      onSubmit={handleSubmit}
+      triggerEl={children}
+    />
+  );
 }
 
-async function createDashboardSection(section) {
-  const response = await axiosInterceptorInstance.post("/brand/24/dashboards", section);
-  return response;
-}
-
-async function createDashboardSectionJSON(payload) {
-  const response = await axios.post("/api/createCubeQuery", payload);
-  return response.data;
-}
-
-function CreateSection({ children }) {
+export function CreateSection({ children }) {
   const dispatch = useDispatch();
 
   const cube = useRef(null);
@@ -150,9 +215,7 @@ function CreateSection({ children }) {
           if (!prev[source]) {
             prev[source] = [];
           }
-
           prev[source].push({ title: m.title, id: m.name });
-
           return prev;
         }, {});
         setMetricList(metricSourceMap);
@@ -174,5 +237,3 @@ function CreateSection({ children }) {
     />
   );
 }
-
-export default CreateSection;

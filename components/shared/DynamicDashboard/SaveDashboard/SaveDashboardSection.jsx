@@ -1,12 +1,11 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { useDispatch } from "react-redux";
 import { fetchDashboard, saveDashboardSection } from "@/lib/store/features/dynamicDashboard";
 
-export function SaveDashboardSection({ gridstackInstance, brandId }) {
+export function SaveDashboardSection({ brandId }) {
   const dispatch = useDispatch();
 
-  const { activeSection, cardCustomizableProps } = useSelector((state) => state.dynamicDashboard);
+  const { activeSection, cardCustomizableProps, gridstackInstance } = useSelector((state) => state.dynamicDashboard);
 
   const saveDashboard = async () => {
     const gridstackPropertiesMap = gridstackInstance.save().reduce((prev, cur) => {
@@ -15,13 +14,24 @@ export function SaveDashboardSection({ gridstackInstance, brandId }) {
     }, {});
 
     const activeSectionCopy = structuredClone(activeSection.section);
-    activeSectionCopy.cards.forEach((card) => {
-      card.active = cardCustomizableProps?.[card.id]?.active ?? card.active;
-      card.columnOrder = cardCustomizableProps?.[card.id]?.columnOrder ?? card.columnOrder;
-      if (gridstackPropertiesMap[card.id]) {
-        card.gridStackProperties = gridstackPropertiesMap[card.id];
-      }
-    });
+    if (activeSection.default) {
+      activeSectionCopy.cards.forEach((card) => {
+        card.active = cardCustomizableProps?.[card.id]?.active ?? card.active;
+        card.columnOrder = cardCustomizableProps?.[card.id]?.columnOrder ?? card.columnOrder;
+        if (gridstackPropertiesMap[card.id]) {
+          card.gridStackProperties = gridstackPropertiesMap[card.id];
+        }
+      });
+    } else {
+      activeSectionCopy.cards = Object.keys(cardCustomizableProps).reduce((prev, cur) => {
+        const card = { ...cardCustomizableProps[cur] };
+        if (gridstackPropertiesMap[cur]) {
+          card.gridStackProperties = gridstackPropertiesMap[card.id];
+        }
+        prev.push(card);
+        return prev;
+      }, []);
+    }
 
     dispatch(saveDashboardSection(activeSectionCopy))
       .unwrap()

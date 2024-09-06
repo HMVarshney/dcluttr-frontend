@@ -19,9 +19,9 @@ function createDashboardCards(metrics, cube) {
           y: 0,
           w: 4,
           h: 2,
-          locked: true,
-          noResize: true,
-          noMove: true
+          locked: false,
+          noResize: false,
+          noMove: false
         },
         query: `[{"measures":["${metric.name}"],"timeDimensions":[{"dimension":"${timeField.name}","compareDateRange":"${compareDateRangeQuery}"}]},{"measures":["${metric.name}"],"timeDimensions":[{"dimension":"${timeField.name}","granularity":"${timeDimensionGranularity}","compareDateRange":"${compareDateRangeQuery}"}],"order":[["${timeField.name}","asc"]]}]`,
         columnOrder: [],

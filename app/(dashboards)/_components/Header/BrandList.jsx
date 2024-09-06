@@ -6,7 +6,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { ChevronDown, Plus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import CreateSection from "./CreateSection";
+import { CreateSection } from "./CreateSection";
 import { Button } from "@/components/ui/button";
 
 export default function BrandList({ sections, activeSectionId, setActiveSectionId }) {
