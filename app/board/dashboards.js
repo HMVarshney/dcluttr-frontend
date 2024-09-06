@@ -343,3 +343,85 @@ export const dashboardTableJSON = {
     }
   ]
 };
+
+export const dashboardJSON2 = {
+  sections: [
+    {
+      id: "overview-A1",
+      name: "A1",
+      brandId: "18",
+      logo: "/icons/google.svg",
+      updatedDate: "2024-09-06T17:25:02.521087000Z",
+      description: "Dashboard description",
+      default: false,
+      cards: [
+        {
+          visualizationType: "linechart",
+          title: "Hybrid Performance Stream Google Ad Spend Sum",
+          id: "hybrid_performance_stream.google_ad_spend_sum",
+          logo: "/icons/meta.svg",
+          description: "New metric",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 2,
+            locked: false,
+            noResize: false,
+            noMove: false
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          childDatasets: [],
+          active: true
+        },
+        {
+          visualizationType: "linechart",
+          title: "Hybrid Performance Stream Google Purchase Value Sum",
+          id: "hybrid_performance_stream.google_purchase_value_sum",
+          logo: "/icons/meta.svg",
+          description: "New metric",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 2,
+            locked: true,
+            noResize: true,
+            noMove: false
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.google_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          childDatasets: [],
+          active: true
+        },
+        {
+          visualizationType: "linechart",
+          title: "Hybrid Performance Stream Google Purchases Sum",
+          id: "hybrid_performance_stream.google_purchases_sum",
+          logo: "/icons/meta.svg",
+          description: "New metric",
+          gridStackProperties: {
+            x: 4.0,
+            y: 4.0,
+            w: 4.0,
+            h: 2.0,
+            locked: false,
+            noResize: false,
+            noMove: false
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_purchases_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.google_purchases_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          childDatasets: [],
+          active: true
+        }
+      ]
+    }
+  ]
+};
