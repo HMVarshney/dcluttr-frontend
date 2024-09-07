@@ -39,7 +39,7 @@ export default function List() {
             <Avatar
               className={cn(
                 "border rounded-lg cursor-pointer transition",
-                selectedBrand === brand?.id && "border-2 border-primary/50"
+                selectedBrand === brand?.id && "border-[3px] border-primary/70"
               )}
               onClick={() => dispatch(setBrand(brand?.id))}
             >
