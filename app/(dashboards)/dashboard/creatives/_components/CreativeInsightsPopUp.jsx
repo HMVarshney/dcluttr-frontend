@@ -8,7 +8,6 @@ import Hint from "@/components/Hint";
 export default function CreativeInsightsPopUp() {
   const dispatch = useDispatch();
   const { isOpen, data } = useSelector((state) => state.creative.insightsPopUp);
-  console.log(data);
 
   return (
     <Dialog open={isOpen} onOpenChange={(e) => dispatch(updateInsightsPopUp({ isOpen: e }))}>
