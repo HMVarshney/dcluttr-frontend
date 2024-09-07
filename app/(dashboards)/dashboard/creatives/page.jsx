@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { fetchCreativeDetails } from "@/lib/store/features/creativeSlice";
 import CreativesTable from "./_components/CreativesTable";
+import CreativeInsightsPopUp from "./_components/CreativeInsightsPopUp";
 
 const data = {
   title: "Spends",
@@ -118,7 +119,6 @@ export default function Page() {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { creativeDetails, isLoading } = useSelector((state) => state.creative);
-  console.log(creativeDetails);
   useEffect(() => {
     dispatch(fetchCreativeDetails());
   }, []);
@@ -128,6 +128,7 @@ export default function Page() {
       className={cn("rounded-md bg-[#FAFAFA] h-full border w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen })}
     >
       <Header />
+      <CreativeInsightsPopUp />
       <CreativesChart
         data={{
           ...data,
