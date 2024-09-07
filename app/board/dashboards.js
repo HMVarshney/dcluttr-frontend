@@ -51,7 +51,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Meta Purchase Value Sum",
           id: "102",
           logo: "/icons/meta.svg",
@@ -72,7 +72,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/meta.svg",
@@ -93,7 +93,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Shopify Total Orders Sum",
           id: "102",
           logo: "/icons/shopify.svg",
@@ -114,7 +114,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/google.svg",
@@ -135,7 +135,7 @@ export const dashboardJSON = {
           active: true
         },
         {
-          visualizationType: "type1",
+          visualizationType: "linechart",
           title: "Campaign Type",
           id: "102",
           logo: "/icons/google.svg",
@@ -238,28 +238,47 @@ export const dashboardTableJSON = {
             noMove: true
           },
           query:
-            '{"measures":["google_campaign_stream.purchase_value_sum","google_campaign_stream.ad_spend_sum","google_campaign_stream.purchase_sum","google_campaign_stream.impressions_sum","google_campaign_stream.clicks_sum","google_campaign_stream.vtc_sum","google_campaign_stream.ctr","google_campaign_stream.cpc","google_campaign_stream.cpm","google_campaign_stream.roas","google_campaign_stream.aov","google_campaign_stream.cpa"],"dimensions":["google_campaign.id","google_campaign.name","google_campaign.resource_name","google_campaign.campaign_link"],"order":{"google_campaign_stream.purchase_value_sum":"desc"},"timeDimensions":[{"dimension":"google_campaign_stream.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"],"granularity":"${time_dimension_granularity}"}]}',
+            '{"measures":["meta_campaign_stream.count","meta_campaign_stream.purchase_value_sum","meta_campaign_stream.ad_spend_sum","meta_campaign_stream.purchase_sum","meta_campaign_stream.impressions_sum","meta_campaign_stream.link_clicks_sum","meta_campaign_stream.landing_page_views_sum","meta_campaign_stream.add_to_carts_sum","meta_campaign_stream.checkount_initiated_sum","meta_campaign_stream.ctr","meta_campaign_stream.cpc","meta_campaign_stream.cpm","meta_campaign_stream.roas","meta_campaign_stream.aov","meta_campaign_stream.cpa"],"dimensions":["meta_campaign_stream.id","meta_campaign.name","meta_campaign.bidding_strategy","meta_campaign.daily_budget","meta_campaign.lifetime_budget","meta_campaign.status","meta_campaign.effective_status","meta_campaign.link","meta_campaign.objective"],"order":{"meta_campaign_stream.count":"desc"},"timeDimensions":[{"dimension":"meta_campaign_stream.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"]}]}',
           columnOrder: [
-            "google_campaign.id",
-            "google_campaign.name",
-            "google_campaign_stream.date.day",
-            "google_campaign.resource_name",
-            "google_campaign.campaign_link",
-            "google_campaign_stream.purchase_value_sum",
-            "google_campaign_stream.ad_spend_sum",
-            "google_campaign_stream.purchase_sum",
-            "google_campaign_stream.impressions_sum",
-            "google_campaign_stream.clicks_sum",
-            "google_campaign_stream.vtc_sum",
-            "google_campaign_stream.ctr",
-            "google_campaign_stream.cpc",
-            "google_campaign_stream.cpm",
-            "google_campaign_stream.roas",
-            "google_campaign_stream.aov",
-            "google_campaign_stream.cpa"
+            "meta_campaign.status",
+            "meta_campaign.name",
+            "meta_campaign.bidding_strategy",
+            "meta_campaign.daily_budget",
+            "meta_campaign.lifetime_budget",
+            "meta_campaign.link",
+            "meta_campaign.objective",
+            "meta_campaign_stream.count",
+            "meta_campaign_stream.purchase_value_sum",
+            "meta_campaign_stream.ad_spend_sum",
+            "meta_campaign_stream.purchase_sum",
+            "meta_campaign_stream.impressions_sum",
+            "meta_campaign_stream.link_clicks_sum",
+            "meta_campaign_stream.landing_page_views_sum",
+            "meta_campaign_stream.add_to_carts_sum",
+            "meta_campaign_stream.checkount_initiated_sum",
+            "meta_campaign_stream.ctr",
+            "meta_campaign_stream.cpc",
+            "meta_campaign_stream.cpm",
+            "meta_campaign_stream.roas",
+            "meta_campaign_stream.aov",
+            "meta_campaign_stream.cpa"
           ],
           selectedMetric: [],
-          active: true
+          active: true,
+          childDataset: [
+            {
+              position: 1,
+              query:
+                '{"measures":["meta_ad_sets_stream.count","meta_ad_sets_stream.purchase_value_sum","meta_ad_sets_stream.ad_spend_sum","meta_ad_sets_stream.purchase_sum","meta_ad_sets_stream.impressions_sum","meta_ad_sets_stream.link_clicks_sum","meta_ad_sets_stream.landing_page_views_sum","meta_ad_sets_stream.add_to_carts_sum","meta_ad_sets_stream.checkount_initiated_sum","meta_ad_sets_stream.ctr","meta_ad_sets_stream.cpc","meta_ad_sets_stream.cpm","meta_ad_sets_stream.roas","meta_ad_sets_stream.aov","meta_ad_sets_stream.cpa"],"dimensions":["meta_ad_sets.id", "meta_ad_sets.campaign_id","meta_ad_sets_stream.ad_set_id","meta_ad_sets.name","meta_ad_sets.bidding_strategy","meta_ad_sets.daily_budget","meta_ad_sets.lifetime_budget","meta_ad_sets.status","meta_ad_sets.effective_status","meta_ad_sets.link","meta_ad_sets.objective"],"order":{"meta_ad_sets_stream.count":"desc"},"timeDimensions":[{"dimension":"meta_ad_sets_stream.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"]}],"filters":[{"member":"meta_ad_sets.campaign_id","operator":"contains","values":"${filter_values}"}]}',
+              forColumnId: ""
+            },
+            {
+              position: 2,
+              query:
+                '{"measures":["meta_ad_stream.count","meta_ad_stream.purchase_value_sum","meta_ad_stream.ad_spend_sum","meta_ad_stream.purchase_sum","meta_ad_stream.impressions_sum","meta_ad_stream.link_clicks_sum","meta_ad_stream.landing_page_views_sum","meta_ad_stream.add_to_carts_sum","meta_ad_stream.checkount_initiated_sum","meta_ad_stream.ctr","meta_ad_stream.cpc","meta_ad_stream.cpm","meta_ad_stream.roas","meta_ad_stream.aov","meta_ad_stream.cpa"],"order":{"meta_ad_stream.count":"desc"},"dimensions":["meta_ads.ad_set_id","meta_ads.id","meta_ads.name","meta_ads.status","meta_ads.effective_status","meta_ads.creative_type","meta_ads.creative_link","meta_ads.link","meta_ads.ad_set_id","meta_ads.campaign_id"],"timeDimensions":[{"dimension":"meta_ad_stream.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"]}],"filters":[{"member":"meta_ads.ad_set_id","operator":"contains","values":"${filter_values}"}]}',
+              forColumnId: ""
+            }
+          ]
         },
         {
           visualizationType: "table",
@@ -295,7 +314,8 @@ export const dashboardTableJSON = {
             "google_bidding_strategy.cpa"
           ],
           selectedMetric: [],
-          active: true
+          active: false,
+          childDataset: []
         },
         {
           visualizationType: "piechart",
@@ -316,6 +336,89 @@ export const dashboardTableJSON = {
             '[null,{"measures":["google_campaign_type.clicks_sum"],"timeDimensions":[{"dimension":"google_campaign_type.date","dateRange":["${time_dimension_date_range_from}","${time_dimension_date_range_to}"]}],"dimensions":["google_campaign_type.campaign_type"]}]',
           columnOrder: [],
           selectedMetric: [],
+          active: false,
+          childDataset: []
+        }
+      ]
+    }
+  ]
+};
+
+export const dashboardJSON2 = {
+  sections: [
+    {
+      id: "overview-A1",
+      name: "A1",
+      brandId: "18",
+      logo: "/icons/google.svg",
+      updatedDate: "2024-09-06T17:25:02.521087000Z",
+      description: "Dashboard description",
+      default: false,
+      cards: [
+        {
+          visualizationType: "linechart",
+          title: "Hybrid Performance Stream Google Ad Spend Sum",
+          id: "hybrid_performance_stream.google_ad_spend_sum",
+          logo: "/icons/meta.svg",
+          description: "New metric",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 2,
+            locked: false,
+            noResize: false,
+            noMove: false
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.google_ad_spend_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          childDatasets: [],
+          active: true
+        },
+        {
+          visualizationType: "linechart",
+          title: "Hybrid Performance Stream Google Purchase Value Sum",
+          id: "hybrid_performance_stream.google_purchase_value_sum",
+          logo: "/icons/meta.svg",
+          description: "New metric",
+          gridStackProperties: {
+            x: 0,
+            y: 0,
+            w: 4,
+            h: 2,
+            locked: true,
+            noResize: true,
+            noMove: false
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.google_purchase_value_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          childDatasets: [],
+          active: true
+        },
+        {
+          visualizationType: "linechart",
+          title: "Hybrid Performance Stream Google Purchases Sum",
+          id: "hybrid_performance_stream.google_purchases_sum",
+          logo: "/icons/meta.svg",
+          description: "New metric",
+          gridStackProperties: {
+            x: 4.0,
+            y: 4.0,
+            w: 4.0,
+            h: 2.0,
+            locked: false,
+            noResize: false,
+            noMove: false
+          },
+          query:
+            '[{"measures":["hybrid_performance_stream.google_purchases_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","compareDateRange":"${compare_date_range_query}"}]},{"measures":["hybrid_performance_stream.google_purchases_sum"],"timeDimensions":[{"dimension":"hybrid_performance_stream.created_at","granularity":"${time_dimension_granularity}","compareDateRange":"${compare_date_range_query}"}],"order":[["hybrid_performance_stream.created_at","asc"]]}]',
+          columnOrder: [],
+          selectedMetric: [],
+          childDatasets: [],
           active: true
         }
       ]
