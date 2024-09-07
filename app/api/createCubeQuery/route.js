@@ -10,10 +10,10 @@ function createDashboardCards(metrics, cube) {
       const timeDimensionGranularity = "${time_dimension_granularity}";
       const card = {
         visualizationType: "linechart",
-        title: metric.title,
+        title: metric.shortTitle,
         id: metric.name,
         logo: "/icons/meta.svg",
-        description: "New metric",
+        description: metric.description,
         gridStackProperties: {
           x: 0,
           y: 0,

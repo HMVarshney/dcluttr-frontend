@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -9,9 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import cubeJsApi from "@/lib/cubeJsApi";
 import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
-import { dynamicDashboardActions, fetchDashboard } from "@/lib/store/features/dynamicDashboard";
-import { useSelector } from "react-redux";
 import { addCardToGrid, createCardObject, removeCardFromGrid } from "@/lib/utils/dynamicDashboard.utils";
+import Hint from "@/components/Hint";
+import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
+import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 
 async function fetchMetricList() {
   const response = await cubeJsApi().meta();
@@ -25,6 +25,12 @@ async function fetchMetricList() {
 async function createDashboardSection(section) {
   const response = await axiosInterceptorInstance.post("/brand/24/dashboards", section);
   return response;
+}
+
+async function deleteDashboardSection(sectionId) {
+  await axiosInterceptorInstance.delete("/brand/dashboard", {
+    data: sectionId
+  });
 }
 
 async function createDashboardSectionJSON(payload) {
@@ -41,6 +47,7 @@ function CreateSectionButton({
   selection,
   onSelect,
   onSubmit,
+  onDelete,
   triggerEl
 }) {
   const [search, setSearch] = useState("");
@@ -86,9 +93,11 @@ function CreateSectionButton({
                       checked={!!selection[item.id]}
                       onChange={() => onSelect(item)}
                     />
-                    <label htmlFor={item.title} className="text-sm font-medium leading-none text-[#515153]">
-                      {item.title}
-                    </label>
+                    <Hint label={item.description}>
+                      <label htmlFor={item.title} className="text-sm font-medium leading-none text-[#515153]">
+                        {item.title}
+                      </label>
+                    </Hint>
                   </div>
                 ))}
               </div>
@@ -96,6 +105,9 @@ function CreateSectionButton({
           ))}
         </div>
         <DialogFooter className=" p-2.5 border-t">
+          <Button variant="outline" onClick={onDelete}>
+            Delete section
+          </Button>
           <Button type="submit" onClick={onSubmit}>
             Done
           </Button>
@@ -106,11 +118,11 @@ function CreateSectionButton({
 }
 
 export function UpdateSection({ children, placeholderValues }) {
-  const dispatch = useDispatch();
-
   const cube = useRef(null);
 
-  const { activeSection, cardCustomizableProps, gridstackInstance } = useSelector((state) => state.dynamicDashboard);
+  const { state, dispatch } = useDynamicDashboardContext();
+
+  const { activeSection, cardCustomizableProps, gridstackInstance } = state;
 
   const [isOpen, setOpen] = useState(false);
   const [metricList, setMetricList] = useState({});
@@ -118,17 +130,23 @@ export function UpdateSection({ children, placeholderValues }) {
 
   const handleSelect = (selectedMetric) => {
     if (cardCustomizableProps[selectedMetric.id]) {
-      dispatch(dynamicDashboardActions.removeCard({ cardId: selectedMetric.id }));
+      dynamicDashboardActions.removeCard(dispatch)(selectedMetric.id);
       removeCardFromGrid(gridstackInstance, selectedMetric.id);
+      dynamicDashboardActions.removeGridItem(dispatch)(selectedMetric.id);
     } else {
       const cardObj = createCardObject(selectedMetric.id, cube.current);
-      dispatch(dynamicDashboardActions.addCard({ cardId: selectedMetric.id, properties: cardObj }));
-      addCardToGrid(gridstackInstance, cardObj, placeholderValues);
+      dynamicDashboardActions.addCard(dispatch)(selectedMetric.id, cardObj);
+      dynamicDashboardActions.addGridItem(dispatch)(addCardToGrid(gridstackInstance, cardObj));
     }
   };
 
   const handleSubmit = async () => {
     setOpen(false);
+  };
+
+  const handleDeleteSection = async () => {
+    await deleteDashboardSection(activeSection.id);
+    dynamicDashboardActions.fetchDashboard(dispatch)(18);
   };
 
   useEffect(() => {
@@ -142,7 +160,7 @@ export function UpdateSection({ children, placeholderValues }) {
           if (!prev[source]) {
             prev[source] = [];
           }
-          prev[source].push({ title: m.title, id: m.name });
+          prev[source].push({ title: m.shortTitle, id: m.name, description: m.description });
           return prev;
         }, {});
         setMetricList(metricSourceMap);
@@ -164,15 +182,16 @@ export function UpdateSection({ children, placeholderValues }) {
       selection={cardCustomizableProps}
       onSelect={handleSelect}
       onSubmit={handleSubmit}
+      onDelete={handleDeleteSection}
       triggerEl={children}
     />
   );
 }
 
 export function CreateSection({ children }) {
-  const dispatch = useDispatch();
-
   const cube = useRef(null);
+
+  const { dispatch } = useDynamicDashboardContext();
 
   const [isOpen, setOpen] = useState(false);
   const [metricList, setMetricList] = useState({});
@@ -198,7 +217,7 @@ export function CreateSection({ children }) {
       brandId: 18
     });
     await createDashboardSection(section);
-    dispatch(fetchDashboard(18));
+    await dynamicDashboardActions.fetchDashboard(dispatch)(18);
     setSelection({});
     setSectionName("");
     setOpen(false);
@@ -215,7 +234,7 @@ export function CreateSection({ children }) {
           if (!prev[source]) {
             prev[source] = [];
           }
-          prev[source].push({ title: m.title, id: m.name });
+          prev[source].push({ title: m.shortTitle, id: m.name, description: m.description });
           return prev;
         }, {});
         setMetricList(metricSourceMap);

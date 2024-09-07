@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { fetchDashboard, saveDashboardSection } from "@/lib/store/features/dynamicDashboard";
+import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
+import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
 
 export function SaveDashboardSection({ brandId }) {
-  const dispatch = useDispatch();
+  const { state, dispatch } = useDynamicDashboardContext();
 
-  const { activeSection, cardCustomizableProps, gridstackInstance } = useSelector((state) => state.dynamicDashboard);
+  const { gridstackInstance, cardCustomizableProps, activeSection } = state;
 
   const saveDashboard = async () => {
     const gridstackPropertiesMap = gridstackInstance.save().reduce((prev, cur) => {
@@ -33,10 +33,10 @@ export function SaveDashboardSection({ brandId }) {
       }, []);
     }
 
-    dispatch(saveDashboardSection(activeSectionCopy))
-      .unwrap()
+    dynamicDashboardActions
+      .saveDashboardSection(dispatch)(activeSectionCopy)
       .then(() => {
-        dispatch(fetchDashboard(brandId));
+        dynamicDashboardActions.fetchDashboard(dispatch)(brandId);
       });
   };
 

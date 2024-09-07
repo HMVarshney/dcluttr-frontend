@@ -1,15 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useCubeQuery } from "@cubejs-client/react";
-import { useSelector, useDispatch } from "react-redux";
 import cubeJsApi from "@/lib/cubeJsApi";
 import { DashboardTableBody, DashboardTableHeader } from "./Elements";
 import { shortenKeyNames, splitKeyAndUseLastPart } from "@/lib/utils";
 import { replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { recursivelyAddSubRows } from "@/lib/utils/datatable.utils";
-import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
 import { DefaultCell, ExpandCell, LinkCell, SwitchCell } from "./Cells";
+import { DynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
+import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
 
 function getColumnCell(rawColumn) {
   if (rawColumn.meta?.switchEnabled) {
@@ -59,11 +59,13 @@ function constructColumnVisibilityMap(columns, columnOrder) {
 }
 
 function DashboardTable({ id: cardId, title, description, query, drilldownQueries }) {
-  const dispatch = useDispatch();
-
   const cubejsClient = useRef(cubeJsApi());
 
-  const { cardCustomizableProps } = useSelector((state) => state.dynamicDashboard);
+  const { state, dispatch } = useContext(DynamicDashboardContext);
+
+  console.log("table state", state, query);
+
+  const { cardCustomizableProps } = state;
 
   const [results, setResults] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -76,18 +78,17 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
   });
 
   const setColumnOrdering = (newOrdering) => {
-    dispatch(
-      dynamicDashboardActions.setCardCustomizableProps({
-        ...cardCustomizableProps,
-        [cardId]: {
-          ...cardCustomizableProps[cardId],
-          columnOrder: newOrdering
-        }
-      })
-    );
+    dynamicDashboardActions.setCardCustomizableProps(dispatch)({
+      ...cardCustomizableProps,
+      [cardId]: {
+        ...cardCustomizableProps[cardId],
+        columnOrder: newOrdering
+      }
+    });
   };
 
   const columnVisibility = useMemo(() => {
+    if (!cardCustomizableProps[cardId]) return {};
     return constructColumnVisibilityMap(columns, cardCustomizableProps[cardId].columnOrder);
   }, [cardCustomizableProps, cardId, columns]);
 
@@ -142,7 +143,7 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
         description={description}
         columns={columns}
         columnVisibility={columnVisibility}
-        columnOrder={cardCustomizableProps[cardId].columnOrder}
+        columnOrder={cardCustomizableProps?.[cardId]?.columnOrder || []}
         setColumnVisibility={changeColumnVisibile}
         setColumnOrdering={setColumnOrdering}
       />
@@ -150,7 +151,7 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
         loading={isLoading}
         error={error}
         data={{ results, columns: columnDefs }}
-        columnOrder={cardCustomizableProps[cardId].columnOrder}
+        columnOrder={cardCustomizableProps?.[cardId]?.columnOrder || []}
         columnVisibility={columnVisibility}
         getRowCanExpand={(row) => row.depth < drilldownQueries.length}
       />
