@@ -118,7 +118,7 @@ export function Tables({ annotation = {}, data = [] }) {
       {
         accessorKey: "meta_ads_name",
         header: () => (
-          <div className="w- flex items-center justify-start text-sm gap-3">
+          <div className="flex items-center justify-start text-sm gap-3">
             <LineChart className="w-5 h-5" />
             Status
           </div>
@@ -211,7 +211,7 @@ export function Tables({ annotation = {}, data = [] }) {
       <TableBody>
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+            <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className="group">
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
               ))}
