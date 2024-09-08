@@ -1,19 +1,16 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import moment from "moment";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../_components/Header";
 import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
-import { getPageDashboards } from "@/lib/utils/dynamicDashboard.utils";
-import { dynamicDashboardActions } from "@/lib/store/features/dynamicDashboard";
+import { renderCardsOnGrid } from "@/lib/utils/dynamicDashboard.utils";
 import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
+import withDynamicDashboardContext from "@/lib/hoc/withDynamicDasboardContext";
 
-export default function Page() {
-  const dispatch = useDispatch();
-
-  const gridstackRef = useRef(null);
+function Page() {
+  const gridRef = useRef(null);
 
   const [dateRange, setDateRange] = useState({
     from: moment().subtract({ day: 7 }).format("YYYY-MM-DD"),
@@ -32,25 +29,21 @@ export default function Page() {
     return values;
   }, [dateRange.from, dateRange.to]);
 
-  const { gridstackIntance, dashboard } = useDynamicDashboard(18, gridstackRef, placeholderValues);
-
-  useMemo(() => {
-    if (!dashboard.length) return [];
-
-    const thisPageDashboards = getPageDashboards(dashboard, "performance-google");
-    dispatch(dynamicDashboardActions.setActiveSection({ id: thisPageDashboards[0].id }));
-    return thisPageDashboards;
-  }, [dashboard, dispatch]);
+  const { gridItems } = useDynamicDashboard("performance-google", 18, gridRef, placeholderValues);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
       <Header dateRange={dateRange} setDateRange={setDateRange} />
 
-      <div ref={gridstackRef}></div>
+      <div className="grid-stack" ref={gridRef}>
+        {renderCardsOnGrid(gridItems, placeholderValues)}
+      </div>
 
       <div style={{ marginTop: "10rem" }}>
-        <SaveDashboardSection gridstackInstance={gridstackIntance} brandId={18} />
+        <SaveDashboardSection brandId={18} />
       </div>
     </ScrollArea>
   );
 }
+
+export default withDynamicDashboardContext(Page);

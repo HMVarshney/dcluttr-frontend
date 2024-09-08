@@ -1,14 +1,14 @@
-const { Suspense } = require("react");
+import { Suspense } from "react";
 
 function withSuspense(Component) {
-  function WithSuspenseWrapped() {
+  function WithWrapped() {
     return (
       <Suspense>
         <Component />
       </Suspense>
     );
   }
-  return WithSuspenseWrapped;
+  return WithWrapped;
 }
 
 export default withSuspense;
