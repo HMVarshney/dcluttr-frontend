@@ -8,7 +8,6 @@ import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 import { renderCardsOnGrid } from "@/lib/utils/dynamicDashboard.utils";
 import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
 import withDynamicDashboardContext from "@/lib/hoc/withDynamicDasboardContext";
-import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 
 function Page() {
   const gridRef = useRef(null);

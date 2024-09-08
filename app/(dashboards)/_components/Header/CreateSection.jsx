@@ -88,13 +88,13 @@ function CreateSectionButton({
                   <div className="flex items-center gap-2" key={item.id}>
                     <input
                       type="checkbox"
-                      id={item.title}
+                      id={item.id}
                       className="w-[18px] h-[18px]"
                       checked={!!selection[item.id]}
                       onChange={() => onSelect(item)}
                     />
                     <Hint label={item.description}>
-                      <label htmlFor={item.title} className="text-sm font-medium leading-none text-[#515153]">
+                      <label htmlFor={item.id} className="text-sm font-medium leading-none text-[#515153]">
                         {item.title}
                       </label>
                     </Hint>

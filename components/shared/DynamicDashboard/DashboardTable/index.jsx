@@ -63,8 +63,6 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
 
   const { state, dispatch } = useContext(DynamicDashboardContext);
 
-  console.log("table state", state, query);
-
   const { cardCustomizableProps } = state;
 
   const [results, setResults] = useState([]);
@@ -78,13 +76,7 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
   });
 
   const setColumnOrdering = (newOrdering) => {
-    dynamicDashboardActions.setCardCustomizableProps(dispatch)({
-      ...cardCustomizableProps,
-      [cardId]: {
-        ...cardCustomizableProps[cardId],
-        columnOrder: newOrdering
-      }
-    });
+    dynamicDashboardActions.updateCardProps(dispatch)(cardId, { columnOrder: newOrdering });
   };
 
   const columnVisibility = useMemo(() => {

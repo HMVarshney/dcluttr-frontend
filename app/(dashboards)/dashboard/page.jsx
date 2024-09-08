@@ -18,7 +18,6 @@ import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/Dynam
 import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
 
 import "gridstack/dist/gridstack.min.css";
-import { createPortal } from "react-dom";
 
 const data1 = {
   title: "Spends",
