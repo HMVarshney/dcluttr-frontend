@@ -24,25 +24,25 @@ const sideBarList = [
       }
     ]
   },
-  {
-    name: "Products",
-    href: "/dashboard/products",
-    icon: Package,
-    level2: [
-      {
-        name: "Analytics",
-        href: "/dashboard/products/analytics"
-      },
-      {
-        name: "Cart",
-        href: "/dashboard/products/cart"
-      },
-      {
-        name: "Sets",
-        href: "/dashboard/products/sets"
-      }
-    ]
-  },
+  // {
+  //   name: "Products",
+  //   href: "/dashboard/products",
+  //   icon: Package,
+  //   level2: [
+  //     {
+  //       name: "Analytics",
+  //       href: "/dashboard/products/analytics"
+  //     },
+  //     {
+  //       name: "Cart",
+  //       href: "/dashboard/products/cart"
+  //     },
+  //     {
+  //       name: "Sets",
+  //       href: "/dashboard/products/sets"
+  //     }
+  //   ]
+  // },
   {
     name: "Creatives",
     href: "/dashboard/creatives",

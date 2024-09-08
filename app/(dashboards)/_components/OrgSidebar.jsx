@@ -16,7 +16,7 @@ export default function OrgSideBar({ sideBarList }) {
   return (
     <div className={cn("h-full min-w-[236px] w-[236px] transition-all", { "min-w-[78px] w-[78px]": isOpen })}>
       <Navbar isOpen={isOpen} />
-      <div className="hidden lg:flex flex-col gap-y-6 w-full py-6 px-4 bg-[#F8F8F8] h-[calc(100%-70px)] border-t">
+      <div className="hidden lg:flex flex-col gap-y-6 w-full py-6 px-4 bg-[#F8F8F8] h-[calc(100%-70px)]">
         <div className="space-y-2.5 w-full">
           {sideBarList.map((item, index) => {
             const Icon = item.icon;
@@ -55,7 +55,7 @@ export default function OrgSideBar({ sideBarList }) {
                         asChild
                         variant={"ghost"}
                         size={"lg"}
-                        className={cn("w-full font-normal justify-start transition-all", isOpen ? "px-1" : "px-4", {
+                        className={cn("w-full font-normal justify-start transition-all h-9", isOpen ? "px-1" : "px-4", {
                           "bg-[#DFEEE6] text-primary": pathname === item2.href
                         })}
                       >
@@ -80,12 +80,7 @@ export default function OrgSideBar({ sideBarList }) {
         <div className="h-full" />
         {pathname.startsWith("/dashboard") && (
           <div className="w-full">
-            <Button
-              asChild
-              variant={"ghost"}
-              size={"lg"}
-              className={cn("w-full font-normal justify-start transition-all px-3")}
-            >
+            <Button asChild variant={"ghost"} size={"lg"} className={cn("w-full font-normal justify-start transition-all px-3")}>
               <Link href={"mailto:team@dcluttr.ai?subject=Help&body=Hi"}>
                 <Question className="h-5 w-5 text-[#7E8986]" />
                 <span
@@ -97,12 +92,7 @@ export default function OrgSideBar({ sideBarList }) {
                 </span>
               </Link>
             </Button>
-            <Button
-              asChild
-              variant={"ghost"}
-              size={"lg"}
-              className={cn("w-full font-normal justify-start transition-all px-3")}
-            >
+            <Button asChild variant={"ghost"} size={"lg"} className={cn("w-full font-normal justify-start transition-all px-3")}>
               <Link href={"/welcome"}>
                 <GearSix className="h-5 w-5 text-[#7E8986]" />
                 <span
