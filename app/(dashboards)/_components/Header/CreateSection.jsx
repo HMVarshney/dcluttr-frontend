@@ -117,7 +117,7 @@ function CreateSectionButton({
   );
 }
 
-export function UpdateSection({ children, placeholderValues }) {
+export function UpdateSection({ children }) {
   const cube = useRef(null);
 
   const { state, dispatch } = useDynamicDashboardContext();
