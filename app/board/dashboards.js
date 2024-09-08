@@ -265,7 +265,7 @@ export const dashboardTableJSON = {
           ],
           selectedMetric: [],
           active: true,
-          childDataset: [
+          childDatasets: [
             {
               position: 1,
               query:

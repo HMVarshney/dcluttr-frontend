@@ -102,15 +102,19 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
 
   const expandHandler = useCallback(
     (row) => {
+      const isRowExpanded = row.getIsExpanded();
       row.getToggleExpandedHandler()();
-      let drilldownQuery = drilldownQueries.find((dq) => dq.position === row.depth + 1);
-      if (drilldownQuery) {
-        drilldownQuery = replacePlaceholders(JSON.parse(drilldownQuery.query), {
-          time_dimension_date_range_from: "2024-08-01",
-          time_dimension_date_range_to: "2024-08-30",
-          filter_values: [row.original.id]
-        });
-        fetchDrilldownData(drilldownQuery, row.original.id);
+      // If previously row was not expanded
+      if (!isRowExpanded) {
+        let drilldownQuery = drilldownQueries.find((dq) => dq.position === row.depth + 1);
+        if (drilldownQuery) {
+          drilldownQuery = replacePlaceholders(JSON.parse(drilldownQuery.query), {
+            time_dimension_date_range_from: "2024-08-01",
+            time_dimension_date_range_to: "2024-08-30",
+            filter_values: [row.original.id]
+          });
+          fetchDrilldownData(drilldownQuery, row.original.id);
+        }
       }
     },
     [drilldownQueries]
