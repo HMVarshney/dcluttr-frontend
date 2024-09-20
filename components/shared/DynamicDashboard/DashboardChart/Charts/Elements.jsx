@@ -1,35 +1,52 @@
 "use client";
 
 import { ArrowUp, CircleHelp, Grip } from "lucide-react";
-import { Share } from "phosphor-react";
+import { DotsNine, Question, Share } from "phosphor-react";
 import Image from "next/image";
 import ExportFileFormat from "@/components/ExportFileFormat";
+import { cn, numberTrim } from "@/lib/utils";
+import Hint from "@/components/Hint";
 
 export function ChartHeader({ details, gaugeData }) {
+  const diff = ((gaugeData[1] - gaugeData[0]) / (gaugeData[0] || 1)) * 100;
   return (
     <>
       <div className="flex items-center p-3 border-b border-[#F1F1F1]">
-        <Image src={details.icon} alt={details.title} width={16} height={16} className="w-4 h-4 object-contain mr-2.5" />
-        <div className="text-xs font-semibold text-[#515153]">{details.title}</div>
+        <Image
+          src={details.icon}
+          alt={details.title}
+          width={44}
+          height={44}
+          className="w-5 h-5 object-contain mr-2.5 not-draggable"
+        />
+        <div className="text-sm font-semibold text-[#515153] not-draggable">{details.title}</div>
         <div className="ml-auto flex gap-2 items-center">
-          <CircleHelp className="duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100" />
+          <Hint label={details?.description}>
+            <Question className="duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100 cursor-pointer" />
+          </Hint>
           <ExportFileFormat>
             <Share className="duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100 cursor-pointer" />
           </ExportFileFormat>
-          <div>
-            <Grip className="duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100" />
-          </div>
+          <DotsNine className="duration-300 ease-in-out w-0 opacity-0 group-hover:w-4 group-hover:opacity-100 cursor-grab" />
         </div>
       </div>
-      <div className="flex items-center justify-between px-3 pt-2.5">
-        <div className=" text-2xl font-bold text-black">₹{gaugeData[1] ?? gaugeData[0]}</div>
+      <div className="flex items-center justify-between px-3 pt-2.5 not-draggable">
+        <Hint label={`₹${(gaugeData[1] ?? gaugeData[0])?.toFixed(2)}`}>
+          <div className=" text-2xl font-bold text-black">₹{numberTrim(gaugeData[1] ?? gaugeData[0])}</div>
+        </Hint>
         {gaugeData[1] !== null && (
           <div>
-            <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
-              <ArrowUp className="w-4" />
-              {((gaugeData[1] - gaugeData[0]) / (gaugeData[0] || 1)) * 100}%
+            <div
+              className={cn("text-sm font-semibold text-green-600 flex items-center justify-end", {
+                "text-[#DB3500CC]": diff < 0
+              })}
+            >
+              <ArrowUp className={cn("w-4", { "rotate-180": diff < 0 })} />
+              {diff?.toFixed(2)}%
             </div>
-            <div className="text-[10px] text-gray-400 text-right">vs ₹{gaugeData[0]} last month</div>
+            <Hint label={`vs ₹${(gaugeData[0] ?? 0)?.toFixed(2)} last month`}>
+              <div className="text-[10px] text-gray-400 text-right">vs ₹{numberTrim(gaugeData[0] ?? 0)} last month</div>
+            </Hint>
           </div>
         )}
       </div>

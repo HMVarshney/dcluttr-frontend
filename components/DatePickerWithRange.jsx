@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CalendarDays } from "lucide-react";
-import { cn } from "@/lib/utils";
+import moment from "moment";
+import { Mulish } from "next/font/google";
+import { useDispatch, useSelector } from "react-redux";
+import { cn, convertDurationToDateObject } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import moment from "moment";
-import { Mulish } from "next/font/google";
 import { Label } from "./ui/label";
-import { useDispatch, useSelector } from "react-redux";
-import { setDateRange, setEndDateRange, setIsCompareOn } from "@/lib/store/features/userSlice";
+import { setDateRange as sR, setEndDateRange as sER, setIsCompareOn as sC } from "@/lib/store/features/userSlice";
 import { Switch } from "./ui/switch";
 
 const mulish = Mulish({ subsets: ["latin"] });
@@ -21,27 +21,43 @@ const START_TIME_RANGES = [
   { label: "Last 7 days", value: "last 7 days" },
   { label: "Last 30 days", value: "last 30 days" },
   { label: "Last 90 days", value: "last 90 days" },
-  { label: "Last month", value: "last months" },
+  { label: "Last month", value: "last month" },
   { label: "This week", value: "this week" },
-  { label: "This month", value: "last month" },
+  { label: "This month", value: "this month" },
   { label: "This quarter", value: "this quarter" },
-  { label: "This year", value: "this year" },
   { label: "Custom", value: "custom" }
 ];
 const END_TIME_RANGES = [
-  { label: "None", value: "today" },
+  { label: "None", value: "none" },
   { label: "Previous period", value: "Previous period" },
-  { label: "Previous week", value: "Previous week" },
-  { label: "Previous month", value: "Previous month" },
-  { label: "Previous quarter", value: "Previous quarter" },
-  { label: "Previous year", value: "Previous year" },
   { label: "Custom", value: "custom" }
 ];
 
 export default function DatePickerWithRange({ className }) {
   const dispatch = useDispatch();
+
   const [isOpen, setOpen] = useState(false);
-  const { isCompareOn, endDateRange, dateRange } = useSelector((state) => state.user);
+  const [isCompareOn, setIsCompareOn] = useState(false);
+
+  const [dateRange, setDateRange] = useState({
+    from: null,
+    to: null,
+    value: null
+  });
+
+  const [endDateRange, setEndDateRange] = useState({
+    from: null,
+    to: null,
+    value: null
+  });
+
+  const { isCompareOn: iO, endDateRange: eR, dateRange: dR } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    setIsCompareOn(iO);
+    setDateRange(dR);
+    setEndDateRange(eR);
+  }, [dR, eR, iO, isOpen]);
 
   return (
     <div className={cn("grid gap-2 font", className, mulish.className)}>
@@ -50,20 +66,40 @@ export default function DatePickerWithRange({ className }) {
           <Button
             id="date"
             variant={"outline"}
-            className={cn("w-[240px] justify-start text-left font-normal", !dateRange && "text-muted-foreground")}
+            className={cn("justify-start text-left font-normal ", !dateRange && "text-muted-foreground", isCompareOn && "h-12")}
           >
             <CalendarDays className="mr-2 min-h-4 min-w-4" />
-            {dateRange?.from ? (
-              dateRange.to ? (
-                <>
-                  {moment(dateRange.from).format("MMM DD, YYYY")} - {moment(dateRange.to).format("MMM DD, YYYY")}
-                </>
-              ) : (
-                moment(dateRange.from).format("MMM DD, YYYY")
-              )
-            ) : (
-              <span>{dateRange?.label ?? "Pick a date"}</span>
-            )}
+            <div className="flex flex-col">
+              <div className="text-sm">
+                {dateRange?.from ? (
+                  dateRange.to ? (
+                    <>
+                      {moment(dateRange.from).format("MMM DD, YYYY")} - {moment(dateRange.to).format("MMM DD, YYYY")}
+                    </>
+                  ) : (
+                    moment(dateRange.from).format("MMM DD, YYYY")
+                  )
+                ) : (
+                  <span>{dateRange?.label ?? "Pick a date"}</span>
+                )}
+              </div>
+              {isCompareOn && (
+                <div className="text-xs text-gray-500">
+                  vs{" "}
+                  {endDateRange?.from ? (
+                    endDateRange.to ? (
+                      <>
+                        {moment(endDateRange.from).format("MMM DD, YYYY")} - {moment(endDateRange.to).format("MMM DD, YYYY")}
+                      </>
+                    ) : (
+                      moment(endDateRange.from).format("MMM DD, YYYY")
+                    )
+                  ) : (
+                    <span>{endDateRange?.label ?? "Pick a date"}</span>
+                  )}
+                </div>
+              )}
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0 flex items-stretch overflow-hidden mr-20" align="start">
@@ -71,13 +107,17 @@ export default function DatePickerWithRange({ className }) {
             {START_TIME_RANGES?.map((ele) => (
               <Button
                 onClick={() => {
-                  setOpen(false);
-                  dispatch(setDateRange(ele));
+                  if (ele?.value !== "custom") {
+                    setDateRange(convertDurationToDateObject(ele.value));
+                  }
                 }}
                 size="sm"
                 variant={"outline"}
                 key={ele.label}
-                className="w-full justify-start text-left text-sm border-none bg-transparent font-normal"
+                className={cn("w-full justify-start text-left text-sm border-none bg-transparent font-normal", {
+                  "bg-primary/10 hover:bg-primary/10 text-primary":
+                    ele?.value === dateRange?.value || (ele?.value === "custom" && dateRange?.from)
+                })}
               >
                 {ele.label}
               </Button>
@@ -100,14 +140,12 @@ export default function DatePickerWithRange({ className }) {
                   defaultMonth={dateRange?.from}
                   selected={dateRange}
                   onSelect={(range) => {
-                    dispatch(
-                      setDateRange({
-                        from: moment(range.from).format("YYYY-MM-DD"),
-                        to: moment(range.to).format("YYYY-MM-DD"),
-                        value: null,
-                        label: null
-                      })
-                    );
+                    setDateRange({
+                      from: moment(range.from).format("YYYY-MM-DD"),
+                      to: moment(range.to).format("YYYY-MM-DD"),
+                      value: null,
+                      label: null
+                    });
                   }}
                   numberOfMonths={1}
                   className="px-0 pt-6"
@@ -132,14 +170,12 @@ export default function DatePickerWithRange({ className }) {
                   defaultMonth={endDateRange?.from}
                   selected={endDateRange}
                   onSelect={(range) => {
-                    dispatch(
-                      setEndDateRange({
-                        from: moment(range.from).format("YYYY-MM-DD"),
-                        to: moment(range.to).format("YYYY-MM-DD"),
-                        value: null,
-                        label: null
-                      })
-                    );
+                    setEndDateRange({
+                      from: moment(range.from).format("YYYY-MM-DD"),
+                      to: moment(range.to).format("YYYY-MM-DD"),
+                      value: null,
+                      label: null
+                    });
                   }}
                   numberOfMonths={1}
                   className="px-0 pt-6"
@@ -148,7 +184,15 @@ export default function DatePickerWithRange({ className }) {
             </div>
 
             <div className="flex gap-2 justify-between items-center p-4 border-t border-[#DFE0E5]">
-              <Button size="sm" onClick={() => setOpen(false)}>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setOpen(false);
+                  dispatch(sR(dateRange));
+                  dispatch(sER(endDateRange));
+                  dispatch(sC(isCompareOn));
+                }}
+              >
                 Apply Changes
               </Button>
               <div className="flex items-center space-x-2 py-2">
@@ -156,7 +200,7 @@ export default function DatePickerWithRange({ className }) {
                 <Switch
                   checked={isCompareOn}
                   onCheckedChange={(e) => {
-                    dispatch(setIsCompareOn(e));
+                    setIsCompareOn(e);
                   }}
                   id="Compare"
                   className="w-10 h-6"
@@ -174,13 +218,19 @@ export default function DatePickerWithRange({ className }) {
             {END_TIME_RANGES?.map((ele) => (
               <Button
                 onClick={() => {
-                  setOpen(false);
-                  dispatch(setEndDateRange(ele));
+                  if (ele?.value === "none") {
+                    setIsCompareOn(false);
+                  } else if (ele?.value !== "custom") {
+                    setEndDateRange(ele);
+                  }
                 }}
                 size="sm"
                 variant={"outline"}
                 key={ele.label}
-                className="w-full justify-start text-left text-sm border-none bg-transparent font-normal"
+                className={cn("w-full justify-start text-left text-sm border-none bg-transparent font-normal", {
+                  "bg-primary/10 hover:bg-primary/10 text-primary":
+                    ele?.value === endDateRange?.value || (ele?.value === "custom" && endDateRange?.from)
+                })}
               >
                 {ele.label}
               </Button>

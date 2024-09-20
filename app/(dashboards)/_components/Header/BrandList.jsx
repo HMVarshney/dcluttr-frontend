@@ -68,7 +68,7 @@ export default function BrandList({ sections, activeSectionId, setActiveSectionI
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent onClick={(e) => e.stopPropagation()} side="bottom" sideOffset={6} className="w-48 ml-10 p-1.5">
-              <div className="text-sm font-bold p-2.5">More section</div>
+              {/* <div className="text-sm font-bold p-2.5">More section</div> */}
               {titles?.slice(7, titles.length).map((section, i) => (
                 <DropdownMenuItem
                   key={section.title}
@@ -78,7 +78,7 @@ export default function BrandList({ sections, activeSectionId, setActiveSectionI
                     const index = titles.findIndex((ele) => ele.title === section.title);
                     const items = titles;
                     const [reorderedItem] = items.splice(index, 1);
-                    items.splice(4, 0, reorderedItem);
+                    items.splice(7, 0, reorderedItem);
                     setTitles(items);
                   }}
                 >

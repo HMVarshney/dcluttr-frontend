@@ -5,9 +5,9 @@ import { useCubeQuery } from "@cubejs-client/react";
 import cubeJsApi from "@/lib/cubeJsApi";
 import { DashboardTableBody, DashboardTableHeader } from "./Elements";
 import { shortenKeyNames, splitKeyAndUseLastPart } from "@/lib/utils";
-import { replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
+import { getCardDatatableProperties, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { recursivelyAddSubRows } from "@/lib/utils/datatable.utils";
-import { DefaultCell, ExpandCell, LinkCell, SwitchCell } from "./Cells";
+import { CheckboxCell, CheckboxHeader, DefaultCell, ExpandCell, LinkCell, SwitchCell } from "./Cells";
 import { DynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
 
@@ -21,7 +21,7 @@ function getColumnCell(rawColumn) {
   return DefaultCell;
 }
 
-function constructColumnDefs(columns, expandHandler) {
+function constructColumnDefs(columns, expandHandler, isSelectable) {
   const columnDefs = columns.reduce((prev, c) => {
     const splitKey = splitKeyAndUseLastPart(c.key);
     prev.push({
@@ -36,7 +36,15 @@ function constructColumnDefs(columns, expandHandler) {
   if (expandHandler) {
     columnDefs.unshift({
       id: "expand-button",
-      cell: ({ row }) => ExpandCell({ row, expandHandler })
+      cell: ({ row }) => <ExpandCell row={row} expandHandler={expandHandler} />
+    });
+  }
+
+  if (isSelectable) {
+    columnDefs.unshift({
+      id: "selection-checkbox",
+      cell: ({ row }) => <CheckboxCell row={row} />,
+      header: ({ table }) => <CheckboxHeader table={table} />
     });
   }
 
@@ -58,12 +66,13 @@ function constructColumnVisibilityMap(columns, columnOrder) {
   return columnVisibilityMap;
 }
 
-function DashboardTable({ id: cardId, title, description, query, drilldownQueries }) {
+function DashboardTable({ id: cardId, title, description, query, drilldownQueries, isSelectable }) {
   const cubejsClient = useRef(cubeJsApi());
+  const idColumnKey = useRef(null);
 
   const { state, dispatch } = useContext(DynamicDashboardContext);
 
-  const { cardCustomizableProps } = state;
+  const { cardCustomizableProps, selected } = state;
 
   const [results, setResults] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -75,14 +84,17 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
     skip: !query
   });
 
-  const setColumnOrdering = (newOrdering) => {
-    dynamicDashboardActions.updateCardProps(dispatch)(cardId, { columnOrder: newOrdering });
-  };
-
   const columnVisibility = useMemo(() => {
     if (!cardCustomizableProps[cardId]) return {};
-    return constructColumnVisibilityMap(columns, cardCustomizableProps[cardId].columnOrder);
+
+    return constructColumnVisibilityMap(columns, getCardDatatableProperties(cardCustomizableProps[cardId]).columnOrder);
   }, [cardCustomizableProps, cardId, columns]);
+
+  const setColumnOrdering = (newOrdering) => {
+    dynamicDashboardActions.updateCardProps(dispatch)(cardId, {
+      datatableProperties: { ...cardCustomizableProps[cardId].datatableProperties, columnOrder: newOrdering }
+    });
+  };
 
   const fetchDrilldownData = async (query, rowId) => {
     const drilldownResults = await cubejsClient.current.load(query, { castNumerics: true });
@@ -92,10 +104,10 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
   const changeColumnVisibile = (id, visibility) => {
     let newColumnOrder;
     if (visibility) {
-      newColumnOrder = [...cardCustomizableProps[cardId].columnOrder];
+      newColumnOrder = [...getCardDatatableProperties(cardCustomizableProps[cardId]).columnOrder];
       newColumnOrder.push(id);
     } else {
-      newColumnOrder = cardCustomizableProps[cardId].columnOrder.filter((c) => c !== id);
+      newColumnOrder = getCardDatatableProperties(cardCustomizableProps[cardId]).columnOrder.filter((c) => c !== id);
     }
     setColumnOrdering(newColumnOrder);
   };
@@ -120,16 +132,34 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
     [drilldownQueries]
   );
 
+  const selectHandler = useCallback(
+    (updaterFn) => {
+      const selectedIds = updaterFn(selected.ids);
+      if (!Object.keys(selectedIds).length) {
+        dynamicDashboardActions.clearSelected(dispatch)();
+      } else {
+        dynamicDashboardActions.setSelected(dispatch)(cardId, query, idColumnKey.current, selectedIds);
+      }
+    },
+    [cardId, dispatch, query, selected.ids]
+  );
+
   useEffect(() => {
     if (!resultSet) return;
 
     const rawColumns = resultSet.tableColumns().filter((c) => {
-      if (splitKeyAndUseLastPart(c.key) === "id" || c.format === "link") return false;
+      const splitKey = splitKeyAndUseLastPart(c.key);
+      // Store the id column key name to be used later
+      if (splitKey === "id") {
+        idColumnKey.current = c.key;
+      }
+
+      if (splitKey === "id" || c.format === "link") return false;
       return true;
     });
     setResults(shortenKeyNames(resultSet.tablePivot()));
     setColumns(rawColumns);
-    setColumnDefs(constructColumnDefs(rawColumns, drilldownQueries.length ? expandHandler : null));
+    setColumnDefs(constructColumnDefs(rawColumns, drilldownQueries.length ? expandHandler : null, isSelectable));
   }, [drilldownQueries.length, expandHandler, resultSet]);
 
   return (
@@ -139,7 +169,7 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
         description={description}
         columns={columns}
         columnVisibility={columnVisibility}
-        columnOrder={cardCustomizableProps?.[cardId]?.columnOrder || []}
+        columnOrder={getCardDatatableProperties(cardCustomizableProps[cardId]).columnOrder}
         setColumnVisibility={changeColumnVisibile}
         setColumnOrdering={setColumnOrdering}
       />
@@ -147,9 +177,11 @@ function DashboardTable({ id: cardId, title, description, query, drilldownQuerie
         loading={isLoading}
         error={error}
         data={{ results, columns: columnDefs }}
-        columnOrder={cardCustomizableProps?.[cardId]?.columnOrder || []}
+        columnOrder={getCardDatatableProperties(cardCustomizableProps[cardId]).columnOrder}
         columnVisibility={columnVisibility}
         getRowCanExpand={(row) => row.depth < drilldownQueries.length}
+        rowSelection={selected.ids}
+        setRowSelection={selectHandler}
       />
     </div>
   );

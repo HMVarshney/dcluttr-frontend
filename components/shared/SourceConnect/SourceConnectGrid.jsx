@@ -6,29 +6,42 @@ import { cn } from "@/lib/utils";
 import { sourceConnectURLs, sourceTypes } from "@/lib/constants/sourceConnect";
 import ConnectGoogle from "./ConnectGoogle";
 import ConnectFacebook from "./ConnectFacebook";
+import { useRouter } from "next/navigation";
 
 function SourceConnectGrid({ brand }) {
+  const router = useRouter();
+
   const [openModalType, toggleModal] = useState("");
 
   const orgId = brand.organizationId;
 
   const handleModalClose = () => toggleModal("");
 
-  const connectSource = useCallback((sourceName) => {
-    const loginChildWindow = window.open(sourceConnectURLs[sourceName], "_blank", "height=600,width=900");
-    const checkPopup = setInterval(() => {
-      try {
-        if (loginChildWindow.window.location.href.includes(window.location.hostname)) {
-          const callbackURL = loginChildWindow.location.href;
-          loginChildWindow.close();
-          toggleModal(sourceName);
-          toast.success("Authentication successful");
-        }
-      } catch (err) {}
-      if (!loginChildWindow || !loginChildWindow.closed) return;
-      clearInterval(checkPopup);
-    }, 1500);
-  }, []);
+  const connectSource = useCallback(
+    (sourceName) => {
+      const loginChildWindow = window.open(sourceConnectURLs[sourceName], "_blank", "height=600,width=900");
+      const checkPopup = setInterval(() => {
+        try {
+          if (loginChildWindow.window.location.href.includes(window.location.hostname)) {
+            const callbackURL = loginChildWindow.location.href;
+            loginChildWindow.close();
+            // ! Temporarily commented for Meta app review
+            // toggleModal(sourceName);
+            // toast.success("Authentication successful");
+            // !
+            toast.success("Connection is successful");
+            let timeout = setTimeout(() => {
+              clearTimeout(timeout);
+              router.push("/dashboard/performance/meta-ads");
+            }, 1500);
+          }
+        } catch (err) {}
+        if (!loginChildWindow || !loginChildWindow.closed) return;
+        clearInterval(checkPopup);
+      }, 1500);
+    },
+    [router]
+  );
 
   const disconnectSource = useCallback(() => {}, []);
 
@@ -75,9 +88,7 @@ function SourceConnectGrid({ brand }) {
                 <Image src={item.icon} alt="logo" width={100} height={100} className="w-5 object-contain mr-2.5" />
                 {item.title}
               </div>
-              <div
-                className={cn("text-sm text-[#031B1599]", { "text-primary underline": item.status === "CONNECTED" })}
-              >
+              <div className={cn("text-sm text-[#031B1599]", { "text-primary underline": item.status === "CONNECTED" })}>
                 {item.desc}
               </div>
             </div>
@@ -95,18 +106,8 @@ function SourceConnectGrid({ brand }) {
         ))}
       </div>
 
-      <ConnectGoogle
-        openModal={openModalType === "GOOGLE"}
-        onClose={handleModalClose}
-        brandId={brand.id}
-        orgId={orgId}
-      />
-      <ConnectFacebook
-        openModal={openModalType === "FACEBOOK"}
-        onClose={handleModalClose}
-        brandId={brand.id}
-        orgId={orgId}
-      />
+      <ConnectGoogle openModal={openModalType === "GOOGLE"} onClose={handleModalClose} brandId={brand.id} orgId={orgId} />
+      <ConnectFacebook openModal={openModalType === "FACEBOOK"} onClose={handleModalClose} brandId={brand.id} orgId={orgId} />
     </>
   );
 }

@@ -45,6 +45,7 @@ export async function POST(req) {
     }
     return prev;
   }, []);
+
   const section = {
     id: sectionId,
     name: sectionName,

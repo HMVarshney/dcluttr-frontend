@@ -41,7 +41,7 @@ export function DashboardTableHeader({
   );
 }
 
-export function DashboardTableBody({ loading, error, data, columnOrder, columnVisibility, getRowCanExpand }) {
+export function DashboardTableBody({ loading, error, data, ...reactTableProps }) {
   const { results, columns } = data;
   return (
     <div className="px-6 pb-8 w-full h-full">
@@ -51,13 +51,7 @@ export function DashboardTableBody({ loading, error, data, columnOrder, columnVi
         ) : error ? (
           <div className="text-destructive p-4 shadow-sm">{error}</div>
         ) : (
-          <DataTable
-            data={results}
-            columns={columns}
-            columnOrder={columnOrder}
-            columnVisibility={columnVisibility}
-            getRowCanExpand={getRowCanExpand}
-          />
+          <DataTable data={results} columns={columns} {...reactTableProps} />
         )}
       </div>
     </div>

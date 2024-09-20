@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowSquareOut, CaretDown, CaretRight } from "phosphor-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import IndeterminateCheckbox from "@/components/IndeterminateCheckbox";
 
 export function SwitchCell({ getValue }) {
   return (
@@ -35,6 +36,26 @@ export function ExpandCell({ row, expandHandler }) {
     >
       {row.getCanExpand() ? row.getIsExpanded() ? <CaretDown className="min-w-4" /> : <CaretRight className="min-w-4" /> : null}
     </div>
+  );
+}
+
+export function CheckboxHeader({ table }) {
+  return (
+    <IndeterminateCheckbox
+      checked={table.getIsAllRowsSelected()}
+      indeterminate={table.getIsSomeRowsSelected()}
+      onChange={table.getToggleAllRowsSelectedHandler()}
+    />
+  );
+}
+
+export function CheckboxCell({ row }) {
+  return (
+    <IndeterminateCheckbox
+      checked={row.getIsSelected()}
+      indeterminate={row.getIsSomeSelected()}
+      onChange={row.getToggleSelectedHandler()}
+    />
   );
 }
 

@@ -1,15 +1,13 @@
 "use client";
 
-import React, { Fragment } from "react";
-import { AreaChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import moment from "moment";
+import Image from "next/image";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import CustomTooltip from "@/components/CustomTooltip";
 import CustomActiveDot from "@/components/CustomActiveDot";
-import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUp } from "lucide-react";
-import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 
 console.error = (...args) => {

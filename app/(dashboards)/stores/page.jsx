@@ -29,15 +29,13 @@ function Page() {
 
   const filteredBrands = useMemo(() => {
     if (!debouncedSearchedName) return currentOrgBrands;
-    return currentOrgBrands.filter((brand) =>
-      brand.brandName.toLowerCase().includes(debouncedSearchedName.toLowerCase())
-    );
+    return currentOrgBrands.filter((brand) => brand.brandName.toLowerCase().includes(debouncedSearchedName.toLowerCase()));
   }, [currentOrgBrands, debouncedSearchedName]);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
       <div className="sticky top-0 z-10">
-        <div className="flex items-center justify-center gap-2 py-3 px-6 bg-white border-b">
+        <div className="flex items-center justify-center gap-2 py-1.5 px-6 bg-white border-b">
           <div className="mr-auto">
             <Breadcrumb>
               <BreadcrumbList>

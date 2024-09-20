@@ -12,7 +12,7 @@ export default function Header({ dateRange, setDateRange }) {
   return (
     <>
       <div className="sticky top-0 z-10">
-        <div className="flex items-center justify-center gap-2 py-3 px-6 bg-white border-b">
+        <div className="flex items-center justify-center gap-2 py-1.5 px-6 bg-white border-b">
           <div className="mr-auto">
             <Breadcrumb>
               <BreadcrumbList>
@@ -25,7 +25,6 @@ export default function Header({ dateRange, setDateRange }) {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-            <div className="text-[#919191] text-xs">Last updated: 12:56 PM</div>
           </div>
           <Switcher />
           <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />

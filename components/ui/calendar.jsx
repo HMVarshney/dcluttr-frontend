@@ -9,6 +9,9 @@ import { buttonVariants } from "@/components/ui/button";
 function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
   return (
     <DayPicker
+      mode="range"
+      nonce=""//TODO reset nonce
+      weekStartsOn={1}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{

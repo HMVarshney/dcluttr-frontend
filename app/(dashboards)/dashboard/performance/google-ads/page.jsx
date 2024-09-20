@@ -8,6 +8,7 @@ import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 import { renderCardsOnGrid } from "@/lib/utils/dynamicDashboard.utils";
 import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
 import withDynamicDashboardContext from "@/lib/hoc/withDynamicDasboardContext";
+import DatatableChartRenderer from "../_components/DatatableChartRenderer";
 
 function Page() {
   const gridRef = useRef(null);
@@ -29,11 +30,13 @@ function Page() {
     return values;
   }, [dateRange.from, dateRange.to]);
 
-  const { gridItems } = useDynamicDashboard("performance-google", 18, gridRef, placeholderValues);
+  const { gridItems } = useDynamicDashboard("performance-google", 18, gridRef);
 
   return (
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
       <Header dateRange={dateRange} setDateRange={setDateRange} />
+
+      <DatatableChartRenderer placeholderValues={placeholderValues} />
 
       <div className="grid-stack" ref={gridRef}>
         {renderCardsOnGrid(gridItems, placeholderValues)}

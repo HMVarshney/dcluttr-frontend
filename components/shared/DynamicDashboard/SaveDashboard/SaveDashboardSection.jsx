@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
+import { getCardDatatableProperties } from "@/lib/utils/dynamicDashboard.utils";
 
 export function SaveDashboardSection({ brandId }) {
   const { state, dispatch } = useDynamicDashboardContext();
@@ -17,7 +18,8 @@ export function SaveDashboardSection({ brandId }) {
     if (activeSection.default) {
       activeSectionCopy.cards.forEach((card) => {
         card.active = cardCustomizableProps?.[card.id]?.active ?? card.active;
-        card.columnOrder = cardCustomizableProps?.[card.id]?.columnOrder ?? card.columnOrder;
+        card.columnOrder =
+          getCardDatatableProperties(cardCustomizableProps[card.id]).columnOrder ?? getCardDatatableProperties(card).columnOrder;
         if (gridstackPropertiesMap[card.id]) {
           card.gridStackProperties = gridstackPropertiesMap[card.id];
         }
@@ -40,5 +42,9 @@ export function SaveDashboardSection({ brandId }) {
       });
   };
 
-  return <Button onClick={saveDashboard}>Save</Button>;
+  return (
+    <Button variant="outline" onClick={saveDashboard}>
+      Save
+    </Button>
+  );
 }

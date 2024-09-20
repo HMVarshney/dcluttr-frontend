@@ -20,9 +20,8 @@ const getCommonPinningStyles = (data) => {
   };
 };
 
-function DataTable({ data = [], columns = [], columnOrder, columnVisibility, getRowCanExpand }) {
+function DataTable({ data = [], columns = [], columnOrder, columnVisibility, getRowCanExpand, rowSelection, setRowSelection }) {
   const [sorting, setSorting] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
   const [expanded, setExpanded] = useState({});
 
   const table = useReactTable({
@@ -30,7 +29,7 @@ function DataTable({ data = [], columns = [], columnOrder, columnVisibility, get
     columns,
     initialState: {
       columnPinning: {
-        left: ["expand-button"]
+        left: ["selection-checkbox", "expand-button"]
       }
     },
     state: {

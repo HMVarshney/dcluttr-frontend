@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import React, { useEffect } from "react";
 import CreativesChart from "./_components/CreativesChart";
 import Header from "./_components/Header";
-import { useDispatch, useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { fetchCreativeDetails } from "@/lib/store/features/creativeSlice";
 import CreativesTable from "./_components/CreativesTable";
@@ -117,11 +117,13 @@ const data = {
 
 export default function Page() {
   const dispatch = useDispatch();
+
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { creativeDetails, isLoading } = useSelector((state) => state.creative);
+
   useEffect(() => {
     dispatch(fetchCreativeDetails());
-  }, []);
+  }, [dispatch]);
 
   return (
     <ScrollArea

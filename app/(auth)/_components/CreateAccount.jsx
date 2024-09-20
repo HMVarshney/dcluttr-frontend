@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import Link from "next/link";
+import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { FormSubmitButton, InputEmail, InputNumber, InputPassword, InputText } from "./FormElements";
-import Link from "next/link";
 import LoginWithGoogle from "./LoginWithGoogle";
 import { signUp } from "@/lib/store/features/authSlice";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function CreateAccount() {
   const dispatch = useDispatch();
@@ -25,14 +25,13 @@ export default function CreateAccount() {
     const data = { ...e, file: ref.current };
     dispatch(signUp(data));
   };
+
   return (
     <section className="h-[calc(100vh-66px)] flex items-center justify-center">
       <div className="max-w-xl w-full">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h3 className="font-bold text-2xl">Create your account</h3>
-          <p className="text-sm font-light mt-1.5">
-            Please provide these details, they will be used to create your account
-          </p>
+          <p className="text-sm font-light mt-1.5">Please provide these details, they will be used to create your account</p>
 
           {/* <input id="file" type="file" onChange={(e) => ref.current = e.target.files[0]} /> */}
           <InputText

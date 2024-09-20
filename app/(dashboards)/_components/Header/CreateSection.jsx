@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import cubeJsApi from "@/lib/cubeJsApi";
 import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
-import { addCardToGrid, createCardObject, removeCardFromGrid } from "@/lib/utils/dynamicDashboard.utils";
+import { addCardToGrid, dynamicDashboardOperations, removeCardFromGrid } from "@/lib/utils/dynamicDashboard.utils";
 import Hint from "@/components/Hint";
 import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
 import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
@@ -28,7 +28,7 @@ async function createDashboardSection(section) {
 }
 
 async function deleteDashboardSection(sectionId) {
-  await axiosInterceptorInstance.delete("/brand/dashboard", {
+  await axiosInterceptorInstance.post("/brand/dashboards/delete", {
     data: sectionId
   });
 }
@@ -55,12 +55,12 @@ function CreateSectionButton({
   return (
     <Dialog open={isOpen} onOpenChange={(e) => setOpen(e)}>
       <DialogTrigger asChild>{triggerEl}</DialogTrigger>
-      <DialogContent className=" bg-white border-none max-w-[652px] p-0">
+      <DialogContent className=" bg-white border-none max-w-[652px] p-0 gap-0">
         <DialogHeader>
           <DialogTitle className="border-b p-4">Create section</DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 px-4 overflow-auto" style={{ height: "800px", maxHeight: "800px" }}>
+        <div className="grid gap-4 px-4 max-h-[74vh] overflow-y-auto">
           <div className="flex flex-col gap-2">
             <Label htmlFor="Section name" className="text-base font-semibold">
               Section name
@@ -134,9 +134,11 @@ export function UpdateSection({ children }) {
       removeCardFromGrid(gridstackInstance, selectedMetric.id);
       dynamicDashboardActions.removeGridItem(dispatch)(selectedMetric.id);
     } else {
-      const cardObj = createCardObject(selectedMetric.id, cube.current);
+      const cardObj = dynamicDashboardOperations.createCardObject(selectedMetric.id, cube.current);
       dynamicDashboardActions.addCard(dispatch)(selectedMetric.id, cardObj);
-      dynamicDashboardActions.addGridItem(dispatch)(addCardToGrid(gridstackInstance, cardObj));
+      dynamicDashboardActions.addGridItem(dispatch)(
+        addCardToGrid(gridstackInstance, cardObj, { ignoreCardGridstackCoords: true })
+      );
     }
   };
 
