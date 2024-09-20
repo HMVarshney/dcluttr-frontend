@@ -2,26 +2,18 @@
 
 import React, { useState } from "react";
 import moment from "moment";
-import {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
+import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb";
 import Switcher from "@/components/Switcher";
-import DatePickerWithRange from "@/components/DatePickerWithRange";
 // import { Button } from '@/components/ui/button';
 // import Notifications from '@/components/Notifications';
 // import ExportFileFormat from '@/components/ExportFileFormat';
 // import { SquareHalf } from 'phosphor-react';
 import TopAdsBanner from "@/components/TopAdsBanner";
 // import { Input } from '@/components/ui/input';
-import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { setMainChart } from "@/lib/store/features/userSlice";
+import dynamic from "next/dynamic";
+const DatePickerWithRange = dynamic(() => import("@/components/DatePickerWithRange"), { ssr: false });
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -35,7 +27,7 @@ export default function Header() {
   return (
     <>
       <div className="sticky top-0 z-10">
-        <div className="flex items-center justify-center gap-2 py-3 px-6 bg-white border-b">
+        <div className="flex items-center justify-center gap-2 py-1.5 px-6 bg-white border-b">
           <div className="mr-auto">
             <Breadcrumb>
               <BreadcrumbList>
@@ -44,7 +36,6 @@ export default function Header() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-            <div className="text-[#919191] text-xs">Last updated: 12:56 PM</div>
           </div>
 
           <Switcher

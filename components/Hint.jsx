@@ -7,7 +7,7 @@ export default function Hint({ label, children, side, align, sideOffset, alignOf
       <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
-          className="text-white bg-black border-black"
+          className="text-black bg-white max-w-[348px]"
           side={side}
           align={align}
           sideOffset={sideOffset}

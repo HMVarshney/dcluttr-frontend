@@ -1,15 +1,13 @@
 "use client";
 
-import React, { Fragment } from "react";
-import { AreaChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import moment from "moment";
+import Image from "next/image";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import CustomTooltip from "@/components/CustomTooltip";
 import CustomActiveDot from "@/components/CustomActiveDot";
-import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowUp } from "lucide-react";
-import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 
 console.error = (...args) => {
@@ -30,7 +28,7 @@ export default function CreativesChart({ data, isLoading = false, results = {} }
       )}
     >
       <ChartHeader />
-      <div className="flex items-center justify-between px-4 pt-2.5">
+      {/* <div className="flex items-center justify-between px-4 pt-2.5">
         <div className=" text-2xl font-bold text-black">₹2,45,982</div>
         <div className="">
           <div className="text-sm font-semibold text-green-600 flex items-center justify-end">
@@ -39,24 +37,24 @@ export default function CreativesChart({ data, isLoading = false, results = {} }
           </div>
           <div className="text-[10px] text-gray-400 text-right">vs 2.69</div>
         </div>
-      </div>
+      </div> */}
       {isLoading ? (
-        <Skeleton className="w-[calc(100%-32px)] h-[212px] my-4 rounded-md mx-auto" />
+        <Skeleton className="w-[calc(100%-32px)] h-[256px] my-4 rounded-md mx-auto" />
       ) : (
-        <ResponsiveContainer width="100%" height={160}>
+        <ResponsiveContainer width="100%" height={256}>
           <AreaChart
             data={data.data}
             margin={{
-              top: 10,
+              top: 24,
               right: 16,
               left: -20,
               bottom: 0
             }}
           >
             <CartesianGrid strokeWidth={1} stroke="#d1d3da33" />
-            <XAxis dataKey={"x"} axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 10, fontWeight: 400 }} />
+            <XAxis dataKey={"x"} axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 12, fontWeight: 400 }} />
 
-            <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 10, fontWeight: 400 }} />
+            <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 12, fontWeight: 400 }} />
 
             <Tooltip content={<CustomTooltip />} />
 
@@ -66,20 +64,12 @@ export default function CreativesChart({ data, isLoading = false, results = {} }
                   type="monotone"
                   dataKey={ele.dataKey}
                   stroke={ele.color}
-                  strokeWidth={1.2}
-                  strokeDasharray={ele.type !== "area" ? "4 2" : null}
+                  strokeWidth={2}
+                  strokeDasharray={ele.type !== "area" ? "10 6" : null}
                   fillOpacity={1}
                   fill={`url(#${ele.name}-${ele.id})`}
                   activeDot={<CustomActiveDot />}
                 />
-                {ele.type === "area" && (
-                  <defs>
-                    <linearGradient id={`${ele.name}-${ele.id}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={ele.color} stopOpacity={0.15} />
-                      <stop offset="95%" stopColor={ele.color} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                )}
               </Fragment>
             ))}
           </AreaChart>
@@ -95,16 +85,6 @@ export function ChartHeader() {
     <>
       <div className="flex gap-2.5 items-center p-4 border-b border-[#F1F1F1]">
         <Select>
-          <SelectTrigger className="w-[140px] ">
-            <SelectValue placeholder="Group By 1" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="O-1">Group By 1</SelectItem>
-            <SelectItem value="O-2">Group By 2</SelectItem>
-            <SelectItem value="O-3">Group By 3</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
           <SelectTrigger className="w-[100px] ">
             <SelectValue placeholder="CV 1" />
           </SelectTrigger>
@@ -114,7 +94,17 @@ export function ChartHeader() {
             <SelectItem value="O-3">CV 3</SelectItem>
           </SelectContent>
         </Select>
-        <div className="flex-1"></div>
+        <Select>
+          <SelectTrigger className="w-[140px] ">
+            <SelectValue placeholder="Group by: Day" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="O-1">Day</SelectItem>
+            <SelectItem value="O-2">Week</SelectItem>
+            <SelectItem value="O-3">Month</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="w-full"></div>
         <Select>
           <SelectTrigger className="w-[190px]">
             <SelectValue placeholder="Choose metric" />
@@ -130,18 +120,31 @@ export function ChartHeader() {
   );
 }
 
-export function ChartFooter() {
+export function ChartFooter({ data }) {
   return (
     <div className="py-4 px-5 text-xs font-semibold text-[#515153] border-t border-[#F1F1F1] flex items-center justify-end gap-4">
-      <div className="p-2.5 rounded-full border aspect-square">
-        <Image src="/icons/google.svg" alt="logo" width={100} height={100} className="w-5 object-contain" />
-      </div>
+      {data.series?.map((ele) => (
+        <div
+          key={ele.name}
+          className=" rounded-xl border-2 aspect-square overflow-hidden bg-white"
+          style={{ borderColor: ele.color }}
+        >
+          <Image
+            src={`/temp/creative_p${Math.floor(Math.random() * 3)}.png`}
+            alt="logo"
+            width={100}
+            height={100}
+            className="w-14 object-contain"
+          />
+        </div>
+      ))}
+      {/*       
       <div className="p-2.5 rounded-full border border-primary flex items-center aspect-square">
         <Image src="/icons/meta.svg" alt="logo" width={100} height={100} className="w-5 object-contain" />
       </div>
       <div className="p-2.5 rounded-full border aspect-square">
         <Image src="/icons/shopify.svg" alt="logo" width={100} height={100} className="w-5 object-contain" />
-      </div>
+      </div> */}
     </div>
   );
 }

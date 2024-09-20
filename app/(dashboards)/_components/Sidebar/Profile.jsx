@@ -15,16 +15,16 @@ export default function Profile() {
   const { userDetails, isSettingsOpen } = useSelector((state) => state.user);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
+    <div className="flex flex-col items-center justify-center gap-5 py-4 ">
       <InvitePeopleButton>
-        <Users className="text-icon cursor-pointer w-7 h-7" />
+        <Users className="text-icon cursor-pointer" size={24} />
       </InvitePeopleButton>
 
       <Popover open={isSettingsOpen} onOpenChange={(e) => dispatch(setSettingsOpen(e))}>
         <PopoverTrigger asChild>
-          <Avatar>
+          <Avatar className="w-7 h-7">
             <AvatarImage src={userDetails?.image} alt={userDetails?.fullName} />
-            <AvatarFallback>{userDetails?.fullName?.slice(0, 1)}</AvatarFallback>
+            <AvatarFallback className="bg-[#6D4FED] text-white uppercase">{userDetails?.fullName?.slice(0, 1)}</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent

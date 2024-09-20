@@ -1,16 +1,14 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { FormSubmitButtonWithIcon, InputSelect, InputText, InputWebsite } from "./FormElements";
 import Link from "next/link";
-import axiosInterceptorInstance from "@/lib/axiosInterceptorInstance";
-import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
-import { setStep, submitOrganizationDetails } from "@/lib/store/features/authSlice";
+import { FormSubmitButtonWithIcon, InputSelect, InputText, InputWebsite } from "./FormElements";
+import { cn } from "@/lib/utils";
+import { submitOrganizationDetails } from "@/lib/store/features/authSlice";
 
 export default function OtherDetails({ isBF = false, onDone = () => {} }) {
   const dispatch = useDispatch();
@@ -48,18 +46,14 @@ export default function OtherDetails({ isBF = false, onDone = () => {} }) {
         });
       });
   };
+
   return (
     <section className={cn("h-[calc(100vh-66px)] flex items-center justify-center", { "h-auto": isBF })}>
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl w-full">
         {!isBF && (
           <>
-            {/* <div className='text-sm mb-6 flex items-center'>
-                        <ArrowLeft className='w-5 cursor-pointer' onClick={() => dispatch(setStep(2))} /><span className='text-black font-light ml-2 '>Back</span>
-                    </div> */}
             <h3 className="font-bold text-2xl">Other details</h3>
-            <p className="text-base mt-1.5">
-              Please provide your personal details, they will be used to complete your profile
-            </p>
+            <p className="text-base mt-1.5">Please provide your personal details, they will be used to complete your profile</p>
           </>
         )}
         <div className="flex mt-10 items-center cursor-pointer" onClick={() => ref.current.click()}>

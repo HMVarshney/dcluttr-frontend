@@ -4,29 +4,26 @@ import { SquareHalf } from "phosphor-react";
 import EditTableAttribution from "./EditTableAttribution";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { exportCSV } from "@/lib/utils/export.utils";
 import ExportButton from "@/components/ExportButton";
+import { useDispatch } from "react-redux";
+import { getAdsPlacementMeta } from "@/lib/store/features/metaAdsSlice";
 
 function exportAdPlacementTable(data, annotation) {
-  const keys = [
-    ...Object.entries(annotation.measures).map(([keyName, value]) => ({
-      field: keyName,
-      title: value.shortTitle || value.title
-    })),
-    ...Object.entries(annotation.dimensions).map(([keyName, value]) => ({
-      field: keyName,
-      value: value.shortTitle || value.title
-    }))
-  ];
+  const keys = Object.entries(annotation).map(([keyName, value]) => ({
+    field: keyName,
+    value: value.shortTitle || value.title
+  }));
   exportCSV(data, { keys }, "ad_placement.csv");
 }
 
 export default function AdPlacementTable({ isGoogle = false }) {
+  const dispath = useDispatch();
   const isOpen = useSelector((state) => state.user.sideBarClose);
   const { adsPlacementMetaLoading, adsPlacementMetaError, adsPlacementMetaData } = useSelector((state) => state.metaAds);
 
@@ -66,7 +63,7 @@ export default function AdPlacementTable({ isGoogle = false }) {
 
 export function Tables({ annotation = {}, data = [] }) {
   const columns = useMemo(() => {
-    return Object.entries(annotation.measures ?? {}).map(([key, value]) => ({
+    return Object.entries(annotation ?? {}).map(([key, value]) => ({
       accessorKey: key,
       header: <div className="min-w-32">{value.shortTitle || value.title}</div>,
       cell: (info) => <div className="min-w-32">{info.getValue()}</div>

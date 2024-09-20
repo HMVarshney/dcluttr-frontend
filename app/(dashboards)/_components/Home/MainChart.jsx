@@ -1,11 +1,9 @@
 "use client";
 
 import React, { Fragment } from "react";
-import { AreaChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import moment from "moment";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import CustomActiveDot from "@/components/CustomActiveDot";
-import Image from "next/image";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -51,12 +49,7 @@ export default function MainChart({ data, isLoading = false }) {
             }}
           >
             <CartesianGrid strokeWidth={1} stroke="#d1d3da33" />
-            <XAxis
-              dataKey={"x"}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#6B7583", fontSize: 10, fontWeight: 400 }}
-            />
+            <XAxis dataKey={"x"} axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 10, fontWeight: 400 }} />
 
             <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7583", fontSize: 10, fontWeight: 400 }} />
 
@@ -122,8 +115,6 @@ export function ChartHeader() {
 }
 
 const CustomTooltip = ({ active, payload, label, coordinate }) => {
-  console.log({ active, payload, label, coordinate });
-
   if (active && payload && payload.length) {
     return (
       <div

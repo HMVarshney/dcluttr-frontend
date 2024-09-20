@@ -31,7 +31,9 @@ export default function BrandDetails({ goNext }) {
     const formData = { ...data, file, orgId };
     dispatch(submitBrandDetails(formData))
       .unwrap()
-      .then(() => goNext());
+      .then((res) => {
+        goNext({ brandId: res.data.id });
+      });
   };
 
   return (

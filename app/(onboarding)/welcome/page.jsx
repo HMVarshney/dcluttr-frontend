@@ -63,21 +63,27 @@ function Welcome() {
 
   const brandDetails = brandDetailsIdMap[brandId];
 
-  const setStep = useCallback(
-    (stepNumber) => {
-      const url = pathname + `?${createQueryString(searchParams, { step: stepNumber })}`;
+  const setQueryParams = useCallback(
+    (params) => {
+      const url = pathname + `?${createQueryString(searchParams, params)}`;
       router.replace(url);
     },
     [pathname, router, searchParams]
   );
 
-  const goNext = () => setStep(step + 1);
+  const goNext = (params) => {
+    if (step === 2) {
+      setQueryParams({ step: 3, brand: params.brandId });
+    } else {
+      setQueryParams({ step: step + 1 });
+    }
+  };
 
   useEffect(() => {
     if (!step) {
-      setStep(1);
+      setQueryParams({ step: 1 });
     }
-  }, [step, setStep]);
+  }, [step, setQueryParams]);
 
   useEffect(() => {
     if (brandId) {
@@ -87,15 +93,15 @@ function Welcome() {
 
   useEffect(() => {
     if (step < 4 && brandDetails && brandDetails.brandSettings.isApproved) {
-      setStep(4);
+      setQueryParams({ step: 4 });
     }
     if (step < 3 && brandDetails) {
-      setStep(3);
+      setQueryParams({ step: 3 });
     }
     if (step > 2 && !brandId) {
-      setStep(1);
+      setQueryParams({ step: 1 });
     }
-  }, [brandDetails, brandId, step, setStep]);
+  }, [brandDetails, brandId, step, setQueryParams]);
 
   if (!step) return null;
 

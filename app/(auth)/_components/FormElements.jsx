@@ -105,27 +105,12 @@ export function InputNumber({ label, placeholder, required, register, name, erro
       >
         {label} <div className="text-xs text-black/50 ml-auto">We won’t spam call you!</div>
       </Label>
-      <Input
-        {...register(name, { required })}
-        id={name}
-        type="tel"
-        placeholder={placeholder}
-        errors={!!errors?.message}
-      />
+      <Input {...register(name, { required })} id={name} type="tel" placeholder={placeholder} errors={!!errors?.message} />
       <InputErrorMessage message={errors?.message} />
     </div>
   );
 }
-export function InputPassword({
-  label,
-  placeholder,
-  required,
-  register,
-  name,
-  errors,
-  className,
-  showForgetOption = false
-}) {
+export function InputPassword({ label, placeholder, required, register, name, errors, className, showForgetOption = false }) {
   return (
     <div className={cn("grid w-full items-center gap-2", className)}>
       <div className="flex items-center">
@@ -198,11 +183,7 @@ export function InputSelect({ label, placeholder, required, control, name, error
 export function FormSubmitButton({ isLoading, text }) {
   return (
     <Button className="w-full" disabled={isLoading}>
-      {isLoading ? (
-        <Image src="/icons/spinner.svg" alt="loader" width={20} height={20} className="animate-spin" />
-      ) : (
-        text
-      )}
+      {isLoading ? <Image src="/icons/spinner.svg" alt="loader" width={20} height={20} className="animate-spin" /> : text}
     </Button>
   );
 }

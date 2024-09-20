@@ -1,14 +1,14 @@
 "use client";
+
+import Link from "next/link";
+import { useSelector } from "react-redux";
 import Hint from "@/components/Hint";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { RadioGroup } from "@/components/ui/radio-group";
 import CreateAccount from "../_components/CreateAccount";
-import { useState } from "react";
 import OTPVerification from "../_components/OTPVerification";
 import OtherDetails from "../_components/OtherDetails";
 import StepBox from "@/components/StepBox";
-import { useSelector } from "react-redux";
 
 export default function Home() {
   const { step } = useSelector((state) => state.auth);

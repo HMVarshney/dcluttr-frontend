@@ -1,33 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import React, { useEffect, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Pencil } from "lucide-react";
 import { X } from "lucide-react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { DotsSixVertical, PushPinSimple } from "phosphor-react";
+import { DotsSixVertical } from "phosphor-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function EditChartsOrder({ cardList = [], setCardList = () => {} }) {
+export default function EditChartsOrder({ cardList = [], cardProps, activateCard }) {
   const [isOpen, setOpen] = useState(false);
-  const [titles, setTitles] = useState(cardList);
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = titles;
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
 
-    setTitles(items);
-  };
+  const handleOnDragEnd = () => {};
+
   return (
     <Popover
       open={isOpen}
       onOpenChange={(e) => {
         setOpen(e);
-        if (e) {
-          setTitles(cardList?.sort((a, b) => (b?.select === true) - (a?.select === true)));
-        }
       }}
     >
       <PopoverTrigger asChild>
@@ -47,64 +38,49 @@ export default function EditChartsOrder({ cardList = [], setCardList = () => {} 
           <Droppable droppableId="imageUrls" direction="vertical">
             {(provided) => (
               <div className="flex flex-col" {...provided.droppableProps} ref={provided.innerRef}>
-                {titles.map((title, i) => (
-                  <Draggable key={i} draggableId={`image-${i}`} index={i}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`border-b py-3.5 px-6 w-full flex items-center ${
-                          snapshot.isDragging ? "bg-blue-100 shadow-lg z-50" : ""
-                        }`}
-                        style={{
-                          ...provided.draggableProps.style,
-                          opacity: snapshot.isDragging ? 0.8 : 1
-                        }}
-                      >
-                        <DotsSixVertical size={16} color="#031B15" className="mr-4" />
-                        <div className="text-base font-semibold"> {title.title}</div>
-                        <input
-                          checked={title.select}
-                          onChange={() => {
-                            setTitles(
-                              titles.map((item) => {
-                                if (item.title === title.title) {
-                                  return {
-                                    ...item,
-                                    select: !item.select
-                                  };
-                                }
-                                return item;
-                              })
-                            );
+                {[...cardList]
+                  .sort((a, b) => (cardProps[b.id]?.active === true) - (cardProps[a.id]?.active === true))
+                  .map((title, i) => (
+                    <Draggable key={i} draggableId={`image-${i}`} index={i}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`border-b py-3.5 px-6 w-full flex items-center ${
+                            snapshot.isDragging ? "bg-blue-100 shadow-lg z-50" : ""
+                          }`}
+                          style={{
+                            ...provided.draggableProps.style,
+                            opacity: snapshot.isDragging ? 0.8 : 1
                           }}
-                          type="checkbox"
-                          className={cn(
-                            "min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto",
-                            " cursor-pointer"
-                          )}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                        >
+                          <DotsSixVertical size={16} color="#031B15" className="mr-4" />
+                          <div className="text-base font-semibold"> {title.title}</div>
+                          <input
+                            checked={cardProps[title.id]?.active || false}
+                            onChange={() => activateCard(title.id, !cardProps[title.id]?.active)}
+                            type="checkbox"
+                            className={cn(
+                              "min-w-4 h-4 accent-primary hover:accent-primary/80 rounded ml-auto",
+                              " cursor-pointer"
+                            )}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
                 <div className="w-[340px] bg-[#dbdbdb8c]">{provided.placeholder}</div>
               </div>
             )}
           </Droppable>
           <div className="w-full flex items-center justify-end gap-2.5 p-4 border-t sticky bottom-0 bg-white">
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
             <Button
-              variant=""
               onClick={() => {
                 setOpen(false);
-                setCardList(titles);
               }}
             >
-              Save
+              Done
             </Button>
           </div>
         </DragDropContext>
