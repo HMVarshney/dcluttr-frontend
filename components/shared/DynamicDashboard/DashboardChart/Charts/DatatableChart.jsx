@@ -44,7 +44,9 @@ function ChartHeader({ selected, options, onChange }) {
         </SelectTrigger>
         <SelectContent>
           {GROUP_BY.map((value) => (
-            <SelectItem value={value.value}>{value.label}</SelectItem>
+            <SelectItem value={value.value} key={value.value}>
+              {value.label}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>

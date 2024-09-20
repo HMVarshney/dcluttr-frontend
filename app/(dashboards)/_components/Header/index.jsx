@@ -23,10 +23,6 @@ export default function Header({ sections, activeSectionId, setActiveSectionId }
                 <BreadcrumbItem>
                   <BreadcrumbLink href="/dashboard">Overview</BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/dashboard">Home</BreadcrumbLink>
-                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>

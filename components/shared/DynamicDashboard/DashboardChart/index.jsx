@@ -43,7 +43,11 @@ function DashboardChart({ title, description, icon, query, chartType }) {
   if (isLoadingChart || isLoadingGauge) return <Skeleton className="w-full h-[408px] my-4 rounded-md mx-auto" />;
 
   if (chartType === visualizationTypes.GAUGE) {
-    return <GaugeChart isLoading={isLoadingGauge} details={{ title, icon, description }} data={gaugeData} />;
+    return (
+      <div className="p-1.5">
+        <GaugeChart isLoading={isLoadingGauge} details={{ title, icon, description }} data={gaugeData} />
+      </div>
+    );
   }
 
   if (chartType === visualizationTypes.PIECHART) {
@@ -55,11 +59,7 @@ function DashboardChart({ title, description, icon, query, chartType }) {
   }
 
   return (
-    <div
-      className={cn({
-        "p-1.5": true
-      })}
-    >
+    <div className="p-1.5">
       <AreaChart1
         isLoading={isLoadingChart || isLoadingGauge}
         gaugeData={gaugeData}

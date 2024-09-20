@@ -5,9 +5,14 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import Switcher from "@/components/Switcher";
 import DatePickerWithRange from "@/components/DatePickerWithRange";
 import TopAdsBanner from "@/components/TopAdsBanner";
+import { useSelector } from "react-redux";
+import { setMainChart } from "@/lib/store/features/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Header({ dateRange, setDateRange }) {
+  const dispatch = useDispatch();
   const pathname = usePathname();
+  const { showMainChart } = useSelector((state) => state.user);
 
   return (
     <>
@@ -26,7 +31,7 @@ export default function Header({ dateRange, setDateRange }) {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <Switcher />
+          <Switcher checked={showMainChart} onCheckedChange={(e) => dispatch(setMainChart(e))} />
           <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} />
         </div>
       </div>

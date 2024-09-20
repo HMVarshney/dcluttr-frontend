@@ -12,12 +12,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { CaretDown } from "phosphor-react";
 
 export function GroupBySelectBox({ value, onValueChange, options }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className=" outline-none focus:ring-0 focus:outline-none">
-        <Button variant="outline">Group by {value?.label}</Button>
+      <DropdownMenuTrigger className=" outline-none focus:ring-0 focus:outline-none" asChild>
+        <Button variant="outline" className="pr-2">
+          Group by: {value?.label}
+          <CaretDown className="min-w-3 w-3 h-3 ml-2" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-36">
         <DropdownMenuRadioGroup

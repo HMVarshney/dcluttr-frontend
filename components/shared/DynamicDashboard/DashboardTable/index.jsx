@@ -7,16 +7,17 @@ import { DashboardTableBody, DashboardTableHeader } from "./Elements";
 import { shortenKeyNames, splitKeyAndUseLastPart } from "@/lib/utils";
 import { getCardDatatableProperties, replacePlaceholders } from "@/lib/utils/dynamicDashboard.utils";
 import { recursivelyAddSubRows } from "@/lib/utils/datatable.utils";
-import { CheckboxCell, CheckboxHeader, DefaultCell, ExpandCell, LinkCell, SwitchCell } from "./Cells";
+import { CheckboxCell, CheckboxHeader, DefaultCell, NameAndLinkCell, SwitchCell } from "./Cells";
 import { DynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
+import Hint from "@/components/Hint";
 
-function getColumnCell(rawColumn) {
+function getColumnCell(rawColumn, expandHandler) {
   if (rawColumn.meta?.switchEnabled) {
     return SwitchCell;
   }
   if (rawColumn.meta?.readableId) {
-    return LinkCell;
+    return (props) => <NameAndLinkCell {...props} expandHandler={expandHandler} />;
   }
   return DefaultCell;
 }
@@ -25,28 +26,23 @@ function constructColumnDefs(columns, expandHandler, isSelectable) {
   const columnDefs = columns.reduce((prev, c) => {
     const splitKey = splitKeyAndUseLastPart(c.key);
     prev.push({
-      id: c.key,
+      id: c.key?.includes("name") ? "name" : c.key,
       accessorFn: (row) => row[splitKey],
-      header: <div className="min-w-32">{c.shortTitle}</div>,
-      cell: getColumnCell(c)
+      header: (
+        <Hint label={c.title}>
+          <div className="whitespace-nowrap cursor-pointer">{c.shortTitle}</div>
+        </Hint>
+      ),
+      cell: getColumnCell(c, expandHandler)
     });
     return prev;
   }, []);
 
-  if (expandHandler) {
-    columnDefs.unshift({
-      id: "expand-button",
-      cell: ({ row }) => <ExpandCell row={row} expandHandler={expandHandler} />
-    });
-  }
-
-  if (isSelectable) {
-    columnDefs.unshift({
-      id: "selection-checkbox",
-      cell: ({ row }) => <CheckboxCell row={row} />,
-      header: ({ table }) => <CheckboxHeader table={table} />
-    });
-  }
+  columnDefs.unshift({
+    id: "selection-checkbox",
+    cell: ({ row }) => <CheckboxCell row={row} />,
+    header: ({ table }) => <CheckboxHeader table={table} />
+  });
 
   return columnDefs;
 }

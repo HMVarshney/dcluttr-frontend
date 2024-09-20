@@ -7,11 +7,14 @@ import Header from "../_components/Header";
 import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 import { renderCardsOnGrid } from "@/lib/utils/dynamicDashboard.utils";
 import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
-import withDynamicDashboardContext from "@/lib/hoc/withDynamicDasboardContext";
+import { cn } from "@/lib/utils";
+import { useSelector } from "react-redux";
 import DatatableChartRenderer from "../_components/DatatableChartRenderer";
 
-function Page() {
+export default function Page() {
   const gridRef = useRef(null);
+  const isOpen = useSelector((state) => state.user.sideBarClose);
+  const { showMainChart } = useSelector((state) => state.user);
 
   const [dateRange, setDateRange] = useState({
     from: moment().subtract({ day: 7 }).format("YYYY-MM-DD"),
@@ -36,9 +39,11 @@ function Page() {
     <ScrollArea className="rounded-md bg-[#FAFAFA] h-full border">
       <Header dateRange={dateRange} setDateRange={setDateRange} />
 
-      <DatatableChartRenderer placeholderValues={placeholderValues} />
+      <div className={cn(" w-[calc(100vw-332px)]", { "w-[calc(100vw-174px)]": isOpen }, { hidden: !showMainChart })}>
+        <DatatableChartRenderer placeholderValues={placeholderValues} />
+      </div>
 
-      <div className="grid-stack" ref={gridRef}>
+      <div className={cn(" w-[calc(100vw-332px)] grid-stack", { "w-[calc(100vw-174px)]": isOpen })} ref={gridRef}>
         {renderCardsOnGrid(gridItems, placeholderValues)}
       </div>
 
@@ -48,5 +53,3 @@ function Page() {
     </ScrollArea>
   );
 }
-
-export default withDynamicDashboardContext(Page);

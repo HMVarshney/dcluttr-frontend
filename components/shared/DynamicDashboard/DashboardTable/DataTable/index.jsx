@@ -11,7 +11,7 @@ const getCommonPinningStyles = (data) => {
 
   return {
     boxShadow: column.id === "name" ? "-1px 0 1px -1px gray inset" : undefined,
-    left: isPinned === "left" ? column.getStart("left") : undefined,
+    left: isPinned === "left" ? (column.id === "name" ? column.getStart("left") - 44 : column.getStart("left")) : undefined,
     opacity: isPinned ? 1 : 1,
     position: isPinned ? "sticky" : "relative",
     width: column.getSize(),
@@ -29,7 +29,7 @@ function DataTable({ data = [], columns = [], columnOrder, columnVisibility, get
     columns,
     initialState: {
       columnPinning: {
-        left: ["selection-checkbox", "expand-button"]
+        left: ["selection-checkbox", "name"]
       }
     },
     state: {

@@ -124,12 +124,9 @@ export default function InvitePeopleButton({ children, preEmail = "", preRoleId 
             {currentOrgBrands?.map((ele, i) => (
               <div
                 key={i}
-                className={cn(
-                  "p-3 rounded-lg border cursor-pointer border-gray-300 transition-all flex items-center gap-4",
-                  {
-                    "border-primary": brandIds?.includes(ele.id)
-                  }
-                )}
+                className={cn("p-3 rounded-lg border cursor-pointer border-gray-300 transition-all flex items-center gap-4", {
+                  "border-primary": brandIds?.includes(ele.id)
+                })}
                 onClick={() => {
                   if (brandIds?.includes(ele.id)) {
                     setBrandIds(brandIds?.filter((id) => id !== ele.id));
@@ -161,7 +158,7 @@ export default function InvitePeopleButton({ children, preEmail = "", preRoleId 
             ))}
           </div>
         </div>
-        <DialogFooter className="border-t p-4 shadow-[0px_-4px_4px_0px_rgba(0,0,0,0.08)]">
+        <DialogFooter className="border-t p-4">
           <Button
             type="submit"
             className="font-medium"

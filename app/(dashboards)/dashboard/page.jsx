@@ -8,17 +8,15 @@ import Header from "../_components/Header";
 import ExportFileFormat from "@/components/ExportFileFormat";
 import { useDynamicDashboard } from "@/lib/hooks/dynamicDashboard";
 import { renderCardsOnGrid } from "@/lib/utils/dynamicDashboard.utils";
-import EditChartsOrder from "../_components/EditChartsOrder";
 import { SaveDashboardSection } from "@/components/shared/DynamicDashboard/SaveDashboard/SaveDashboardSection";
 import { UpdateSection } from "../_components/Header/CreateSection";
 import { Button } from "@/components/ui/button";
-import withDynamicDashboardContext from "@/lib/hoc/withDynamicDasboardContext";
 import { useDynamicDashboardContext } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 import { dynamicDashboardActions } from "@/lib/context/DynamicDashboard/DynamicDashboardActions";
 
 import "gridstack/dist/gridstack.min.css";
 
-function Page() {
+export default function Page() {
   const gridRef = useRef(null);
 
   const { state, dispatch } = useDynamicDashboardContext();
@@ -52,11 +50,17 @@ function Page() {
 
     if (activeSection.section.default) {
       return (
-        <EditChartsOrder
-          cardList={activeSection.section?.cards || []}
-          cardProps={cardProps}
-          activateCard={(cardId, activate) => activateCard(cardId, activate, placeholderValues)}
-        />
+        <UpdateSection>
+          <Button variant="outline" className=" text-[#031B15]">
+            <Pencil className="w-4 h-4 mr-2" />
+            <div className="font-medium text-sm">Edit</div>
+          </Button>
+        </UpdateSection>
+        // <EditChartsOrder
+        //   cardList={activeSection.section?.cards || []}
+        //   cardProps={cardProps}
+        //   activateCard={(cardId, activate) => activateCard(cardId, activate, placeholderValues)}
+        // />
       );
     }
 
@@ -97,5 +101,3 @@ function Page() {
     </ScrollArea>
   );
 }
-
-export default withDynamicDashboardContext(Page);

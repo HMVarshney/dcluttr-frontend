@@ -2,6 +2,7 @@
 
 import { House, Package, PresentationChart, ImageSquare } from "phosphor-react";
 import OrgSideBar from "../_components/OrgSidebar";
+import { DynamicDashboardProvider } from "@/lib/context/DynamicDashboard/DynamicDashboardContext";
 
 const sideBarList = [
   {
@@ -51,9 +52,9 @@ const sideBarList = [
 ];
 export default function DashboardLayout({ children }) {
   return (
-    <>
+    <DynamicDashboardProvider>
       <OrgSideBar sideBarList={sideBarList} />
       <div className="px-5 pt-4 w-full">{children}</div>
-    </>
+    </DynamicDashboardProvider>
   );
 }

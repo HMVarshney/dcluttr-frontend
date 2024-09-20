@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Forward } from "lucide-react";
 import { Share } from "phosphor-react";
 
-export default function ExportFileFormat({ children, variant = "default" }) {
+export default function ExportFileFormat({ children, variant = "outline" }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
